@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Twinkle+Star&display=swap" rel="stylesheet">
+    <title>Carrinho</title>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <div id="header">
+        <nav class="navbar bg-body-tertiary bg-yellow-green">
+            <div class="container-fluid">
+                <div class="d-flex">
+                    <a class="navbar-brand" href="#">
+                        <img src="https://www.svgrepo.com/show/509382/menu.svg" alt="Menu" class="icon">
+                    </a>
+                    <h6 class="veronica mt-075">Categorias</h6>
+                </div>
+                <a class="white logo">Bookworm</a>
+                <div class="d-flex">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Pesquisar..." aria-label="Pesquisar..."
+                            aria-describedby="basic-addon1">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <img src="https://www.svgrepo.com/show/532555/search.svg" alt="Pesquisar"
+                                    class="search-icon">
+                            </button>
+                        </div>
+                    </div>
+                    <a class="navbar-brand ml-4" href="#">
+                        <img src="https://www.svgrepo.com/show/532473/heart.svg" alt="Favoritos" class="icon">
+                    </a>
+                    <a class="navbar-brand" href="#">
+                        <img src="https://www.svgrepo.com/show/533043/cart-shopping.svg" alt="Carrinho" class="icon">
+                    </a>
+                    <a class="navbar-brand" href="#">
+                        <img src="https://www.svgrepo.com/show/440009/person-circle.svg" alt="Minha Conta" class="icon">
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div id="body" class="body">
+        <div class="cart">
+            <div class="left">
+                <div class="bg-gray">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="page-title">Informações de Contato</div>
+                        <div class="d-flex">
+                            <div>
+                                Já possui uma conta?
+                            </div>
+                            <a class="ml-1">
+                                Log in
+                            </a>
+                        </div>
+                    </div>
+                    <input class="w-100 mt-5 form-control" placeholder="Email ou celular">
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                        <input class="w-49 form-control" placeholder="Nome">
+                        <input class="w-49 form-control" placeholder="Sobrenome">
+                    </div>
+                    <hr class="mt-5">
+                    <div class="page-title mt-5">Endereço</div>
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                        <input class="w-79 form-control" placeholder="Endereço">
+                        <input class="w-20 form-control" placeholder="Número">
+                    </div>
+                    <input class="w-100 mt-1 form-control" placeholder="Complemento">
+                    <input class="w-100 mt-1 form-control" placeholder="Cidade">
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                        <input class="w-49 form-control" placeholder="Estado">
+                        <input class="w-49 form-control" placeholder="CEP">
+                    </div>
+                    <hr class="mt-5">
+                    <div class="page-title mt-5">Pagamento</div>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center mt-1">
+                            <div class="slight-bold">Seus Cartões</div>
+                            <button type="button" class="btn" data-toggle="tooltip" data-placement="left" title="O valor pago em cada cartão não pode ser menor que R$ 10,00. (Se o valor final da sua compra for menor que R$ 20,00, o uso de mais de um cartão será barrado.)">
+                                <img src="https://www.svgrepo.com/show/511031/info.svg" alt="info" class="icon-min">
+                            </button>
+                        </div>
+                        <a href="#">Usar mais de um cartão</a>
+                    </div>
+                    <div class="mt-1"></div>
+                    <div class="cards">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <img src="https://www.svgrepo.com/show/508703/mastercard.svg" alt="cartão 1" width="100">
+                                <div class="ml-1">
+                                    <div>**** **** **** 1234</div>
+                                    <div>Nome no Cartão</div>
+                                    <div>Vence em: 12/28</div>
+                                </div>
+                            </div>
+                            <div class="al-t-r">
+                                <div class="slight-bold">Valor</div>
+                                <input class="form-control" placeholder="R$ 10,00">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <img src="https://www.svgrepo.com/show/508730/visa-classic.svg" alt="cartão 1" width="100">
+                                <div class="ml-1">
+                                    <div>**** **** **** 1234</div>
+                                    <div>Nome no Cartão</div>
+                                    <div>Vence em: 12/28</div>
+                                </div>
+                            </div>
+                            <div class="al-t-r">
+                                <div class="slight-bold">Valor</div>
+                                <input class="form-control" placeholder="R$ 10,00">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slight-bold mt-3">Adicionar Cartão</div>
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                        <input class="w-49 form-control" placeholder="Número do Cartão">
+                        <input class="w-49 form-control" placeholder="Validade">
+                    </div>
+                    <input class="w-100 mt-1 form-control" placeholder="Nome Impresso no Cartão">
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                        <input class="w-49 form-control" placeholder="Nome">
+                        <input class="w-49 form-control" placeholder="Sobrenome">
+                    </div>
+                    <button type="button" class="btn btn-secondary mt-1">Adicionar Cartão</button>
+                </div>
+            </div>
+            <div class="d-block right">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex ">
+                        <img src="https://edit.org/images/cat/book-covers-big-2019101610.jpg" width="50rem">
+                        <div class="ml-1 t-left">
+                            <div class="slight-bold">Livro</div>
+                            <div>Autor</div>
+                            <div>Editora</div>
+                        </div>
+                    </div>
+                    <div>R$ 9,99</div>
+                </div>
+                <hr>
+                <div class="bg-gray mt-4">
+                    <div class="slight-bold">Cupom</div>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Pesquisar..." aria-label="Pesquisar..."
+                            aria-describedby="basic-addon1">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <img src="https://www.svgrepo.com/show/532555/search.svg" alt="Pesquisar"
+                                    class="search-icon">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3 slight-bold">Total Carrinho</div>
+                <div class="bg-gray mt-3">
+                    <div class="d-flex">
+                        <div class="slight-bold">Subtotal</div>
+                        <div class="ml-auto">R$ 9,99</div>
+                    </div>
+                    <hr>
+                    <div class="d-flex">
+                        <div class="slight-bold">Frete</div>
+                        <div class="ml-auto">R$ 9,99</div>
+                    </div>
+                    <hr>
+                    <div class="d-flex">
+                        <div class="slight-bold">Total</div>
+                        <div class="ml-auto">R$ 9,99</div>
+                    </div>
+                    <hr>
+                    <button type="button" class="btn btn-primary w-100 mt-1">Finalizar Compra</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div id="footer" class="footer">
+        <div class="info">
+            <div class="logo">Bookworm</div>
+            <div class="icons">
+                <img class="icon" src="https://www.svgrepo.com/show/521654/facebook.svg" alt="facebook">
+                <img class="icon" src="https://www.svgrepo.com/show/512399/instagram-167.svg" alt="instagram">
+                <img class="icon" src="https://www.svgrepo.com/show/513008/twitter-154.svg" alt="twitter">
+            </div>
+        </div>
+        <div class="info">
+            <div class="info-title">Minha Conta</div>
+            <div class="info-text">Entrar</div>
+            <div class="info-text">Registrar</div>
+            <div class="info-text">Meus Pedidos</div>
+        </div>
+        <div class="info">
+            <div class="info-title">Ajuda</div>
+            <div class="info-text">Entrega</div>
+            <div class="info-text">Troca</div>
+            <div class="info-text">Dúvidas</div>
+        </div>
+        <div class="info">
+            <div class="info-title">Loja</div>
+            <div class="info-text">Todos os Livros</div>
+            <div class="info-text">Categorias</div>
+            <div class="info-text">Bugigangas</div>
+        </div>
+        <div class="info">
+            <div class="info-title">Legal</div>
+            <div class="info-text">Entrega</div>
+            <div class="info-text">Termos e Condições</div>
+            <div class="info-text">Política de Privacidade</div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
