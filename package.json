@@ -1,0 +1,29 @@
+{
+  "name": "bookworm",
+  "version": "1.0.0",
+  "description": "Projeto de LES, ecommerce de livros",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liviapires/bookworm.git"
+  },
+  "keywords": [
+    "Ecommerce",
+    "Livros"
+  ],
+  "author": "Livia Pires",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/liviapires/bookworm/issues"
+  },
+  "homepage": "https://github.com/liviapires/bookworm#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1"
+  }
+}
