@@ -79,6 +79,15 @@
     color: var(--veronica);
 }
 
+.title-home {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    margin-top: 0.5rem;
+    color: var(--veronica);
+    text-align: center;
+}
+
 .title-green {
     font-size: 1.5rem;
     font-weight: 700;
@@ -187,6 +196,13 @@
     border-color: var(--light-veronica) !important;
     outline: 0;
     border: none;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 }
 
 .cards-wrapper {

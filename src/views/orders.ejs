@@ -1,0 +1,35 @@
+<%- include('header.ejs') %>
+
+    <div id="body" class="body">
+        <div class="bottom ml-10">
+            <div class="filters">
+                <div>
+                    <img src="https://www.svgrepo.com/show/532571/image-circle.svg" alt="imagem de perfil" class="br-100" width="150">
+                    <div class="filter-title mt-5">
+                        Dados Pessoais
+                    </div>
+                    <div class="mt-5">
+                        Endereços
+                    </div>
+                    <div class="mt-5">
+                        Pedidos
+                    </div>
+                    <div class="mt-5">
+                        Cartões
+                    </div>
+                    <div class="mt-5">
+                        Favoritos
+                    </div>
+                    <div class="mt-5">
+                        Sair
+                    </div>
+                </div>
+            </div>
+            <div class="items">
+                <div class="title">Pedidos</div>
+                <%- include('orderCard.ejs')  %>
+            </div> 
+        </div>
+    </div>
+
+<%- include('footer.ejs')  %>

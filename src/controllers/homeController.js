@@ -1,8 +1,10 @@
-const homeModel = require('../models/homeModel');
+// Renderiza a view home
+const homeView = (req, res) => {
+    res.render('home', {
+        title: 'Início'
+    });
+}
 
-exports.getHome = ((req, res) => {
-    const homeData = new homeModel();
-    const data = homeData.getHomeData();
-
-    res.send(`${data}`);
-});
+module.exports = {
+    homeView
+}

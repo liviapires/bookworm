@@ -1,0 +1,27 @@
+<div class="card-item d-block">
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="slight-bold d-flex">Situação do Pedido 
+            <% if (title == 'Avaliar Troca ou Devolução') {%>
+                <div class="slight-bold ml-1">-</div>
+                <div class="slight-bold ml-1">Nome do Cliente</div>
+            <% } %>
+        </div>
+        <div class="slight-bold">#0001</div>
+    </div>
+    <hr>
+    <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+            <img src="https://edit.org/images/cat/book-covers-big-2019101610.jpg" width="100rem">
+            <div class="info-item">
+                <div class="title-item">Livro</div>
+                <div class="price-item">R$ 00,00</div>
+                <div class="description-item">Compra feita em: 12/01/2023</div>
+            </div>
+        </div>
+        <% if (title == 'Avaliar Troca ou Devolução') { %>
+            <%-include('evaluateExchangeButton.ejs');%>
+        <% } else if (title == 'Pedidos') { %>
+            <%-include('buyAgainExchangeButtons.ejs');%>
+        <% } %>
+    </div>
+</div>
