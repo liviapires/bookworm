@@ -45,35 +45,23 @@
                     </div>
                     <div class="mt-1"></div>
                     <div class="cards">
-                        <div class="d-flex justify-content-between align-items-center">
+                        <% cartoes.forEach((cartao) => { %>
                             <div class="d-flex justify-content-between align-items-center">
-                                <img src="https://www.svgrepo.com/show/508703/mastercard.svg" alt="cartão 1" width="100">
-                                <div class="ml-1">
-                                    <div>**** **** **** 1234</div>
-                                    <div>Nome no Cartão</div>
-                                    <div>Vence em: 12/28</div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <img src="<%= cartao.imagem %>" alt="cartão 1" width="100">
+                                    <div class="ml-1">
+                                        <div><%= cartao.numero %></div>
+                                        <div><%= cartao.nome %></div>
+                                        <div>Vence em: <%= cartao.validade %></div>
+                                    </div>
+                                </div>
+                                <div class="al-t-r">
+                                    <div class="slight-bold">Valor</div>
+                                    <input class="form-control" placeholder="R$ 10,00">
                                 </div>
                             </div>
-                            <div class="al-t-r">
-                                <div class="slight-bold">Valor</div>
-                                <input class="form-control" placeholder="R$ 10,00">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <img src="https://www.svgrepo.com/show/508730/visa-classic.svg" alt="cartão 1" width="100">
-                                <div class="ml-1">
-                                    <div>**** **** **** 1234</div>
-                                    <div>Nome no Cartão</div>
-                                    <div>Vence em: 12/28</div>
-                                </div>
-                            </div>
-                            <div class="al-t-r">
-                                <div class="slight-bold">Valor</div>
-                                <input class="form-control" placeholder="R$ 10,00">
-                            </div>
-                        </div>
+                            <hr>
+                            <% }); %>
                     </div>
                     <div class="slight-bold mt-3">Adicionar Cartão</div>
                     <div class="d-flex justify-content-between align-items-center mt-1">
@@ -89,18 +77,20 @@
                 </div>
             </div>
             <div class="d-block right">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-flex ">
-                        <img src="https://edit.org/images/cat/book-covers-big-2019101610.jpg" width="50rem">
-                        <div class="ml-1 t-left">
-                            <div class="slight-bold">Livro</div>
-                            <div>Autor</div>
-                            <div>Editora</div>
+                <% livros.forEach((livro) => { %>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex ">
+                            <img src="<%= livro.imagem %>" width="50rem">
+                            <div class="ml-1 t-left">
+                                <div class="slight-bold"><%= livro.titulo %></div>
+                                <div><%= livro.autor %></div>
+                                <div><%= livro.editora %></div>
+                            </div>
                         </div>
+                        <div>R$ <%= livro.preco %></div>
                     </div>
-                    <div>R$ 9,99</div>
-                </div>
-                <hr>
+                    <hr>
+                <% }); %>
                 <div class="bg-gray mt-4">
                     <div class="slight-bold">Cupom</div>
                     <div class="input-group">
@@ -118,17 +108,17 @@
                 <div class="bg-gray mt-3">
                     <div class="d-flex">
                         <div class="slight-bold">Subtotal</div>
-                        <div class="ml-auto">R$ 9,99</div>
+                        <div class="ml-auto">R$ <%= precoFinal %></div>
                     </div>
                     <hr>
                     <div class="d-flex">
                         <div class="slight-bold">Frete</div>
-                        <div class="ml-auto">R$ 9,99</div>
+                        <div class="ml-auto">R$ <%= frete %></div>
                     </div>
                     <hr>
                     <div class="d-flex">
                         <div class="slight-bold">Total</div>
-                        <div class="ml-auto">R$ 9,99</div>
+                        <div class="ml-auto">R$ <%= precoFinalComFrete %></div>
                     </div>
                     <hr>
                     <button type="button" class="btn btn-primary w-100 mt-1">Finalizar Compra</button>

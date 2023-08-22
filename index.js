@@ -1,4 +1,6 @@
 const express = require("express");
+const ejs = require("ejs");
+
 const app = express();
 const path = require("path");
 
@@ -13,18 +15,21 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // The following lines requires the routes files from the routes folder.
 const homeRouter = require("./src/routes/homeRoute");
-const categoryRouter = require("./src/routes/categoryRoute");
 const bookRouter = require("./src/routes/bookRoute");
 const cartRouter = require("./src/routes/cartRoute");
 const adminRouter = require("./src/routes/adminRoutes");
 const ordersRouter = require("./src/routes/ordersRoute");
 
+const categoryRouter = require("./src/routes/categoryRoute");
+
 app.use(homeRouter);
-app.use(categoryRouter);
 app.use(bookRouter);
 app.use(cartRouter);
 app.use(adminRouter);
 app.use(ordersRouter);
+
+app.get(categoryRouter);
+
 
 app.listen(3000, () => {
     console.log("Server running on port 3000");

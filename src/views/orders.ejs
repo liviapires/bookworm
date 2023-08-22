@@ -4,14 +4,15 @@
         <div class="bottom ml-10">
             <div class="filters">
                 <div>
-                    <img src="https://www.svgrepo.com/show/532571/image-circle.svg" alt="imagem de perfil" class="br-100" width="150">
-                    <div class="filter-title mt-5">
+                    <img src="https://www.svgrepo.com/show/532571/image-circle.svg" alt="imagem de perfil"
+                        class="br-100" width="150">
+                    <div class="mt-5">
                         Dados Pessoais
                     </div>
                     <div class="mt-5">
                         Endereços
                     </div>
-                    <div class="mt-5">
+                    <div class="filter-title mt-5">
                         Pedidos
                     </div>
                     <div class="mt-5">
@@ -27,9 +28,31 @@
             </div>
             <div class="items">
                 <div class="title">Pedidos</div>
-                <%- include('orderCard.ejs')  %>
-            </div> 
+                <% pedido.forEach((pd)=> { %>
+                <div class="card-item d-block">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="slight-bold d-flex"><%= pd.situacao %></div>
+                        <div class="slight-bold">#0001</div>
+                    </div>
+                    <hr>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <img src="<%= pd.imagem %>" width="100rem">
+                                <div class="info-item">
+                                    <div class="title-item"><%= pd.titulo %></div>
+                                    <div class="price-item">R$ <%= pd.preco %></div>
+                                    <div class="description-item">Compra feita em: <%= pd.dataPedido %></div>
+                                </div>
+                            </div>
+                            <div class="d-flex">
+                                <button type="button" class="btn btn-secondary">Comprar novamente</button>
+                                <button type="button" class="btn btn-secondary ml-1">Solicitar Troca/Devolução</button>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
         </div>
     </div>
 
-<%- include('footer.ejs')  %>
+    <%- include('footer.ejs') %>

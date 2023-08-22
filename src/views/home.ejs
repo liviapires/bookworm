@@ -1,45 +1,58 @@
 <%- include('header.ejs'); %>
 
     <div id="body" class="body">
-        
-        <%- include('itemsDisplay.ejs'); %>
+
+        <div class="title-home">Mais Vendidos</div>
+
+        <div class="cards-wrapper">
+            <% livros.forEach((livro) => {%>
+                <div class="card">
+                    <img src="<%= livro.imagem %>"
+                        class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= livro.titulo %>
+                        </h5>
+                        <p class="card-text">R$ <%= livro.preco %></p>
+                        <a href="#" class="btn btn-primary">Comprar Agora</a>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
 
         <div class="medium">
             <div class="title-home">Top Categorias</div>
             <div id="circles" class="d-flex justify-content-around align-items-center">
-                <div class="category">
-                    <div class="circle">
-                        <img class="icon-category" src="https://www.svgrepo.com/show/532906/book-open.svg"
-                            alt="icon-category">
+                <% categorias.forEach((categoria) => { %>
+                    <div class="category">
+                        <div class="circle">
+                            <img class="icon-category" src="<%= categoria.icon %>"
+                                alt="icon-category">
+                        </div>
+                        <h4 class="mt-075"><%= categoria.titulo %></h4>
                     </div>
-                    <h4 class="mt-075">Categoria 1</h4>
-                </div>
-                <div class="category">
-                    <div class="circle">
-                        <img class="icon-category" src="https://www.svgrepo.com/show/532906/book-open.svg"
-                            alt="icon-category">
-                    </div>
-                    <h4 class="mt-075">Categoria 2</h4>
-                </div>
-                <div class="category">
-                    <div class="circle">
-                        <img class="icon-category" src="https://www.svgrepo.com/show/532906/book-open.svg"
-                            alt="icon-category">
-                    </div>
-                    <h4 class="mt-075">Categoria 3</h4>
-                </div>
-                <div class="category">
-                    <div class="circle">
-                        <img class="icon-category" src="https://www.svgrepo.com/show/532906/book-open.svg"
-                            alt="icon-category">
-                    </div>
-                    <h4 class="mt-075">Categoria 4</h4>
-                </div>
+                <% }); %>
             </div>
         </div>
 
-        <%- include('itemsDisplay.ejs'); %>
+        <div class="title-home">Boxes</div>
+
+        <div class="cards-wrapper">
+            <% boxes.forEach((box) => {%>
+                <div class="card">
+                    <img src="<%= box.imagem %>"
+                        class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= box.titulo %>
+                        </h5>
+                        <p class="card-text">R$ <%= box.preco %></p>
+                        <a href="#" class="btn btn-primary">Comprar Agora</a>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
 
     </div>
-    
-<%- include('footer.ejs'); %>
+
+    <%- include('footer.ejs'); %>

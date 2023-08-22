@@ -3,61 +3,48 @@
 <div id="body" class="body">
     <div class="cart">
         <div class="left">
-            <div class="d-flex justify-content-between mb-3">
-                <div class="slight-bold">
-                    Produto
-                </div>
-                <div class="slight-bold ml-5">
-                    Preço
-                </div>
-                <div class="slight-bold ml-3">
-                    Quantidade
-                </div>
-                <div class="slight-bold ml-3">
-                    Total
-                </div>
-                <div class="slight-bold">
-                    Remover
-                </div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex">
-                    <img src="https://edit.org/images/cat/book-covers-big-2019101610.jpg" width="50rem">
-                    <div class="ml-1">
-                        <div class="slight-bold">
-                            Livro
-                        </div>
-                        <div>
-                            Autor
-                        </div>
-                        <div>
-                            Editora
+            <% livros.forEach((livro) => { %>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                    <div class="d-flex">
+                        <img src="<%= livro.imagem %>" width="50rem">
+                        <div class="ml-1">
+                            <div class="slight-bold">
+                                <%= livro.titulo %>
+                            </div>
+                            <div>
+                                <%= livro.autor %>
+                            </div>
+                            <div>
+                                <%= livro.editora %>
+                            </div>
                         </div>
                     </div>
+                    <div>
+                        R$
+                        <%= livro.preco %>
+                    </div>
+                    <div class="input-group w-6">
+                        <span class="input-group-prepend">
+                            <button type="button" class="btn btn-outline-secondary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
+                                <img src="https://www.svgrepo.com/show/532960/minus.svg" alt="Menos" width="8">
+                            </button>
+                        </span>
+                        <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-outline-secondary btn-number" data-type="Mais" data-field="quant[1]">
+                                <img src="https://www.svgrepo.com/show/532997/plus-large.svg" alt="plus" width="8">
+                            </button>
+                        </span>
+                    </div>
+                    <div>
+                        R$
+                        <%= livro.preco %>
+                    </div>
+                    <div>
+                        <img src="https://www.svgrepo.com/show/533017/trash-blank-alt.svg" alt="Remover item" class="icon">
+                    </div>
                 </div>
-                <div>
-                    R$ 9,99
-                </div>
-                <div class="input-group w-6">
-                    <span class="input-group-prepend">
-                        <button type="button" class="btn btn-outline-secondary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
-                            <img src="https://www.svgrepo.com/show/532960/minus.svg" alt="Menos" width="8">
-                        </button>
-                    </span>
-                    <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">
-                    <span class="input-group-append">
-                        <button type="button" class="btn btn-outline-secondary btn-number" data-type="Mais" data-field="quant[1]">
-                            <img src="https://www.svgrepo.com/show/532997/plus-large.svg" alt="plus" width="8">
-                        </button>
-                    </span>
-                </div>
-                <div>
-                    R$ 9,99
-                </div>
-                <div>
-                    <img src="https://www.svgrepo.com/show/533017/trash-blank-alt.svg" alt="Remover item" class="icon">
-                </div>
-            </div>
+            <% }); %>
             <hr>
             <button type="button" class="btn btn-secondary">Limpar o Carrinho</button>
         </div>
@@ -79,12 +66,12 @@
             <div class="bg-gray mt-3">
                 <div class="d-flex">
                     <div class="slight-bold">Subtotal</div>
-                    <div class="ml-auto">R$ 9,99</div>
+                        <div class="ml-auto">R$ <%= precoFinal %></div>
                 </div>
                 <hr>
                 <div class="d-flex">
                     <div class="slight-bold">Total</div>
-                    <div class="ml-auto">R$ 9,99</div>
+                    <div class="ml-auto">R$ <%= precoFinal %></div>
                 </div>
                 <hr>
                 <button type="button" class="btn btn-primary w-100 mt-1">Comprar agora</button>
@@ -101,7 +88,23 @@
     </div>
 </div>
 
-<%- include('itemsDisplay.ejs') %>
+<div class="title-home">Quem viu, viu também...</div>
+
+<div class="cards-wrapper">
+    <% livros.forEach((livro) => { %>
+        <div class="card">
+            <img src="<%= livro.imagem %>"
+                class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <%= livro.titulo %>
+                </h5>
+                <p class="card-text">R$ <%= livro.preco %></p>
+                <a href="#" class="btn btn-primary">Comprar Agora</a>
+            </div>
+        </div>
+    <% }); %>
+</div>
 
 <%- include('footer.ejs') %>
  

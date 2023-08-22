@@ -132,6 +132,10 @@
     margin-left: 10rem !important;
 }
 
+.mb-1 {
+    margin-bottom: 1rem !important;
+}
+
 .mt-075 {
     margin-top: 0.75rem !important;
 }
@@ -459,8 +463,16 @@ a:hover {
     color: var(--dark-gray);
 }
 
-.br-100{
+.br-100 {
     border-radius: 100%;
+}
+
+.badge {
+    background-color: var(--yellow-green);
+    color: var(--white);
+    font-size: 0.8rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
 }
 
 @media (min-width: 768px) {

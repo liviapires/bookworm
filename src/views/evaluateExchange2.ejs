@@ -33,10 +33,21 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-secondary">Avaliar Troca/Devolução</button>
+                            <div class="slight-bold"><%= pd.motivo %></div>
                         </div>
-                        <% }); %>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="slight-bold">Explicação do Motivo:</div>
+                                <%= pd.descricaoMotivo %>
+                            </div>
+                            <div class="d-flex">
+                                <button type="button" class="btn btn-secondary">Recusado</button>
+                                <button type="button" class="btn btn-secondary ml-1">Aprovado</button>
+                            </div>
+                        </div>
                     </div>
+                    <% }); %>
             </div>
         </div>
     </div>
