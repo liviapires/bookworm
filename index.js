@@ -30,7 +30,13 @@ app.use(ordersRouter);
 
 app.get(categoryRouter);
 
-
 app.listen(3000, () => {
     console.log("Server running on port 3000");
 });
+
+
+// Database connection verification
+const db = require("./config/db.js");
+db.authenticate()
+    .then(() => console.log("Database connected!"))
+    .catch((err) => console.log("Error: " + err));
