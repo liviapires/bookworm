@@ -19,6 +19,8 @@ const bookRouter = require("./src/routes/bookRoute");
 const cartRouter = require("./src/routes/cartRoute");
 const adminRouter = require("./src/routes/adminRoutes");
 const ordersRouter = require("./src/routes/ordersRoute");
+const signinRouter = require("./src/routes/signinRoute");
+const myAccountRouter = require("./src/routes/myAccountRoutes");
 
 const categoryRouter = require("./src/routes/categoryRoute");
 
@@ -27,6 +29,8 @@ app.use(bookRouter);
 app.use(cartRouter);
 app.use(adminRouter);
 app.use(ordersRouter);
+app.use(signinRouter);
+app.use(myAccountRouter);
 
 app.get(categoryRouter);
 

@@ -30,6 +30,10 @@
     width: 79% !important;
 }
 
+.w-59 {
+    width: 59% !important;
+}
+
 .w-20 {
     width: 20% !important;
 }
@@ -222,6 +226,15 @@
     width: 15rem;
 }
 
+.card-big {
+    margin: 0em 1em;
+    box-shadow: 2px 6px 8px 0 var(--shadow);
+    border: none;
+    border-radius: 0;
+    width: 50rem;
+    padding: 1rem;
+}
+
 .card-item {
     box-shadow: 2px 6px 8px 0 var(--shadow);
     border: none;
@@ -243,8 +256,8 @@
     padding: 1rem;
 }
 
-.info-item {
-    margin-left: 20% !important;
+.info-item{
+    width: 22rem;
 }
 
 .title-item {
@@ -473,6 +486,10 @@ a:hover {
     font-size: 0.8rem;
     padding: 0.5rem;
     border-radius: 0.5rem;
+}
+
+.data {
+    width: 50rem;
 }
 
 @media (min-width: 768px) {
