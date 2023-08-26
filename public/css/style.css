@@ -256,8 +256,8 @@
     padding: 1rem;
 }
 
-.info-item {
-    margin-left: 20% !important;
+.info-item{
+    width: 22rem;
 }
 
 .title-item {

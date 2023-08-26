@@ -31,127 +31,33 @@
                     </div>
                     <hr>
 
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            Default checkbox
-                        </label>
-                    </div>
-
-
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            Default checkbox
-                        </label>
-                    </div>
-
-
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            Default checkbox
-                        </label>
-                    </div>
-
-                </div>
-                <div class="mt-5">
-                    <div class="filter-title">
-                        Desconto
-                    </div>
-                    <hr>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            Default checkbox
-                        </label>
-                    </div>
-
-                </div>
-                <div class="mt-5">
-                    <div class="filter-title">
-                        Preço
-                    </div>
-                    <hr>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            Default checkbox
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                        <label class="form-check-label" for="defaultCheck1">
-                            Default checkbox
-                        </label>
-                    </div>
-
+                    <% categorias.forEach((categoria) => { %>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                            <label class="form-check-label" for="defaultCheck1">
+                                <%= categoria.nome %>
+                            </label>
+                        </div>
+                    <% }); %>
                 </div>
             </div>
             <div class="items">
-                <div class="card-item">
-                    <img src="https://edit.org/images/cat/book-covers-big-2019101610.jpg" width="150rem">
-                    <div class="info-item">
-                        <div class="title-item">Livro</div>
-                        <div class="price-item">R$ 00,00</div>
-                        <div class="description-item">Descrição</div>
-                        <div class="icons-item">
-                            <img class="icon" src="https://www.svgrepo.com/show/532473/heart.svg" alt="heart">
-                            <img class="icon ml-3" src="https://www.svgrepo.com/show/511031/info.svg" alt="info">
+                <% livros.forEach((livro) => { %>
+                    <div class="card-item">
+                        <img src="<%= livro.imagem %>" width="150rem">
+                        <div class="ml-3 info-item">
+                            <div class="title-item"><%= livro.titulo %></div>
+                            <div class="price-item">R$ <%= livro.preco %></div>
+                            <div class="description-item"><%= livro.autor %></div>
+                            <div class="icons-item">
+                                <img class="icon" src="https://www.svgrepo.com/show/511031/info.svg" alt="info">
+                            </div>
+                        </div>
+                        <div class="ml-10">
+                            <button type="button" class="btn btn-secondary">Comprar agora</button>
                         </div>
                     </div>
-                    <div class="ml-10">
-                        <button type="button" class="btn btn-secondary">Comprar agora</button>
-                    </div>
-                </div>
-                <div class="card-item">
-                    <img src="https://edit.org/images/cat/book-covers-big-2019101610.jpg" width="150rem">
-                    <div class="info-item">
-                        <div class="title-item">Livro</div>
-                        <div class="price-item">R$ 00,00</div>
-                        <div class="description-item">Descrição</div>
-                        <div class="icons-item">
-                            <img class="icon" src="https://www.svgrepo.com/show/532473/heart.svg" alt="heart">
-                            <img class="icon ml-3" src="https://www.svgrepo.com/show/511031/info.svg" alt="info">
-                        </div>
-                    </div>
-                    <div class="ml-10">
-                        <button type="button" class="btn btn-secondary">Comprar agora</button>
-                    </div>
-                </div>
-                <div class="card-item">
-                    <img src="https://edit.org/images/cat/book-covers-big-2019101610.jpg" width="150rem">
-                    <div class="info-item">
-                        <div class="title-item">Livro</div>
-                        <div class="price-item">R$ 00,00</div>
-                        <div class="description-item">Descrição</div>
-                        <div class="icons-item">
-                            <img class="icon" src="https://www.svgrepo.com/show/532473/heart.svg" alt="heart">
-                            <img class="icon ml-3" src="https://www.svgrepo.com/show/511031/info.svg" alt="info">
-                        </div>
-                    </div>
-                    <div class="ml-10">
-                        <button type="button" class="btn btn-secondary">Comprar agora</button>
-                    </div>
-                </div>
+                <% }); %>
             </div>
         </div>
     </div>
