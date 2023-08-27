@@ -1,4 +1,5 @@
-const db = require('../config/db.js');
+// Get db connection
+const db = require("../../config/db.js");
 
 class ClientModel {
     

@@ -19,7 +19,7 @@ const bookRouter = require("./src/routes/bookRoute");
 const cartRouter = require("./src/routes/cartRoute");
 const adminRouter = require("./src/routes/adminRoutes");
 const ordersRouter = require("./src/routes/ordersRoute");
-const signinRouter = require("./src/routes/signinRoute");
+const clientRouter = require("./src/routes/clientRoute");
 const myAccountRouter = require("./src/routes/myAccountRoutes");
 
 const categoryRouter = require("./src/routes/categoryRoute");
@@ -29,7 +29,7 @@ app.use(bookRouter);
 app.use(cartRouter);
 app.use(adminRouter);
 app.use(ordersRouter);
-app.use(signinRouter);
+app.use(clientRouter);
 app.use(myAccountRouter);
 
 app.get(categoryRouter);
@@ -41,6 +41,7 @@ app.listen(3000, () => {
 
 // Database connection verification
 const db = require("./config/db.js");
+
 db.authenticate()
     .then(() => console.log("Database connected!"))
     .catch((err) => console.log("Error: " + err));

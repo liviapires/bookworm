@@ -1,4 +1,4 @@
-const clientModel = require('../models/ClientModel');
+const clientModel = require('../models/clientModel');
 
 class clientController {
 
@@ -6,13 +6,23 @@ class clientController {
         let results = await clientModel.getClients();
 
         if (results) {
-            res.status(200).json(results);
+            console.log(results);
         } else {
-            res.status(404).json({ message: 'Nenhum cliente encontrado' });
+            console.log("No results found!");
         }
         
     }
 
 }
 
-module.exports = clientController;
+// Renderiza a view signin
+const signinView = (req, res) => {
+    res.render('signin', {
+        title: 'Sign In'
+    });
+}
+
+module.exports = {
+    signinView,
+    clientController
+}
