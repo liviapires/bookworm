@@ -7,6 +7,8 @@ router.get("/signin", clientController.signinView);
 
 router.get("/clients", clientController.getAllClients);
 
+router.get("/client/:id", clientController.getClientById);
+
 // Create a new client
 router.post("/signup", function (req, res) {
     clientController.create(req, res);

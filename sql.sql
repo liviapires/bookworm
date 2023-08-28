@@ -15,7 +15,7 @@ INSERT INTO `teste`.`addresses` (`cep`, `street`, `number`, `neighborhood`, `com
 -- query to insert data into the table 'clients' in the database 'teste'
 
 INSERT INTO `teste`.`clients` (`code`, `name`, `birthDate`, `gender`, `cpf`, `email`, `password`, `ranking`, `status`, `deleted`, `createdAt`, `addressesIds`, `phonesIds`)
-    VALUES ('1234567890', 'Nome Teste', '2019-01-01 00:00:00', 'MASCULINO', '12345678901', 'aa@bb.com', '123456', '1', 'ATIVO', '0', '2019-01-01 00:00:00', '1', '3');
+    VALUES ('1234567890', 'Nome Teste', '2019-01-01 00:00:00', 'MASCULINO', '12345678901', 'aa@bb.com', '123456', '1', 'ATIVO', '0', '2019-01-01 00:00:00', '2', '2');
 
 -- query to create the table 'addresses' in the database 'teste'
 

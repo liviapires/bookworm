@@ -1,4 +1,4 @@
-const db = require("../../config/db");
+const db = require(`../../config/db`);
 
 class Client {
     constructor(code, name, birthDate, gender, cpf, email, password, ranking, status, deleted, createdAt, updatedAt, deletedAt, addressesIds, phonesIds) {
@@ -21,9 +21,9 @@ class Client {
 
     async getAll() {
         const [results, metadata] = await db.query(
-            "SELECT * FROM `clients` \
-                LEFT JOIN `addresses` ON `clients`.`addressesIds` = `addresses`.`id` \
-                LEFT JOIN `phones` ON `clients`.`phonesIds` = `phones`.`id`;"
+            `SELECT * FROM clients \
+                LEFT JOIN addresses ON clients.addressesIds = addresses.id \
+                LEFT JOIN phones ON clients.phonesIds = phones.id;`
         );
 
         return results;
@@ -31,12 +31,38 @@ class Client {
 
     async create() {
         const [results, metadata] = await db.query(
-            "INSERT INTO `clients` (`code`, `name`, `birthDate`, `gender`, `cpf`, `email`, `password`, `ranking`, `status`, `deleted`, `createdAt`, `updatedAt`, `deletedAt`, `addressesIds`, `phonesIds`) \
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+            `INSERT INTO clients (code, name, birthDate, gender, cpf, email, password, ranking, status, deleted, createdAt, updatedAt, deletedAt, addressesIds, phonesIds) \
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`
         );
 
         return results;
     }
+
+    async update(id) {
+        const [results, metadata] = await db.query(
+            `UPDATE clients SET code = ?, name = ?, birthDate = ?, gender = ?, cpf = ?, email = ?, password = ?, ranking = ?, status = ?, deleted = ?, createdAt = ?, updatedAt = ?, deletedAt = ?, addressesIds = ?, phonesIds = ? \
+                WHERE id = ${id};`
+        );
+
+        return results;
+    }
+
+    async delete(id) {
+        const [results, metadata] = await db.query(
+            `DELETE FROM clients WHERE id = ${id};`
+        );
+
+        return results;
+    }
+
+    async getById(id) {
+        const [results, metadata] = await db.query(
+            `SELECT * FROM clients LEFT JOIN addresses ON clients.addressesIds = addresses.id LEFT JOIN phones ON clients.phonesIds = phones.id WHERE clients.id = ${id};`
+        );
+
+        return results;
+    }
+
 }
 
 module.exports = Client;
