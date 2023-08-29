@@ -76,3 +76,19 @@ CREATE TABLE `teste`.`clients` (
   CONSTRAINT `addressesIds` FOREIGN KEY (`addressesIds`) REFERENCES `addresses` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `phonesIds` FOREIGN KEY (`phonesIds`) REFERENCES `phones` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- query to create cards table
+
+CREATE TABLE `teste`.`cards` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cardNumber` varchar(16) NOT NULL,
+  `cardName` varchar(255) NOT NULL,
+  `expirationDate` date NOT NULL,
+  `cardFlag` ENUM('Visa', 'Mastercard', 'Elo', 'American Express') NOT NULL,
+  `cvv` varchar(3) NOT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime DEFAULT NULL,
+  `deletedAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
