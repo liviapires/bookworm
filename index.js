@@ -13,6 +13,12 @@ app.set("view engine", "ejs");
 // In the following line, we are telling Express to use the public folder to serve static files.
 app.use(express.static(path.join(__dirname, "public")));
 
+// The following line tells Express that we are using JSON to parse the incoming requests.
+app.use(express.json());
+
+// The following line tells Express that we are using URL encoded to parse the incoming requests.
+app.use(express.urlencoded({ extended: true }));
+
 // The following lines requires the routes files from the routes folder.
 const homeRouter = require("./src/routes/homeRoute");
 const bookRouter = require("./src/routes/bookRoute");
@@ -32,7 +38,17 @@ app.use(ordersRouter);
 app.use(clientRouter);
 app.use(myAccountRouter);
 
-app.get(categoryRouter);
+app.use(categoryRouter);
+
+app.get("/", (req, res) => {
+    res.redirect("/home");
+});
+
+// after deleting the client, redirect to the clients page
+app.get("/clients/delete/:id", (req, res) => {
+    res.redirect("/clients");
+});
+
 
 app.listen(3000, () => {
     console.log("Server running on port 3000");

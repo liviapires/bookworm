@@ -1,14 +1,18 @@
-const db = require('../database');
+const db = require("../../config/db");
 
 class Card {
-    constructor(cardNumber, cardName, cardFlag, cvv) {
+    constructor(cardNumber, cardName, expirationDate, cardFlag, cvv, createdAt, updatedAt) {
         this.cardNumber = cardNumber;
         this.cardName = cardName;
+        this.expirationDate = expirationDate;
         this.cardFlag = cardFlag;
         this.cvv = cvv;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
-    async getAll() {
+    // get all cards
+    async getAllCards() {
         const [results, metadata] = await db.query(
             `SELECT * FROM cards;`
         );
@@ -16,46 +20,73 @@ class Card {
         return results;
     }
 
-    async create(params) {
+    // create a new card
+    async createCard(card) {
         const [results, metadata] = await db.query(
-            `INSERT INTO cards (cardNumber, cardName, cardFlag, cvv) \
-                VALUES (${params.cardNumber}, ${params.cardName}, ${params.cardFlag}, ${params.cvv});`
+            `INSERT INTO cards (cardNumber, cardName, expirationDate, cardFlag, cvv, createdAt, updatedAt) \
+                VALUES (
+                    '${card.cardNumber}',
+                    '${card.cardName}',
+                    '${card.expirationDate}',
+                    '${card.cardFlag}',
+                    '${card.cvv}',
+                    '${card.createdAt}',
+                    '${card.updatedAt}'
+                );`
         );
 
         return results;
     }
 
-    async update(id) {
+    // update a card
+    async updateCard(card) {
         const [results, metadata] = await db.query(
-            `UPDATE cards SET cardNumber = ?, cardName = ?, cardFlag = ?, cvv = ? \
-                WHERE id = ${id};`
+            `UPDATE cards SET 
+                cardNumber = '${card.cardNumber}',
+                cardName = '${card.cardName}',
+                expirationDate = '${card.expirationDate}',
+                cardFlag = '${card.cardFlag}',
+                cvv = '${card.cvv}',
+                updatedAt = '${card.updatedAt}'
+            WHERE cardId = ?;`
         );
 
         return results;
     }
 
-    async delete(id) {
+    // delete a card
+    async deleteCard(id) {
         const [results, metadata] = await db.query(
-            `DELETE FROM cards WHERE id = ${id};`
+            `DELETE FROM cards WHERE cardId = '${id}';`
         );
 
         return results;
     }
 
-    async getById(id) {
+    // get card by id
+    async getCardById(id) {
         const [results, metadata] = await db.query(
-            `SELECT * FROM cards WHERE id = ${id};`
+            `SELECT * FROM cards WHERE cardId = '${id}';`
         );
 
         return results;
     }
 
-    async getByCardNumber(cardNumber) {
+    // get card id
+    async getCardId(card) {
         const [results, metadata] = await db.query(
-            `SELECT * FROM cards WHERE cardNumber = ${cardNumber};`
+            `SELECT cardId FROM cards 
+                WHERE cardNumber = '${card.cardNumber}' 
+                    AND cardName = '${card.cardName}' 
+                    AND expirationDate = '${card.expirationDate}'
+                    AND cardFlag = '${card.cardFlag}'
+                    AND cvv = '${card.cvv}'
+                    AND createdAt = '${card.createdAt}';`
         );
 
         return results;
     }
 
 }
+
+module.exports = Card;

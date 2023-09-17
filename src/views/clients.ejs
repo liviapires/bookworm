@@ -1,0 +1,70 @@
+<%- include('header.ejs') %>
+
+<div class="container h-100">
+
+    <h1 class="title-home">Clientes</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="veronica">Nome</th>
+                <th class="veronica">CPF</th>
+                <th class="veronica">Telefone</th>
+                <th class="veronica">Endereço</th>
+                <th class="veronica">Bairro</th>
+                <th class="veronica">CEP</th>
+                <th class="veronica">Estado</th>
+                <th class="veronica">Opções</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <% if (clients.length==0) { %>
+                <tr>
+                    <td colspan="8" class="text-center">Nenhum cliente cadastrado</td>
+                </tr>
+            <% } %>
+
+            <% clients.forEach(function(client) { %>
+                <tr>
+                    <td class="bold">
+                        <%= client.name %>
+                    </td>
+                    <td>
+                        <%= client.cpf %>
+                    </td>
+                    <td>(<%= client.ddd %>) <%= client.phoneNumber %>
+                    </td>
+                    <td>
+                        <%= client.street %>, <%= client.addressNumber %>
+                    </td>
+                    <td>
+                        <%= client.neighborhood %>
+                    </td>
+                    <td>
+                        <%= client.cep %>
+                    </td>
+                    <td>
+                        <%= client.state %>
+                    </td>
+                    <td>
+                        <a href="/client/<%= client.id %>">
+                            <img src="https://www.svgrepo.com/show/522719/zoom-plus.svg" alt="Ver mais"
+                                class="icon">
+                        </a>
+                        <a href="/clients/delete/<%= client.id %>" style="display: inline-block;">
+                            <img src="https://www.svgrepo.com/show/502606/delete-3.svg" alt="Deletar"
+                                class="icon">
+                        </a>
+                    </td>
+                </tr>
+            <% }); %>
+
+        </tbody>
+    </table>
+    
+    <a href="/signin" class="btn btn-primary">Novo Cliente</a>
+
+</div>
+
+<%- include('footer.ejs') %>

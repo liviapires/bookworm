@@ -5,7 +5,7 @@ const getAllCards = async (req, res) => {
     const card = new Card();
 
     try {
-        const [cards] = await card.getAll();
+        const [cards] = await card.getAllCards();
         res.status(200).json(cards);
     } catch (error) {
         res.status(500).json({
@@ -19,7 +19,7 @@ const getCardById = async (req, res) => {
     const card = new Card();
 
     try {
-        const [cards] = await card.getById(req.params.id);
+        const [cards] = await card.getCardById(req.params.id);
         res.status(200).json(cards);
     } catch (error) {
         res.status(500).json({

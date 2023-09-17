@@ -1,12 +1,22 @@
 const Client = require('../models/ClientModel');
+const Address = require('../models/AddressModel');
+const Phone = require('../models/PhoneModel');
+const Card = require('../models/CardModel');
+const { get } = require('../routes/clientRoutes');
 
-// get all clients
-const getAllClients = async (req, res) => {
-    const client = new Client();
+const bcrypt = require('bcrypt');
+const moment = require('moment');
 
+const aClient = new Client();
+const anAddress = new Address();
+const aPhone = new Phone();
+const aCard = new Card();
+
+// get address by id
+async function getAddressById (req, res) {
     try {
-        const [clients] = await client.getAll();
-        res.status(200).json(clients);
+        let [address] = await anAddress.getAddressById(req.params.id);
+        res.status(200).json(address);
     } catch (error) {
         res.status(500).json({
             message: error.message
@@ -14,61 +24,11 @@ const getAllClients = async (req, res) => {
     }
 }
 
-// get one client by id
-const getClientById = async (req, res) => {
-    const client = new Client();
-
+// get phone by id
+async function getPhoneById (req, res) {
     try {
-        const [clients] = await client.getById(req.params.id);
-        res.status(200).json(clients);
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
-}
-
-// create address
-const createAddress = async (req, res) => {
-    const address = new Address();
-
-    address.street = req.body.street;
-    address.number = req.body.number;
-    address.complement = req.body.complement;
-    address.neighborhood = req.body.neighborhood;
-    address.city = req.body.city;
-    address.state = req.body.state;
-    address.zipCode = req.body.zipCode;
-
-    try {
-        const results = await address.create(address);
-
-        res.status(201).json({
-            message: "Endereço criado com sucesso!",
-            address: results
-        });
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
-}
-
-// create phone
-const createPhone = async (req, res) => {
-    const phone = new Phone();
-
-    phone.ddd = req.body.ddd;
-    phone.number = req.body.number;
-    phone.type = req.body.type;
-
-    try {
-        const results = await phone.create(phone);
-
-        res.status(201).json({
-            message: "Telefone criado com sucesso!",
-            phone: results
-        });
+        let [phone] = await aPhone.getPhoneById(req.params.id);
+        res.status(200).json(phone);
     } catch (error) {
         res.status(500).json({
             message: error.message
@@ -77,77 +37,177 @@ const createPhone = async (req, res) => {
 }
 
 // create a new client
-const createClient = async (req, res) => {
-    const client = new Client();
-
-    let exists = true;
-
-    let code = 0;
+async function createClient (req, res) {
     
-    do {
-        // generate a new code
-        code = Math.floor(Math.random() * 1000000);
+    // pega o email
+    const email = req.body.email;
 
-        // verify if code exists
-        const [results] = await client.getByCode(code);
+    // gera um código aleatório
+    const code = Math.floor(Math.random() * 1000000);
 
-        // if results null or empty, code not exists
-        if (results == null || results == '') {
-            exists = false;
-        }
+    // pega o cpf
+    const cpf = req.body.cpf;
 
-    } while (exists == true);
-
-    client.code = code;
-    client.name = req.body.name;
-    client.birthDate = req.body.birthDate;
-    client.gender = req.body.gender;
-    client.cpf = req.body.cpf;
-    client.email = req.body.email;
-
-    // hash password
-    const bcrypt = require("bcrypt");
+    // codifica a senha
     const salt = await bcrypt.genSalt(10);
-    client.password = await bcrypt.hash(req.body.password, salt);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-    // set ranking as the lowest
-    client.ranking = 1;
+    // faz o parse da data de nascimento
+    const birthDate = moment(req.body.birthDate).format('YYYY-MM-DD HH:mm:ss');
 
-    // set status as active
-    client.status = 'Ativo';
-    client.deleted = 0;
+    const ranking = 1;
+    const active = 1;
 
-    // get current date and time
-    const date = new Date();
-    client.createdAt = date;
+    // date in mysql format
+    const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
 
-    // call createAddress function
-    const address = await createAddress(req, res);
+    const updatedAt = createdAt;
 
-    // set address id
-    client.addressesIds = address.id;
+    let phone = {
+        ddd: req.body.ddd,
+        phoneNumber: req.body.phoneNumber,
+        type: req.body.type,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+    }
 
-    // call createPhone function
-    const phone = await createPhone(req, res);
+    let address = {
+        street: req.body.street,
+        addressNumber: req.body.addressNumber,
+        complement: req.body.complement,
+        neighborhood: req.body.neighborhood,
+        city: req.body.city,
+        state: req.body.state,
+        country: req.body.country,
+        cep: req.body.cep,
+        observation: req.body.observation,
+        createdAt: createdAt,
+        updatedAt: updatedAt
+    }
 
-    // set phone id
-    client.phonesIds = phone.id;
+    let creditCard = {
+        cardNumber: req.body.cardNumber,
+        cardName: req.body.cardName,
+        expirationDate: req.body.expiration,
+        cardFlag: req.body.cardFlag,
+        cvv: req.body.cvv,
+        createdAt: createdAt,
+        updatedAt: updatedAt
+    }
 
-    // set variables in model to create a new client
+    await aPhone.createPhone(phone);
+    await anAddress.createAddress(address);
+    await aCard.createCard(creditCard);
+
+    // get phone id from phone table
+    const phoneId = await aPhone.getPhoneId(phone);
+
+    // get address id from address table
+    const addressId = await anAddress.getAddressId(address);
+
+    // get card id from card table
+    const cardId = await aCard.getCardId(creditCard);
+
+    let client = {
+        code: code,
+        name: req.body.name,
+        birthDate: birthDate,
+        gender: req.body.gender,
+        cpf: cpf,
+        email: email,
+        password: hashedPassword,
+        ranking: ranking,
+        active: active,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+        addressesIds: addressId[0].addressId,
+        phonesIds: phoneId[0].phoneId,
+        cardsIds: cardId[0].cardId
+    }
+
     try {
-        const results = await client.create(client);
+        const newClient = await aClient.createClient(client);
+        res.status(201).json(newClient);
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
 
-        res.status(201).json({
-            message: "Cliente criado com sucesso!",
-            client: results
+    res.redirect('/home');
+
+}
+
+// update a client
+
+async function updateClient (req, res) {
+
+    console.log(req.body);
+
+    // get client by id
+    let client = await aClient.getClientById(req.body.id);
+
+    console.log(client);
+
+    // get post data
+    let birthDate = moment(req.body.birthDate).format('YYYY-MM-DD HH:mm:ss');
+
+    let clientData = {
+        id: client[0].id,
+        name: req.body.name,
+        birthDate: birthDate,
+        gender: req.body.gender,
+        cpf: req.body.cpf,
+        email: req.body.email,
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+    }
+
+    // update client
+    await aClient.updateClient(clientData);
+
+    // redirect to the client page
+    res.redirect(`/client/${req.body.id}`);
+}
+    
+// delete a client and its dependencies
+async function deleteClient (req, res) {
+    try {
+
+        // get client by id
+        let [client] = await aClient.getClientById(req.params.id);
+
+        // get address by id
+        let [address] = await anAddress.getAddressById(client.addressesIds);
+
+        // get phone by id
+        let [phone] = await aPhone.getPhoneById(client.phonesIds);
+
+        // get card by id
+        let [card] = await aCard.getCardById(client.cardsIds);
+
+        // delete client
+        await aClient.deleteClient(req.params.id);
+
+        // delete address
+        await anAddress.deleteAddress(address.addressId);
+
+        // delete phone
+        await aPhone.deletePhone(phone.phoneId);
+
+        // delete card
+        await aCard.deleteCard(card.cardId);
+        
+        res.status(200).json({
+            message: 'Cliente deletado com sucesso!'
         });
     } catch (error) {
         res.status(500).json({
             message: error.message
         });
     }
-}
 
+    res.redirect('/clients');
+}
 
 // Renderiza a view signin
 const signinView = (req, res) => {
@@ -156,11 +216,65 @@ const signinView = (req, res) => {
     });
 }
 
+// Renderiza a view clients
+async function clientsView (req, res) {
+
+    const clients = await aClient.getAllClients();
+
+    res.render('clients', {
+        title: 'Clientes',
+        clients: clients
+    });
+}
+
+// Renderiza a view client
+async function clientView (req, res) {
+    
+    const cliente = await aClient.getClientById(req.params.id);
+
+    // get different image depending on the cardFlag
+
+    if (cliente[0].cardFlag == 'Visa') {
+        cliente[0].cardFlag = 'https://www.svgrepo.com/show/508730/visa-classic.svg';
+    } else if (cliente[0].cardFlag == 'Mastercard') {
+        cliente[0].cardFlag = 'https://www.svgrepo.com/show/508703/mastercard.svg';
+    } else if (cliente[0].cardFlag == 'American Express') {
+        cliente[0].cardFlag = 'https://www.svgrepo.com/show/508403/amex.svg';
+    } else if (cliente[0].cardFlag == 'Elo') {
+        cliente[0].cardFlag = 'https://www.svgrepo.com/show/508421/elo.svg';
+    }
+
+    // censor the credit card number
+
+    let cardNumber = cliente[0].cardNumber;
+    let censoredCardNumber = cardNumber.replace(/\d(?=\d{4})/g, "*");
+    cliente[0].cardNumber = censoredCardNumber;
+
+    res.render('client', {
+        title: cliente[0].name,
+        cliente: cliente
+    });
+}
+
+// Renderiza a view editClient
+
+async function editClientView (req, res) {
+    const cliente = await aClient.getClientById(req.params.id);
+
+    res.render('editClient', {
+        title: 'Editar Cliente',
+        cliente: cliente
+    });
+}
+
 module.exports = {
     signinView,
-    getAllClients,
-    getClientById,
+    clientsView,
+    clientView,
+    editClientView,
     createClient,
-    createAddress,
-    createPhone
+    deleteClient,
+    updateClient,
+    getAddressById,
+    getPhoneById
 }
