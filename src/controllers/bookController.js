@@ -46,14 +46,25 @@ const livro = [{
 }];
 
 // Renderiza a view book
-const bookView = (req, res) => {
+async function bookView (req, res) {
+    let livros = await aBook.getAllBooks();
+
     res.render('book', {
         title: 'Livro',
-        livros: livros,
+        livros: livros
+    });
+}
+
+async function oneBookView (req, res) {
+    let livro = await aBook.getBookById(req.params.id);
+
+    res.render('book', {
+        title: 'Livro',
         livro: livro
     });
 }
 
 module.exports = {
-    bookView
+    bookView,
+    oneBookView
 }
