@@ -1,8 +1,8 @@
 const db = require("../../config/db");
 
 class Address {
-    constructor(cep, street, addressNumber, neighborhood, complement, city, state, country, observation, createdAt, updatedAt) {
-        this.cep = cep;
+    constructor(zipCode, street, addressNumber, neighborhood, complement, city, state, country, observation, createdAt, updatedAt, clientId) {
+        this.zipCode = zipCode;
         this.street = street;
         this.addressNumber = addressNumber;
         this.neighborhood = neighborhood;
@@ -13,6 +13,7 @@ class Address {
         this.observation = observation;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.clientId = clientId;
     }
 
     // get all addresses
@@ -27,9 +28,9 @@ class Address {
     // create address
     async createAddress(address) {
         const [results, metadata] = await db.query(
-            `INSERT INTO addresses (cep, street, addressNumber, neighborhood, complement, city, state, country, observation, createdAt, updatedAt) \
+            `INSERT INTO addresses (zipCode, street, addressNumber, neighborhood, complement, city, state, country, observation, createdAt, updatedAt, clientId) \
             VALUES (
-                '${address.cep}',
+                '${address.zipCode}',
                 '${address.street}',
                 '${address.addressNumber}',
                 '${address.neighborhood}',
@@ -39,7 +40,8 @@ class Address {
                 '${address.country}',
                 '${address.observation}',
                 '${address.createdAt}',
-                '${address.updatedAt}'
+                '${address.updatedAt}',
+                '${address.clientId}'
             );`
         );
 
@@ -50,7 +52,7 @@ class Address {
     async updateAddress(address) {
         const [results, metadata] = await db.query(
             `UPDATE addresses SET 
-                cep = '${address.cep}', 
+                zipCode = '${address.zipCode}', 
                 street = '${address.street}', 
                 addressNumber = '${address.addressNumber}',
                 neighborhood = '${address.neighborhood}', 
@@ -78,26 +80,25 @@ class Address {
     // get address by id
     async getAddressById(id) {
         const [results, metadata] = await db.query(
-            `SELECT * FROM addresses
-                WHERE addressId = '${id}';`
+            `SELECT * FROM addresses WHERE addressId = '${id}';`
         );
 
         return results;
     }
 
-    async getAddressId(address) {
+    // get address by clientId
+    async getAddressByClientId(id) {
         const [results, metadata] = await db.query(
-            `SELECT addressId FROM addresses 
-                WHERE cep = '${address.cep}' 
-                    AND street = '${address.street}' 
-                    AND addressNumber = '${address.addressNumber}' 
-                    AND neighborhood = '${address.neighborhood}' 
-                    AND complement = '${address.complement}' 
-                    AND city = '${address.city}' 
-                    AND state = '${address.state}' 
-                    AND country = '${address.country}' 
-                    AND observation = '${address.observation}'
-                    AND createdAt = '${address.createdAt}';`
+            `SELECT * FROM addresses WHERE clientId = '${id}';`
+        );
+
+        return results;
+    }
+
+    // delete address by clientId
+    async deleteAddressByClientId(id) {
+        const [results, metadata] = await db.query(
+            `DELETE FROM addresses WHERE clientId = '${id}';`
         );
 
         return results;

@@ -121,3 +121,5 @@ INSERT INTO `teste`.`books` (`title`, `year`, `publisher`, `edition`, `isbn`, `p
 
 INSERT INTO `teste`.`books` (`title`, `year`, `publisher`, `edition`, `isbn`, `pages`, `synopsis`, `height`, `width`, `depth`, `weight`, `price`, `barcode`, `categoryId`, `createdAt`, `updatedAt`)
   VALUES ('O Pequeno Príncipe', '1943', 'Reynal & Hitchcock', '1', '978-0-04-823045-6', '423', 'O Pequeno Príncipe é um romance do escritor francês Antoine de Saint-Exupéry, publicado em 1943 nos Estados Unidos. A princípio, aparentando ser um livro para crianças, tem um grande teor poético e filosófico. É o livro francês mais vendido no mundo, cerca de 145 milhões de exemplares, e entre 400 a 500 edições.', '23', '15', '3', '1', '20.50', '978-0-04-823045-6', '2', '2020-10-10 00:00:00', NULL);
+
+

@@ -9,10 +9,6 @@ router.get("/clients", clientController.clientsView);
 
 router.get("/client/:id", clientController.clientView);
 
-router.get("/addresses/:id", clientController.getAddressById);
-
-router.get("/phones/:id", clientController.getPhoneById);
-
 router.get("/signin", clientController.signinView);
 
 router.get("/clients/delete/:id", clientController.deleteClient);

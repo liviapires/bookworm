@@ -112,6 +112,10 @@
     margin-left: 7rem !important;
 }
 
+.ml-05 {
+    margin-left: 0.5rem !important;
+}
+
 .ml-5 {
     margin-left: 5rem !important;
 }
@@ -413,6 +417,11 @@
     height: 1rem;
 }
 
+.icon-max {
+    width: 2rem;
+    height: 2rem;
+}
+
 .search-icon {
     width: 1.2rem;
     height: 1.2rem;
@@ -553,6 +562,39 @@ a:hover {
     text-decoration: none;
 }
 
+.btn-outline-secondary {
+    border-color: var(--veronica) !important;
+    color: var(--veronica) !important;
+    background-color: var(--white) !important;
+}
+
+.btn-plus-minus {
+    border-color: var(--veronica) !important;
+    color: var(--eerie-black) !important;
+    font-weight: 600 !important;
+    background-color: var(--white) !important;
+    width: 1.65rem;
+    font-size: 1.15rem;
+}
+
+.btn-plus-minus:hover {
+    border-color: var(--veronica) !important;
+    color: var(--white) !important;
+    font-weight: 600 !important;
+    background-color: var(--veronica) !important;
+    width: 1.65rem;
+    font-size: 1.15rem;
+    transition: 0.35s;
+}
+
+.btn-plus-minus:disabled{
+    border-color: var(--dark-gray) !important;
+    color: var(--dark-gray) !important;
+    font-weight: 600 !important;
+    background-color: var(--white) !important;
+    width: 1.65rem;
+    font-size: 1.15rem;
+}
 
 @media (min-width: 768px) {
     .card img {

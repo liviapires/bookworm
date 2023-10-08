@@ -1,7 +1,7 @@
 const db = require("../../config/db");
 
 class Card {
-    constructor(cardNumber, cardName, expirationDate, cardFlag, cvv, createdAt, updatedAt) {
+    constructor(cardNumber, cardName, expirationDate, cardFlag, cvv, createdAt, updatedAt, clientId) {
         this.cardNumber = cardNumber;
         this.cardName = cardName;
         this.expirationDate = expirationDate;
@@ -9,6 +9,7 @@ class Card {
         this.cvv = cvv;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.clientId = clientId;
     }
 
     // get all cards
@@ -23,7 +24,7 @@ class Card {
     // create a new card
     async createCard(card) {
         const [results, metadata] = await db.query(
-            `INSERT INTO cards (cardNumber, cardName, expirationDate, cardFlag, cvv, createdAt, updatedAt) \
+            `INSERT INTO cards (cardNumber, cardName, expirationDate, cardFlag, cvv, createdAt, updatedAt, clientId) \
                 VALUES (
                     '${card.cardNumber}',
                     '${card.cardName}',
@@ -31,7 +32,8 @@ class Card {
                     '${card.cardFlag}',
                     '${card.cvv}',
                     '${card.createdAt}',
-                    '${card.updatedAt}'
+                    '${card.updatedAt}',
+                    '${card.clientId}'
                 );`
         );
 
@@ -82,6 +84,24 @@ class Card {
                     AND cardFlag = '${card.cardFlag}'
                     AND cvv = '${card.cvv}'
                     AND createdAt = '${card.createdAt}';`
+        );
+
+        return results;
+    }
+
+    // get card by clientId
+    async getCardByClientId(id) {
+        const [results, metadata] = await db.query(
+            `SELECT * FROM cards WHERE clientId = '${id}';`
+        );
+
+        return results;
+    }
+
+    // delete card by clientId
+    async deleteCardByClientId(id) {
+        const [results, metadata] = await db.query(
+            `DELETE FROM cards WHERE clientId = '${id}';`
         );
 
         return results;

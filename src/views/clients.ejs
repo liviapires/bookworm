@@ -2,7 +2,7 @@
 
 <div class="container h-100">
 
-    <h1 class="title-home">Clientes</h1>
+    <h1 class="title center mt-5">Clientes</h1>
 
     <table class="table table-striped">
         <thead>
@@ -42,17 +42,17 @@
                         <%= client.neighborhood %>
                     </td>
                     <td>
-                        <%= client.cep %>
+                        <%= client.zipCode %>
                     </td>
                     <td>
                         <%= client.state %>
                     </td>
                     <td>
-                        <a href="/client/<%= client.id %>">
+                        <a href="/client/<%= client.clientId %>">
                             <img src="https://www.svgrepo.com/show/522719/zoom-plus.svg" alt="Ver mais"
                                 class="icon">
                         </a>
-                        <a href="/clients/delete/<%= client.id %>" style="display: inline-block;">
+                        <a href="/clients/delete/<%= client.clientId %>" style="display: inline-block;">
                             <img src="https://www.svgrepo.com/show/502606/delete-3.svg" alt="Deletar"
                                 class="icon">
                         </a>

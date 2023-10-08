@@ -12,41 +12,13 @@ const anAddress = new Address();
 const aPhone = new Phone();
 const aCard = new Card();
 
-// get address by id
-async function getAddressById (req, res) {
-    try {
-        let [address] = await anAddress.getAddressById(req.params.id);
-        res.status(200).json(address);
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
-}
-
-// get phone by id
-async function getPhoneById (req, res) {
-    try {
-        let [phone] = await aPhone.getPhoneById(req.params.id);
-        res.status(200).json(phone);
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
-}
-
 // create a new client
 async function createClient (req, res) {
-    
-    // pega o email
-    const email = req.body.email;
+
+    console.log(req.body);
 
     // gera um código aleatório
     const code = Math.floor(Math.random() * 1000000);
-
-    // pega o cpf
-    const cpf = req.body.cpf;
 
     // codifica a senha
     const salt = await bcrypt.genSalt(10);
@@ -60,8 +32,28 @@ async function createClient (req, res) {
 
     // date in mysql format
     const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
-
     const updatedAt = createdAt;
+
+    let client = {
+        code: code,
+        name: req.body.name,
+        birthDate: birthDate,
+        gender: req.body.gender,
+        cpf: req.body.cpf,
+        email: req.body.email,
+        password: hashedPassword,
+        ranking: ranking,
+        active: active,
+        createdAt: createdAt,
+        updatedAt: updatedAt
+    }
+    
+    await aClient.createClient(client);
+
+    // get the id of the new client
+    let clientId = await aClient.getClientId(client);
+
+    clientId = clientId[0].clientId;
 
     let phone = {
         ddd: req.body.ddd,
@@ -69,6 +61,7 @@ async function createClient (req, res) {
         type: req.body.type,
         createdAt: createdAt,
         updatedAt: updatedAt,
+        clientId: clientId
     }
 
     let address = {
@@ -79,10 +72,11 @@ async function createClient (req, res) {
         city: req.body.city,
         state: req.body.state,
         country: req.body.country,
-        cep: req.body.cep,
+        zipCode: req.body.zipCode,
         observation: req.body.observation,
         createdAt: createdAt,
-        updatedAt: updatedAt
+        updatedAt: updatedAt,
+        clientId: clientId
     }
 
     let creditCard = {
@@ -92,48 +86,20 @@ async function createClient (req, res) {
         cardFlag: req.body.cardFlag,
         cvv: req.body.cvv,
         createdAt: createdAt,
-        updatedAt: updatedAt
+        updatedAt: updatedAt,
+        clientId: clientId
     }
 
+    // create phone
     await aPhone.createPhone(phone);
+
+    // create address
     await anAddress.createAddress(address);
+
+    // create credit card
     await aCard.createCard(creditCard);
 
-    // get phone id from phone table
-    const phoneId = await aPhone.getPhoneId(phone);
-
-    // get address id from address table
-    const addressId = await anAddress.getAddressId(address);
-
-    // get card id from card table
-    const cardId = await aCard.getCardId(creditCard);
-
-    let client = {
-        code: code,
-        name: req.body.name,
-        birthDate: birthDate,
-        gender: req.body.gender,
-        cpf: cpf,
-        email: email,
-        password: hashedPassword,
-        ranking: ranking,
-        active: active,
-        createdAt: createdAt,
-        updatedAt: updatedAt,
-        addressesIds: addressId[0].addressId,
-        phonesIds: phoneId[0].phoneId,
-        cardsIds: cardId[0].cardId
-    }
-
-    try {
-        const newClient = await aClient.createClient(client);
-        res.status(201).json(newClient);
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
-
+    // redirect to the home page
     res.redirect('/home');
 
 }
@@ -153,7 +119,7 @@ async function updateClient (req, res) {
     let birthDate = moment(req.body.birthDate).format('YYYY-MM-DD HH:mm:ss');
 
     let clientData = {
-        id: client[0].id,
+        id: client[0].clientId,
         name: req.body.name,
         birthDate: birthDate,
         gender: req.body.gender,
@@ -171,46 +137,26 @@ async function updateClient (req, res) {
     
 // delete a client and its dependencies
 async function deleteClient (req, res) {
-    try {
 
-        // get client by id
-        let [client] = await aClient.getClientById(req.params.id);
+        // delete client's addresses
+        await anAddress.deleteAddressByClientId(req.params.id);
 
-        // get address by id
-        let [address] = await anAddress.getAddressById(client.addressesIds);
+        // delete client's phones
+        await aPhone.deletePhoneByClientId(req.params.id);
 
-        // get phone by id
-        let [phone] = await aPhone.getPhoneById(client.phonesIds);
-
-        // get card by id
-        let [card] = await aCard.getCardById(client.cardsIds);
+        // delete client's cards
+        await aCard.deleteCardByClientId(req.params.id);
 
         // delete client
         await aClient.deleteClient(req.params.id);
-
-        // delete address
-        await anAddress.deleteAddress(address.addressId);
-
-        // delete phone
-        await aPhone.deletePhone(phone.phoneId);
-
-        // delete card
-        await aCard.deleteCard(card.cardId);
-        
-        res.status(200).json({
-            message: 'Cliente deletado com sucesso!'
-        });
-    } catch (error) {
-        res.status(500).json({
-            message: error.message
-        });
-    }
-
-    res.redirect('/clients');
+    
+        // redirect to the clients page
+        res.redirect('/clients');
 }
 
 // Renderiza a view signin
 const signinView = (req, res) => {
+
     res.render('signin', {
         title: 'Sign In'
     });
@@ -274,7 +220,5 @@ module.exports = {
     editClientView,
     createClient,
     deleteClient,
-    updateClient,
-    getAddressById,
-    getPhoneById
+    updateClient
 }

@@ -47,7 +47,7 @@ const livro = [{
 
 // Renderiza a view book
 async function bookView (req, res) {
-    let livros = await aBook.getAllBooks();
+    // let livros = await aBook.getAllBooks();
 
     res.render('book', {
         title: 'Livro',
@@ -56,7 +56,7 @@ async function bookView (req, res) {
 }
 
 async function oneBookView (req, res) {
-    let livro = await aBook.getBookById(req.params.id);
+    // let livro = await aBook.getBookById(req.params.id);
 
     res.render('book', {
         title: 'Livro',

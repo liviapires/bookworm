@@ -1,110 +1,119 @@
 <%- include('header.ejs') %>
 
-<div id="body" class="body">
-    <div class="cart">
-        <div class="left">
-            <% livros.forEach((livro) => { %>
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                    <div class="d-flex">
-                        <img src="<%= livro.imagem %>" width="50rem">
-                        <div class="ml-1">
-                            <div class="slight-bold">
-                                <%= livro.titulo %>
+    <div id="body" class="body">
+        <div class="cart">
+            <div class="left">
+                <div class="container">
+                    <div class="row">
+                        <% livros.forEach((livro)=> { %>
+                            <div class="col-md-5 mb-1">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <img src="<%= livro.imagem %>" class="img-fluid" alt="<%= livro.titulo %>"
+                                            width="50">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="font-weight-bold">
+                                            <%= livro.titulo %>
+                                        </div>
+                                        <div>
+                                            <%= livro.autor %>
+                                        </div>
+                                        <div>
+                                            <%= livro.editora %>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <%= livro.autor %>
+                            <div class="col-md-2">
+                                R$ <%= livro.preco %>
                             </div>
-                            <div>
-                                <%= livro.editora %>
+                            <div class="col-md-2">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <button type="button" class="btn-plus-minus btn-outline-secondary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
+                                            -
+                                        </button>
+                                    </div>
+                                    <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn-plus-minus btn-outline-secondary btn-number" data-type="Mais" data-field="quant[1]">
+                                            +
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="col-md-2">
+                                R$ <%= livro.preco %>
+                            </div>
+                            <div class="col-md-1">
+                                <img src="https://www.svgrepo.com/show/533017/trash-blank-alt.svg" alt="Remover item"
+                                    class="icon">
+                            </div>
+                            <% }); %>
+                    </div>
+                </div>
+                <hr>
+                <button type="button" class="btn btn-secondary">Limpar o Carrinho</button>
+            </div>
+            <div class="d-block right">
+                <div class="bg-gray">
+                    <div class="slight-bold">Cupom</div>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Pesquisar..." aria-label="Pesquisar..."
+                            aria-describedby="basic-addon1">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <img src="https://www.svgrepo.com/show/532555/search.svg" alt="Pesquisar"
+                                    class="search-icon">
+                            </button>
                         </div>
                     </div>
-                    <div>
-                        R$
-                        <%= livro.preco %>
-                    </div>
-                    <div class="input-group w-6">
-                        <span class="input-group-prepend">
-                            <button type="button" class="btn btn-outline-secondary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
-                                <img src="https://www.svgrepo.com/show/532960/minus.svg" alt="Menos" width="8">
-                            </button>
-                        </span>
-                        <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">
-                        <span class="input-group-append">
-                            <button type="button" class="btn btn-outline-secondary btn-number" data-type="Mais" data-field="quant[1]">
-                                <img src="https://www.svgrepo.com/show/532997/plus-large.svg" alt="plus" width="8">
-                            </button>
-                        </span>
-                    </div>
-                    <div>
-                        R$
-                        <%= livro.preco %>
-                    </div>
-                    <div>
-                        <img src="https://www.svgrepo.com/show/533017/trash-blank-alt.svg" alt="Remover item" class="icon">
-                    </div>
                 </div>
-            <% }); %>
-            <hr>
-            <button type="button" class="btn btn-secondary">Limpar o Carrinho</button>
-        </div>
-        <div class="d-block right">
-            <div class="bg-gray">
-                <div class="slight-bold">Cupom</div>
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Pesquisar..." aria-label="Pesquisar..."
-                        aria-describedby="basic-addon1">
-                    <div class="input-group-prepend">
-                        <button class="btn btn-outline-secondary" type="button">
-                            <img src="https://www.svgrepo.com/show/532555/search.svg" alt="Pesquisar"
-                                class="search-icon">
-                        </button>
+                <div class="mt-3 slight-bold">Total Carrinho</div>
+                <div class="bg-gray mt-3">
+                    <div class="d-flex">
+                        <div class="slight-bold">Subtotal</div>
+                        <div class="ml-auto">R$ <%= precoFinal %>
+                        </div>
                     </div>
+                    <hr>
+                    <div class="d-flex">
+                        <div class="slight-bold">Total</div>
+                        <div class="ml-auto">R$ <%= precoFinal %>
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="button" class="btn btn-primary w-100 mt-1">Comprar agora</button>
                 </div>
-            </div>
-            <div class="mt-3 slight-bold">Total Carrinho</div>
-            <div class="bg-gray mt-3">
-                <div class="d-flex">
-                    <div class="slight-bold">Subtotal</div>
-                        <div class="ml-auto">R$ <%= precoFinal %></div>
-                </div>
-                <hr>
-                <div class="d-flex">
-                    <div class="slight-bold">Total</div>
-                    <div class="ml-auto">R$ <%= precoFinal %></div>
-                </div>
-                <hr>
-                <button type="button" class="btn btn-primary w-100 mt-1">Comprar agora</button>
-            </div>
-            <div class="mt-3 slight-bold">Calcular Frete</div>
-            <div class="bg-gray mt-3">
-                <input type="text" class="form-control" placeholder="CEP">
-                <div class="d-flex justify-content-between align-items-baseline">
-                    <div>Valor</div>
-                    <button type="button" class="btn btn-secondary w-50 mt-1">Calcular</button>
+                <div class="mt-3 slight-bold">Calcular Frete</div>
+                <div class="bg-gray mt-3">
+                    <input type="text" class="form-control" placeholder="CEP">
+                    <div class="d-flex justify-content-between align-items-baseline">
+                        <div>Valor</div>
+                        <button type="button" class="btn btn-secondary w-50 mt-1">Calcular</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="title-home">Quem viu, viu também...</div>
+    <div class="title-home">Quem viu, viu também...</div>
 
-<div class="cards-wrapper">
-    <% livros.forEach((livro) => { %>
-        <div class="card">
-            <img src="<%= livro.imagem %>"
-                class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">
-                    <%= livro.titulo %>
-                </h5>
-                <p class="card-text">R$ <%= livro.preco %></p>
-                <a href="#" class="btn btn-primary">Comprar Agora</a>
+    <div class="cards-wrapper">
+        <% livros.forEach((livro)=> { %>
+            <div class="card">
+                <img src="<%= livro.imagem %>" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <%= livro.titulo %>
+                    </h5>
+                    <p class="card-text">R$ <%= livro.preco %>
+                    </p>
+                    <a href="#" class="btn btn-primary">Comprar Agora</a>
+                </div>
             </div>
-        </div>
-    <% }); %>
-</div>
+            <% }); %>
+    </div>
 
-<%- include('footer.ejs') %>
- 
+    <%- include('footer.ejs') %>

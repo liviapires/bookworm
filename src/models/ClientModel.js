@@ -1,7 +1,7 @@
 const db = require(`../../config/db`);
 
 class Client {
-    constructor(code, name, birthDate, gender, cpf, email, password, ranking, active, createdAt, updatedAt, addressesIds, phonesIds, cardsIds) {
+    constructor(code, name, birthDate, gender, cpf, email, password, ranking, active, createdAt, updatedAt) {
         this.code = code;
         this.name = name;
         this.birthDate = birthDate;
@@ -13,18 +13,16 @@ class Client {
         this.active = active;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.addressesIds = addressesIds;
-        this.phonesIds = phonesIds;
-        this.cardsIds = cardsIds;
     }
+
+    // get all clients with their phones, addresses and cards
 
     async getAllClients() {
         const [results, metadata] = await db.query(
-            `SELECT * FROM teste.clients
-                LEFT JOIN addresses ON clients.addressesIds = addresses.addressId
-                LEFT JOIN phones ON clients.phonesIds = phones.phoneId
-                LEFT JOIN cards ON clients.cardsIds = cards.cardId;
-            `
+            `SELECT * FROM clients 
+                INNER JOIN phones ON clients.clientId = phones.clientId
+                INNER JOIN addresses ON clients.clientId = addresses.clientId
+                INNER JOIN cards ON clients.clientId = cards.clientId;`
         );
 
         return results;
@@ -32,7 +30,7 @@ class Client {
 
     async createClient(client) {
         const [results, metadata] = await db.query(
-            `INSERT INTO clients (code, name, birthDate, gender, cpf, email, password, ranking, active, createdAt, updatedAt, addressesIds, phonesIds, cardsIds)
+            `INSERT INTO clients (code, name, birthDate, gender, cpf, email, password, ranking, active, createdAt, updatedAt)
                 VALUES (
                     '${client.code}',
                     '${client.name}',
@@ -44,10 +42,7 @@ class Client {
                     '${client.ranking}',
                     '${client.active}',
                     '${client.createdAt}',
-                    '${client.updatedAt}',
-                    '${client.addressesIds}',
-                    '${client.phonesIds}',
-                    '${client.cardsIds}'
+                    '${client.updatedAt}'
                 );`
         );
 
@@ -69,9 +64,11 @@ class Client {
         return results;
     }
 
+    // delete client by id and all its phones, addresses and cards
+
     async deleteClient(id) {
         const [results, metadata] = await db.query(
-            `DELETE FROM clients WHERE id = '${id}';`
+            `DELETE FROM clients WHERE clientId = '${id}';`
         );
 
         return results;
@@ -80,10 +77,10 @@ class Client {
     async getClientById(id) {
         const [results, metadata] = await db.query(
             `SELECT * FROM clients 
-                LEFT JOIN addresses ON clients.addressesIds = addresses.addressId 
-                LEFT JOIN phones ON clients.phonesIds = phones.phoneId
-                LEFT JOIN cards ON clients.cardsIds = cards.cardId
-                WHERE clients.id = '${id}';`
+                INNER JOIN phones ON clients.clientId = phones.clientId
+                INNER JOIN addresses ON clients.clientId = addresses.clientId
+                INNER JOIN cards ON clients.clientId = cards.clientId
+                WHERE clients.clientId = '${id}';`
         );
 
         return results;
@@ -100,6 +97,17 @@ class Client {
     async getClientByCpf(cpf) {
         const [results, metadata] = await db.query(
             `SELECT * FROM clients WHERE clients.cpf = '${cpf}';`
+        );
+
+        return results;
+    }
+
+    // get client id
+
+    async getClientId(client) {
+        const [results, metadata] = await db.query(
+            `SELECT clientId FROM clients 
+                WHERE code = '${client.code}';`
         );
 
         return results;
