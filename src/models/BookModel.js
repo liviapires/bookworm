@@ -2,7 +2,7 @@ const db = require("../../config/db");
 
 class Book {
 
-    constructor(title, year, publisher, edition, isbn, pages, synopsis, height, width, depth, weight, price, barcode, categoryId, createdAt, updatedAt) {
+    constructor(title, year, publisher, edition, isbn, pages, synopsis, height, width, depth, weight, price, barcode, createdAt, updatedAt) {
         this.title = title;
         this.year = year;
         this.publisher = publisher;
@@ -16,7 +16,6 @@ class Book {
         this.weight = weight;
         this.price = price;
         this.barcode = barcode;
-        this.categoryId = categoryId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -33,7 +32,7 @@ class Book {
     // create book
     async createBook(book) {
         const [results, metadata] = await db.query(
-            `INSERT INTO books (title, year, publisher, edition, isbn, pages, synopsis, height, width, depth, weight, price, barcode, categoryId, createdAt, updatedAt) \
+            `INSERT INTO books (title, year, publisher, edition, isbn, pages, synopsis, height, width, depth, weight, price, barcode, createdAt, updatedAt) \
             VALUES (
                 '${book.title}',
                 '${book.year}',
@@ -48,7 +47,6 @@ class Book {
                 '${book.weight}',
                 '${book.price}',
                 '${book.barcode}',
-                '${book.categoryId}',
                 '${book.createdAt}',
                 '${book.updatedAt}'
             );`
@@ -74,9 +72,8 @@ class Book {
                 weight = '${book.weight}',
                 price = '${book.price}',
                 barcode = '${book.barcode}',
-                categoryId = '${book.categoryId}',
                 updatedAt = '${book.updatedAt}'
-            WHERE id = ${book.id};`
+            WHERE bookId = ${book.id};`
         );
 
         return results;
@@ -85,7 +82,7 @@ class Book {
     // delete book by id
     async deleteBook(id) {
         const [results, metadata] = await db.query(
-            `DELETE FROM books WHERE id = ${id};`
+            `DELETE FROM books WHERE bookId = ${id};`
         );
 
         return results;
@@ -94,8 +91,7 @@ class Book {
     // get book by id
     async getBookById(id) {
         const [results, metadata] = await db.query(
-            `SELECT * FROM books
-                WHERE id = ${id};`
+            `SELECT * FROM books WHERE bookId = ${id};`
         );
 
         return results;

@@ -1,54 +1,7 @@
--- query to create the table 'addresses' in the database 'teste'
-
-CREATE TABLE `teste`.`addresses` (
-  `addressId` int NOT NULL AUTO_INCREMENT,
-  `cep` varchar(8) NOT NULL,
-  `street` varchar(255) NOT NULL,
-  `addressNumber` varchar(10) NOT NULL,
-  `neighborhood` varchar(255) NOT NULL,
-  `complement` varchar(255) DEFAULT NULL,
-  `city` varchar(255) NOT NULL,
-  `state` varchar(255) NOT NULL,
-  `country` varchar(255) NOT NULL,
-  `observation` varchar(255) DEFAULT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`addressId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
-
--- query to create the table 'phones' in the database 'teste'
-
-CREATE TABLE `teste`.`phones` (
-  `phoneId` int NOT NULL AUTO_INCREMENT,
-  `ddd` varchar(2) NOT NULL,
-  `phoneNumber` varchar(25) NOT NULL,
-  `type` ENUM('Comercial', 'Casa', 'Trabalho', 'Celular') NOT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`phoneId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
-
--- query to create cards table
-
-CREATE TABLE `teste`.`cards` (
-  `cardId` int NOT NULL AUTO_INCREMENT,
-  `cardNumber` varchar(16) NOT NULL,
-  `cardName` varchar(255) NOT NULL,
-  `expirationDate` varchar(255) NOT NULL,
-  `cardFlag` ENUM('Visa', 'Mastercard', 'Elo', 'American Express') NOT NULL,
-  `cvv` varchar(3) NOT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`cardId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
-
-
--- query to create the table 'clients' in the database 'teste' with the foreign keys 'addressesIds' and 'phonesIds' to the tables 'addresses', 'phones' and 'cards' in the database 'teste'
+-- create table clients
 
 CREATE TABLE `teste`.`clients` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `clientId` int NOT NULL AUTO_INCREMENT,
   `code` varchar(10) NOT NULL,
   `name` varchar(255) NOT NULL,
   `birthDate` date NOT NULL,
@@ -60,66 +13,124 @@ CREATE TABLE `teste`.`clients` (
   `active` tinyint(1) NOT NULL DEFAULT '1',
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  `addressesIds` int NOT NULL,
-  `phonesIds` int NOT NULL,
-  `cardsIds` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `addressesIds` (`addressesIds`),
-  KEY `phonesIds` (`phonesIds`),
-  KEY `cardsIds` (`cardsIds`),
-  CONSTRAINT `addressIds` FOREIGN KEY (`addressesIds`) REFERENCES `addresses` (`addressId`),
-  CONSTRAINT `phonesIds` FOREIGN KEY (`phonesIds`) REFERENCES `phones` (`phoneId`),
-  CONSTRAINT `cardsIds` FOREIGN KEY (`cardsIds`) REFERENCES `cards` (`cardId`)
+  PRIMARY KEY (`clientId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- create table books with title, year, publisher, edition, isbn, pages, synopsis, height, width, depth, weight, price, barcode, categoryId, createdAt, updatedAt
+-- create table addresses with zipCode, street, addressNumber, neighborhood, city, state, country, complement, observation, createdAt, updatedAt and clientId
 
-CREATE TABLE `teste`.`books` (
-  `bookId` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `year` varchar(4) NOT NULL,
-  `publisher` varchar(255) NOT NULL,
-  `edition` varchar(255) NOT NULL,
-  `isbn` varchar(255) NOT NULL,
-  `pages` varchar(255) NOT NULL,
-  `synopsis` text NOT NULL,
-  `height` varchar(255) NOT NULL,
-  `width` varchar(255) NOT NULL,
-  `depth` varchar(255) NOT NULL,
-  `weight` varchar(255) NOT NULL,
-  `price` float NOT NULL,
-  `barcode` varchar(255) NOT NULL,
-  `categoryId` int NOT NULL,
+CREATE TABLE `addresses` (
+  `addressId` int NOT NULL AUTO_INCREMENT,
+  `zipCode` varchar(8) NOT NULL,
+  `street` varchar(255) NOT NULL,
+  `addressNumber` varchar(10) NOT NULL,
+  `neighborhood` varchar(255) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `state` varchar(255) NOT NULL,
+  `country` varchar(255) NOT NULL,
+  `complement` varchar(255) DEFAULT NULL,
+  `observation` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`bookId`),
-  KEY `categoryId` (`categoryId`),
-  CONSTRAINT `categoryId` FOREIGN KEY (`categoryId`) REFERENCES `categories` (`categoryId`)
+  `clientId` int NOT NULL,
+  PRIMARY KEY (`addressId`),
+  CONSTRAINT `fk_address_clientId` FOREIGN KEY (`clientId`) REFERENCES `clients` (`clientId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- create table phones with ddd, phoneNumber, type, createdAt, updatedAt and clientId
+
+CREATE TABLE `phones` (
+  `phoneId` int NOT NULL AUTO_INCREMENT,
+  `ddd` varchar(2) NOT NULL,
+  `phoneNumber` varchar(25) NOT NULL,
+  `type` ENUM('Comercial', 'Residencial', 'Celular') NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime DEFAULT NULL,
+  `clientId` int NOT NULL,
+  PRIMARY KEY (`phoneId`),
+  CONSTRAINT `fk_phone_clientId` FOREIGN KEY (`clientId`) REFERENCES `clients` (`clientId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- create table cards with cardNumber, cardName, expirationDate, cardFlag, cvv, createdAt, updatedAt and clientId
+
+CREATE TABLE `cards` (
+  `cardId` int NOT NULL AUTO_INCREMENT,
+  `cardNumber` varchar(16) NOT NULL,
+  `cardName` varchar(255) NOT NULL,
+  `expirationDate` varchar(255) NOT NULL,
+  `cardFlag` ENUM('Visa', 'Mastercard', 'Elo', 'American Express') NOT NULL,
+  `cvv` varchar(3) NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime DEFAULT NULL,
+  `clientId` int NOT NULL,
+  PRIMARY KEY (`cardId`),
+  CONSTRAINT `fk_card_clientId` FOREIGN KEY (`clientId`) REFERENCES `clients` (`clientId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- create table books with title, author, publisher, edition, year, pages, isbn, language, createdAt, updatedAt
+
+CREATE TABLE `books` (
+  `bookId` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `author` varchar(255) NOT NULL,
+  `publisher` varchar(255) NOT NULL,
+  `edition` varchar(255) NOT NULL,
+  `year` varchar(4) NOT NULL,
+  `pages` varchar(255) NOT NULL,
+  `isbn` varchar(255) NOT NULL,
+  `language` varchar(255) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`bookId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- create table categories with name, createdAt, updatedAt
 
-CREATE TABLE `teste`.`categories` (
+CREATE TABLE `categories` (
   `categoryId` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `icon` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`categoryId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- insert 4 random books into the table books
+-- create table books_categories with bookId, categoryId, createdAt, updatedAt
 
-INSERT INTO `teste`.`books` (`title`, `year`, `publisher`, `edition`, `isbn`, `pages`, `synopsis`, `height`, `width`, `depth`, `weight`, `price`, `barcode`, `categoryId`, `createdAt`, `updatedAt`) 
-  VALUES ('O Senhor dos Anéis', '1954', 'Allen & Unwin', '1', '978-0-04-823045-6', '423', 'O Senhor dos Anéis é um romance de fantasia criado pelo escritor, professor e filólogo britânico J. R. R. Tolkien. A história começa como seqüência de um livro anterior de Tolkien, O Hobbit (1937), e logo se desenvolve numa história muito maior. Foi escrito entre 1937 e 1949, com muitas partes criadas durante a Segunda Guerra Mundial. Embora Tolkien tenha planejado realizá-lo em volume único, foi originalmente publicado em três volumes entre 1954 e 1955, e foi assim, em três volumes, que se tornou popular. Desde então foi reimpresso várias vezes e foi traduzido para mais de 40 línguas, tornando-se um dos trabalhos mais populares da literatura do século XX.', '23', '15', '3', '1', '100.00', '978-0-04-823045-6', '2', '2020-10-10 00:00:00', NULL);
+CREATE TABLE `books_categories` (
+  `bookId` int NOT NULL,
+  `categoryId` int NOT NULL,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime DEFAULT NULL,
+  PRIMARY KEY (`bookId`, `categoryId`),
+  CONSTRAINT `fk_bookId` FOREIGN KEY (`bookId`) REFERENCES `books` (`bookId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_categoryId` FOREIGN KEY (`categoryId`) REFERENCES `categories` (`categoryId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `teste`.`books` (`title`, `year`, `publisher`, `edition`, `isbn`, `pages`, `synopsis`, `height`, `width`, `depth`, `weight`, `price`, `barcode`, `categoryId`, `createdAt`, `updatedAt`)
-  VALUES ('O Hobbit', '1937', 'Allen & Unwin', '1', '978-0-04-823045-6', '423', 'O Hobbit é um livro infantojuvenil de alta fantasia, escrito pelo filólogo e professor britânico J. R. R. Tolkien. Publicado originalmente em 21 de setembro de 1937, na Inglaterra e um ano depois nos Estados Unidos, a obra se tornou um clássico da literatura infantojuvenil e é um dos livros mais vendidos até hoje.', '23', '15', '3', '1', '55.20', '978-0-04-823045-6', '2', '2020-10-10 00:00:00', NULL);
+-- insert into categories 10 different categories
 
-INSERT INTO `teste`.`books` (`title`, `year`, `publisher`, `edition`, `isbn`, `pages`, `synopsis`, `height`, `width`, `depth`, `weight`, `price`, `barcode`, `categoryId`, `createdAt`, `updatedAt`)
-  VALUES ('O Silmarillion', '1977', 'Allen & Unwin', '1', '978-0-04-823045-6', '423', 'O Silmarillion é uma coletânea de mitos do escritor britânico J. R. R. Tolkien, editada e publicada postumamente em 1977 por seu filho Christopher Tolkien com a ajuda de Guy Gavriel Kay. Trata-se, essencialmente, da história da criação do universo ficcional onde se passam os romances O Hobbit, O Senhor dos Anéis e O Silmarillion propriamente dito, e que é conhecido como "Terra Média".', '23', '15', '3', '1', '60.00', '978-0-04-823045-6', '2', '2020-10-10 00:00:00', NULL);
+INSERT INTO `categories` (`name`, `createdAt`) VALUES 
+  ('Ação', '2021-05-10 00:00:00'),
+  ('Aventura', '2021-05-10 00:00:00'),
+  ('Biografia', '2021-05-10 00:00:00'),
+  ('Comédia', '2021-05-10 00:00:00'),
+  ('Drama', '2021-05-10 00:00:00'),
+  ('Ficção Científica', '2021-05-10 00:00:00'),
+  ('História', '2021-05-10 00:00:00'),
+  ('Infantil', '2021-05-10 00:00:00'),
+  ('Romance', '2021-05-10 00:00:00'),
+  ('Terror', '2021-05-10 00:00:00');
 
-INSERT INTO `teste`.`books` (`title`, `year`, `publisher`, `edition`, `isbn`, `pages`, `synopsis`, `height`, `width`, `depth`, `weight`, `price`, `barcode`, `categoryId`, `createdAt`, `updatedAt`)
-  VALUES ('O Pequeno Príncipe', '1943', 'Reynal & Hitchcock', '1', '978-0-04-823045-6', '423', 'O Pequeno Príncipe é um romance do escritor francês Antoine de Saint-Exupéry, publicado em 1943 nos Estados Unidos. A princípio, aparentando ser um livro para crianças, tem um grande teor poético e filosófico. É o livro francês mais vendido no mundo, cerca de 145 milhões de exemplares, e entre 400 a 500 edições.', '23', '15', '3', '1', '20.50', '978-0-04-823045-6', '2', '2020-10-10 00:00:00', NULL);
+-- insert into books 10 different books
 
-
+INSERT INTO `books` (`title`, `author`, `publisher`, `edition`, `year`, `pages`, `isbn`, `language`, `price`, `image`, `createdAt`) VALUES
+('Livro 1', 'Autor 1', 'Editora 1', 'Edição 1', '2023', '300', '1234567890', 'Português', 29.99, 'https://edit.org/images/cat/book-covers-big-2019101610.jpg', NOW()),
+('Livro 2', 'Autor 2', 'Editora 2', 'Edição 2', '2022', '250', '0987654321', 'Inglês', 19.99, 'https://edit.org/images/cat/book-covers-big-2019101610.jpg', NOW()),
+('Livro 3', 'Autor 3', 'Editora 3', 'Edição 1', '2021', '320', '5432109876', 'Espanhol', 24.99, 'https://edit.org/images/cat/book-covers-big-2019101610.jpg', NOW()),
+('Livro 4', 'Autor 4', 'Editora 4', 'Edição 3', '2020', '280', '1357924680', 'Francês', 22.99, 'https://edit.org/images/cat/book-covers-big-2019101610.jpg', NOW()),
+('Livro 5', 'Autor 5', 'Editora 5', 'Edição 1', '2019', '400', '2468135790', 'Alemão', 34.99, 'https://edit.org/images/cat/book-covers-big-2019101610.jpg', NOW()),
+('Livro 6', 'Autor 6', 'Editora 6', 'Edição 2', '2018', '270', '9876543210', 'Italiano', 18.99, 'https://edit.org/images/cat/book-covers-big-2019101610.jpg', NOW()),
+('Livro 7', 'Autor 7', 'Editora 7', 'Edição 1', '2017', '350', '0123456789', 'Português', 27.99, 'https://edit.org/images/cat/book-covers-big-2019101610.jpg', NOW()),
+('Livro 8', 'Autor 8', 'Editora 8', 'Edição 4', '2016', '310', '5678901234', 'Inglês', 21.99, 'https://edit.org/images/cat/book-covers-big-2019101610.jpg', NOW()),
+('Livro 9', 'Autor 9', 'Editora 9', 'Edição 1', '2015', '290', '9870123456', 'Espanhol', 23.99, 'https://edit.org/images/cat/book-covers-big-2019101610.jpg', NOW()),
+('Livro 10', 'Autor 10', 'Editora 10', 'Edição 5', '2014', '260', '6789012345', 'Francês', 25.99, 'https://edit.org/images/cat/book-covers-big-2019101610.jpg', NOW());

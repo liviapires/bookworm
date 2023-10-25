@@ -468,7 +468,7 @@
 }
 
 .filters {
-    width: 10%;
+    width: 20%;
 }
 
 .filter-title {
@@ -594,6 +594,25 @@ a:hover {
     background-color: var(--white) !important;
     width: 1.65rem;
     font-size: 1.15rem;
+}
+
+.btn-minus {
+    border-radius: 0.35rem 0 0 0.35rem !important;
+}
+
+.btn-plus {
+    border-radius: 0 0.35rem 0.35rem 0 !important;
+}
+
+.input-cart {
+    width: 3rem;
+    text-align: center;
+    border: 0.1rem 0 0 0.1rem;
+    outline: none;
+}
+
+.veronica {
+    color: var(--veronica) !important;
 }
 
 @media (min-width: 768px) {

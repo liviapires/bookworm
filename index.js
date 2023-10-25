@@ -1,8 +1,16 @@
 const express = require("express");
-const ejs = require("ejs");
+const session = require("express-session");
 
 const app = express();
 const path = require("path");
+
+app.use(session({
+    secret: '2C44-4D44-WppQ38S',
+    resave: true,
+    saveUninitialized: true,
+    cookie: { maxAge: 600000 }
+})); 
+
 
 // The following line tells Express that we are using views as our view directory.
 app.set("views", "./src/views");
@@ -40,20 +48,15 @@ app.use(myAccountRouter);
 
 app.use(categoryRouter);
 
+// The following line tells Express to redirect the user to the home page if the user tries to access a route that does not exist.
 app.get("/", (req, res) => {
     res.redirect("/home");
 });
 
-// after deleting the client, redirect to the clients page
-app.get("/clients/delete/:id", (req, res) => {
-    res.redirect("/clients");
-});
-
-
+// The following line tells Express to listen to port 3000 for incoming requests.
 app.listen(3000, () => {
     console.log("Server running on port 3000");
 });
-
 
 // Database connection verification and sync
 (async () => {

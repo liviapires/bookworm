@@ -1,0 +1,61 @@
+<%- include('header.ejs') %>
+
+<div id="body" class="body">
+    <!-- MAIN -->
+    <div class="top ml-10">
+        <div class="d-block">
+            <div class="page-title">Todos os Livros</div>
+            <div class="page-subtitle">Home > Todos os Livros</div>
+        </div>
+        <div class="d-flex align-items-center">
+            <div>Página</div>
+            <div class="btn-group ml-1">
+                <select name="page" id="page" class="form-control">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom ml-10">
+        <div class="filters">
+            <div class="filter-title">
+                Categoria
+            </div>
+            <hr>
+
+            <% categorias.forEach((categoria) => { %>
+                <div class="form-check">
+                    <input class="form-check-input check" type="checkbox" value="" id="defaultCheck1">
+                    <label class="form-check-label" for="defaultCheck1">
+                        <%= categoria.name %>
+                    </label>
+                </div>
+            <% }); %>
+        </div>
+
+        <div class="items">
+            <% livros.forEach((livro) => { %>
+                <div class="card-item">
+                    <img src="<%= livro.image %>" width="150rem">
+                    <div class="ml-3 info-item">
+                        <div class="title-item"><%= livro.title %></div>
+                        <div class="price-item">R$ <%= livro.price %></div>
+                        <div class="description-item"><%= livro.author %></div>
+                        <div class="icons-item">
+                            <img class="icon" src="https://www.svgrepo.com/show/511031/info.svg" alt="info">
+                        </div>
+                    </div>
+                    <form action="/addToCart" method="POST">
+                        <input type="hidden" id="id" name="id" value="<%= livro.bookId %>">
+                        <button type="submit" class="btn btn-secondary ml-10">Comprar Agora</button>
+                    </form>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</div>
+
+<%- include('footer.ejs') %>

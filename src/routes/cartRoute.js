@@ -7,4 +7,6 @@ const cartContinueView = require("../controllers/cartController");
 router.get("/cart", cartView.cartView);
 router.get("/cartContinue", cartContinueView.cartContinueView);
 
+router.post("/addToCart", cartView.addToCart);
+
 module.exports = router;

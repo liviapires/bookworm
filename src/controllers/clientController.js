@@ -15,8 +15,6 @@ const aCard = new Card();
 // create a new client
 async function createClient (req, res) {
 
-    console.log(req.body);
-
     // gera um código aleatório
     const code = Math.floor(Math.random() * 1000000);
 
