@@ -34,6 +34,10 @@ app.use(myAccountRouter);
 
 app.get(categoryRouter);
 
+app.get("/", (req, res) => {
+    res.redirect("/home");
+});
+
 
 app.listen(3000, () => {
     console.log("Server running on port 3000");

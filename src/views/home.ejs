@@ -14,7 +14,7 @@
                             <%= livro.titulo %>
                         </h5>
                         <p class="card-text">R$ <%= livro.preco %></p>
-                        <a href="#" class="btn btn-primary">Comprar Agora</a>
+                        <a href="/book/<%= livro.id %>" class="btn btn-primary">Comprar Agora</a>
                     </div>
                 </div>
             <% }); %>
