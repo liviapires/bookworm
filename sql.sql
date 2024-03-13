@@ -1,6 +1,6 @@
 -- create table clients
 
-CREATE TABLE `teste`.`clients` (
+CREATE TABLE `bookworm`.`clients` (
   `clientId` int NOT NULL AUTO_INCREMENT,
   `code` varchar(10) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE `teste`.`clients` (
 
 -- create table addresses with zipCode, street, addressNumber, neighborhood, city, state, country, complement, observation, createdAt, updatedAt and clientId
 
-CREATE TABLE `addresses` (
+CREATE TABLE `bookworm`.`addresses` (
   `addressId` int NOT NULL AUTO_INCREMENT,
   `zipCode` varchar(8) NOT NULL,
   `street` varchar(255) NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE `addresses` (
 
 -- create table phones with ddd, phoneNumber, type, createdAt, updatedAt and clientId
 
-CREATE TABLE `phones` (
+CREATE TABLE `bookworm`.`phones` (
   `phoneId` int NOT NULL AUTO_INCREMENT,
   `ddd` varchar(2) NOT NULL,
   `phoneNumber` varchar(25) NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE `phones` (
 
 -- create table cards with cardNumber, cardName, expirationDate, cardFlag, cvv, createdAt, updatedAt and clientId
 
-CREATE TABLE `cards` (
+CREATE TABLE `bookworm`.`cards` (
   `cardId` int NOT NULL AUTO_INCREMENT,
   `cardNumber` varchar(16) NOT NULL,
   `cardName` varchar(255) NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE `cards` (
 
 -- create table books with title, author, publisher, edition, year, pages, isbn, language, createdAt, updatedAt
 
-CREATE TABLE `books` (
+CREATE TABLE `bookworm`.`books` (
   `bookId` int NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `author` varchar(255) NOT NULL,
@@ -87,7 +87,7 @@ CREATE TABLE `books` (
 
 -- create table categories with name, createdAt, updatedAt
 
-CREATE TABLE `categories` (
+CREATE TABLE `bookworm`.`categories` (
   `categoryId` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `createdAt` datetime NOT NULL,
@@ -97,7 +97,7 @@ CREATE TABLE `categories` (
 
 -- create table books_categories with bookId, categoryId, createdAt, updatedAt
 
-CREATE TABLE `books_categories` (
+CREATE TABLE `bookworm`.`books_categories` (
   `bookId` int NOT NULL,
   `categoryId` int NOT NULL,
   `createdAt` datetime NOT NULL,
@@ -109,7 +109,7 @@ CREATE TABLE `books_categories` (
 
 -- insert into categories 10 different categories
 
-INSERT INTO `categories` (`name`, `createdAt`) VALUES 
+INSERT INTO `bookworm`.`categories` (`name`, `createdAt`) VALUES 
   ('Ação', '2021-05-10 00:00:00'),
   ('Aventura', '2021-05-10 00:00:00'),
   ('Biografia', '2021-05-10 00:00:00'),
@@ -123,7 +123,7 @@ INSERT INTO `categories` (`name`, `createdAt`) VALUES
 
 -- insert into books 10 different books
 
-INSERT INTO `books` (`title`, `author`, `publisher`, `edition`, `year`, `pages`, `isbn`, `language`, `price`, `image`, `createdAt`) VALUES
+INSERT INTO `bookworm`.`books` (`title`, `author`, `publisher`, `edition`, `year`, `pages`, `isbn`, `language`, `price`, `image`, `createdAt`) VALUES
 ('Livro 1', 'Autor 1', 'Editora 1', 'Edição 1', '2023', '300', '1234567890', 'Português', 29.99, 'https://edit.org/images/cat/book-covers-big-2019101610.jpg', NOW()),
 ('Livro 2', 'Autor 2', 'Editora 2', 'Edição 2', '2022', '250', '0987654321', 'Inglês', 19.99, 'https://edit.org/images/cat/book-covers-big-2019101610.jpg', NOW()),
 ('Livro 3', 'Autor 3', 'Editora 3', 'Edição 1', '2021', '320', '5432109876', 'Espanhol', 24.99, 'https://edit.org/images/cat/book-covers-big-2019101610.jpg', NOW()),

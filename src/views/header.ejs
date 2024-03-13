@@ -24,9 +24,17 @@
         <nav class="navbar bg-body-tertiary bg-yellow-green">
             <div class="container-fluid">
                 <div class="d-flex">
-                    <a class="navbar-brand" href="/allBooks">
+
+                    <div class="navbar-brand botaoCategorias" id="categorias">
                         <img src="https://www.svgrepo.com/show/509382/menu.svg" alt="Menu" class="icon">
-                    </a>
+                    </div>
+
+                    <div class="modalCategorias">
+                        <div class="conteudoModalCategorias">
+                            <div class=" closeModalCategorias" id="close"><img src="https://www.svgrepo.com/show/521590/cross.svg" alt="FEchar" class="icon"></div>
+                        </div>
+                    </div>
+
                     <h6 class="veronica mt-075">Categorias</h6>
                 </div>
                 <a id="logo" class="white logo" href="/home">Bookworm</a>
@@ -50,3 +58,24 @@
             </div>
         </nav>
     </div>
+
+<!-- JS -->
+<script>
+    // toogle modal categorias
+    const switchModal = () => {
+        const modal = document.querySelector('.modalCategorias');
+        const actualState = modal.style.display;
+        if (actualState === 'block') {
+            modal.style.display = 'none';
+        } else {
+            modal.style.display = 'block';
+        }
+    }
+
+    const btn = document.querySelector('#categorias');
+    btn.addEventListener('click', switchModal);
+
+    // close modal when clicking on close button
+    const closeModal = document.querySelector('.closeModalCategorias');
+    closeModal.addEventListener('click', switchModal);
+</script>

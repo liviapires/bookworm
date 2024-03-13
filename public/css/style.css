@@ -615,6 +615,35 @@ a:hover {
     color: var(--veronica) !important;
 }
 
+.botaoCategorias{
+    cursor: pointer;
+}
+
+/* Estilos para o modal */
+.modalCategorias {
+    display: none; /* Oculta o modal por padrão */
+    position: fixed; /* Posição fixa para permanecer no lugar enquanto a página é rolada */
+    left: 0; /* Coloca o modal no lado esquerdo */
+    top: 0; /* Mantém o modal no topo */
+    width: 300px; /* Largura do modal */
+    height: 100%; /* Altura do modal (100% da altura da página) */
+    background-color: var(--gray); /* Fundo semi-transparente para o modal */
+    z-index: 9999; /* Coloca o modal acima de outros elementos */
+    overflow-x: hidden; /* Esconde a barra de rolagem horizontal */
+    overflow-y: auto; /* Permite rolagem vertical se o conteúdo do modal for maior que a tela */
+  }
+
+/* Estilos para o botão de fechar o modal */
+.closeModalCategorias {
+    float: right; /* Alinha à direita */
+}
+
+.closeModalCategorias:hover,
+.closeModalCategorias:focus {
+    cursor: pointer; /* Altera o cursor */
+}
+
+
 @media (min-width: 768px) {
     .card img {
         height: 11em;
