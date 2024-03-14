@@ -36,25 +36,25 @@ class Category {
             `UPDATE categories SET 
                 name = '${category.name}', 
                 updatedAt = '${category.updatedAt}'
-            WHERE id = ${category.id};`
+            WHERE categoryId = ${category.categoryId};`
         );
 
         return results;
     }
 
     // delete category by id
-    async deleteCategory(id) {
+    async deleteCategory(categoryId) {
         const [results, metadata] = await db.query(
-            `DELETE FROM categories WHERE id = ${id};`
+            `DELETE FROM categories WHERE categoryId = ${categoryId};`
         );
 
         return results;
     }
 
     // get category by id
-    async getCategoryById(id) {
+    async getCategoryById(categoryId) {
         const [results, metadata] = await db.query(
-            `SELECT * FROM categories WHERE id = ${id};`
+            `SELECT * FROM categories WHERE categoryId = ${categoryId};`
         );
 
         return results;

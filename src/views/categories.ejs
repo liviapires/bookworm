@@ -1,0 +1,37 @@
+<div class="modalCategorias">
+    <div class="conteudoModalCategorias">
+        <div class="closeModalCategorias" id="close"><img src="https://www.svgrepo.com/show/521590/cross.svg" alt="Fechar" class="icon"></div>
+
+        <div class="categorias">
+            <h6 class="veronica">Categorias</h6>
+            
+            <!-- mock categories -->
+            <div class="category">
+                <li>
+                    <a href="/allBooks">Todos os Livros</a>
+                </li>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS -->
+<script>
+    // toogle modal categorias
+    const switchModal = () => {
+        const modal = document.querySelector('.modalCategorias');
+        const actualState = modal.style.display;
+        if (actualState === 'block') {
+            modal.style.display = 'none';
+        } else {
+            modal.style.display = 'block';
+        }
+    }
+
+    const btn = document.querySelector('#categorias');
+    btn.addEventListener('click', switchModal);
+
+    // close modal when clicking on close button
+    const closeModal = document.querySelector('.closeModalCategorias');
+    closeModal.addEventListener('click', switchModal);
+</script>
