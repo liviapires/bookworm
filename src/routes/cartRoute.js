@@ -1,12 +1,13 @@
 const express = require('express')
 const router = express.Router();
 
-const cartView = require("../controllers/cartController");
-const cartContinueView = require("../controllers/cartController");
+const cartController = require("../controllers/cartController");
 
-router.get("/cart", cartView.cartView);
-router.get("/cartContinue", cartContinueView.cartContinueView);
+router.get("/cart", cartController.cartView);
+router.get("/cartContinue", cartController.cartContinueView);
+router.get("/cartCheckout", cartController.cartCheckoutView);
+router.get("/finishPurchase", cartController.finishPurchase);
 
-router.post("/addToCart", cartView.addToCart);
+router.post("/addToCart", cartController.addToCart);
 
 module.exports = router;
