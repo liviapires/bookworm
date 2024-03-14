@@ -74,11 +74,11 @@
                                                 <%= cliente[0].city %>, <%= cliente[0].state %> - <%= cliente[0].zipCode %>
                                             </div>
                                             <div>
-                                                <a href="/address/<%= cliente[0].addressId %>">
+                                                <a href="/edit/address/<%= cliente[0].addressId %>">
                                                     <img src="https://www.svgrepo.com/show/522527/edit-3.svg" alt="Editar"
                                                         class="icon-min ml-1">
                                                 </a>
-                                                <a href="/address/delete/<%= cliente[0].addressId %>" style="display: inline-block;">
+                                                <a href="/delete/address/<%= cliente[0].addressId %>" style="display: inline-block;">
                                                     <img src="https://www.svgrepo.com/show/502606/delete-3.svg" alt="Deletar"
                                                         class="icon-min">
                                                 </a>
@@ -121,7 +121,7 @@
 
                 </div>
 
-                <a href="/clients" class="mt-5 btn btn-primary">Voltar</a>
+                <a href="/admin/clients" class="mt-5 btn btn-primary">Voltar</a>
             </div>
         </div>
 

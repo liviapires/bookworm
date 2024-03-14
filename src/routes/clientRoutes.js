@@ -5,9 +5,11 @@ const clientController = require("../controllers/clientController");
 
 // GET ROUTES
 
-router.get("/clients", clientController.clientsView);
+router.get("/admin/clients", clientController.clientsView);
 
-router.get("/client/:id", clientController.clientView);
+router.get("/admin/client/:id", clientController.clientView);
+
+router.get("/myAccount/:id", clientController.clientView);
 
 router.get("/signin", clientController.signinView);
 

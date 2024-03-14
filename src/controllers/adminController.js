@@ -22,19 +22,42 @@ const pedido = [{
 // Renderiza a view evaluateExchange
 const evaluateExchangeView = (req, res) => {
     res.render('evaluateExchange', {
-        title: 'Avaliar Troca ou Devolução',
+        title: 'Avaliar Troca',
         pedido: pedido
     });
 }
 
-const evaluateExchangeView2 = (req, res) => {
-    res.render('evaluateExchange2', {
-        title: 'Avaliar Troca ou Devolução',
+const evaluateExchangeContinueView = (req, res) => {
+    res.render('evaluateExchangeContinue', {
+        title: 'Avaliar Troca',
         pedido: pedido
+    });
+}
+
+const evaluateDevoutionView = (req, res) => {
+    res.render('evaluateDevolution', {
+        title: 'Avaliar Devolução',
+        pedido: pedido
+    });
+}
+
+const evaluateDevolutionContinueView = (req, res) => {
+    res.render('evaluateDevolutionContinue', {
+        title: 'Avaliar Devolução',
+        pedido: pedido
+    });
+}
+
+async function mainAdminView (req, res) {
+    res.render('mainAdmin', {
+        title: 'Administração'
     });
 }
 
 module.exports = {
     evaluateExchangeView,
-    evaluateExchangeView2
+    evaluateExchangeContinueView,
+    evaluateDevoutionView,
+    evaluateDevolutionContinueView,
+    mainAdminView
 }

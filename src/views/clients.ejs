@@ -1,6 +1,6 @@
 <%- include('header.ejs') %>
 
-<div class="container h-100">
+<div class="main-center container">
 
     <h1 class="title center mt-5">Clientes</h1>
 
@@ -48,7 +48,7 @@
                         <%= client.state %>
                     </td>
                     <td>
-                        <a href="/client/<%= client.clientId %>">
+                        <a href="/admin/client/<%= client.clientId %>">
                             <img src="https://www.svgrepo.com/show/522719/zoom-plus.svg" alt="Ver mais"
                                 class="icon">
                         </a>

@@ -1,9 +1,14 @@
 const express = require('express')
 const router = express.Router();
 
-const adminView = require("../controllers/adminController");
+const adminController = require("../controllers/adminController");
 
-router.get("/evaluateExchange", adminView.evaluateExchangeView);
-router.get("/evaluateExchange2", adminView.evaluateExchangeView2);
+router.get("/evaluateExchange", adminController.evaluateExchangeView);
+router.get("/evaluateExchangeContinue", adminController.evaluateExchangeContinueView);
+router.get("/evaluateDevolution", adminController.evaluateDevoutionView);
+router.get("/evaluateDevolutionContinue", adminController.evaluateDevolutionContinueView);
+
+
+router.get("/admin", adminController.mainAdminView);
 
 module.exports = router;
