@@ -3,34 +3,179 @@
 <div id="body" class="body">
     <div class="bottom ml-10">
         <div class="filters">
-            <div>
-                <img src="https://www.svgrepo.com/show/532571/image-circle.svg" alt="imagem de perfil"
-                    class="br-100" width="150">
-                <div class="filter-title mt-5">
-                    Dados Pessoais
+            <img src="https://www.svgrepo.com/show/532906/book-open.svg" alt="Livro" width="150">
+            <div class="ml-1 r-line">
+                <div class="mt-5">
+                    <button onclick="toggleDiv('dadosPessoais', 'pedidos')" class="btn-primary btn w-79">Dados Pessoais</button>
                 </div>
                 <div class="mt-5">
-                    Endereços
+                    <button onclick="toggleDiv('pedidos', 'dadosPessoais')" class="btn-primary btn w-79">Pedidos</button>
                 </div>
                 <div class="mt-5">
-                    Pedidos
-                </div>
-                <div class="mt-5">
-                    Cartões
-                </div>
-                <div class="mt-5">
-                    Favoritos
-                </div>
-                <div class="mt-5">
-                    Sair
+                    <button class="btn-danger btn w-79">Sair</button>
                 </div>
             </div>
         </div>
         <div class="data">
-            <div class="title">Minha Conta</div>
+            <div id="dadosPessoais"> 
+                <div class="title center">Minha Conta</div>
+                <div class="big-card">
+                    <div class="center">
+                        <img src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/yellow-business-leadership-book-cover-design-template-dce2f5568638ad4643ccb9e725e5d6ff_screen.jpg?ts=1637017516"
+                            width="250rem" class="icon-person">
+                        <div class="d-flex align-items-center mt-1">
+                            <div class="bold"><%= cliente[0].name %></div>
+                            <div class="badge ml-1"><%= cliente[0].ranking %></div>
+                        </div>
+                    </div>
+                    <div class="info-client ml-7">
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex">
+                                <img src="https://www.svgrepo.com/show/532167/document-layout-right.svg" class="icon op-75">
+                                <div class="ml-1">
+                                    <div class="bold">CPF</div>
+                                    <%= cliente[0].cpf %>
+                                </div>
+                            </div>
+                            <div class="d-flex">
+                                <img src="https://www.svgrepo.com/show/502648/email.svg" class="icon op-75">
+                                <div class="ml-1">
+                                    <div class="bold">E-mail</div>
+                                    <%= cliente[0].email %>
+                                </div>
+                            </div>
+                            <div class="d-flex">
+                                <img src="https://www.svgrepo.com/show/502605/date-range.svg" class="icon op-75">
+                                <div class="ml-1">
+                                    <div class="bold">Data de Nascimento</div>
+                                    <%= cliente[0].birthDate %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex mt-2">
+                            <div class="w-49">
+                                <div class="d-flex">
+                                    <img src="https://www.svgrepo.com/show/533285/phone.svg" class="icon op-75">
+                                    <div class="ml-1">
+                                        <div class="bold">Telefones</div>
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div>
+                                                (<%= cliente[0].ddd %>) <%= cliente[0].phoneNumber %>
+                                            </div>
+                                            <div>
+                                                <a href="/phone/<%= cliente[0].phoneId %>">
+                                                    <img src="https://www.svgrepo.com/show/522527/edit-3.svg" alt="Editar"
+                                                        class="icon-min ml-05">
+                                                </a>
+                                                <a href="/phone/delete/<%= cliente[0].phoneId %>" style="display: inline-block;">
+                                                    <img src="https://www.svgrepo.com/show/502606/delete-3.svg" alt="Deletar"
+                                                        class="icon-min">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex mt-2">
+                                    <img src="https://www.svgrepo.com/show/532540/location-pin-alt-1.svg" class="icon op-75">
+                                    <div class="ml-1">
+                                        <div class="bold">Endereços</div>
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <div>
+                                                <img src="https://www.svgrepo.com/show/491219/dot.svg" alt="Editar" class="icon-max">
+                                            </div>
+                                            <div>
+                                                <%= cliente[0].street %>, <%= cliente[0].addressNumber %>, <%= cliente[0].neighborhood %>
+                                                <br>
+                                                <%= cliente[0].city %>, <%= cliente[0].state %> - <%= cliente[0].zipCode %>
+                                            </div>
+                                            <div>
+                                                <a href="/edit/address/<%= cliente[0].addressId %>">
+                                                    <img src="https://www.svgrepo.com/show/522527/edit-3.svg" alt="Editar"
+                                                        class="icon-min ml-1">
+                                                </a>
+                                                <a href="/delete/address/<%= cliente[0].addressId %>" style="display: inline-block;">
+                                                    <img src="https://www.svgrepo.com/show/502606/delete-3.svg" alt="Deletar"
+                                                        class="icon-min">
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-49">
+                                <!-- cards -->
+                                <div class="d-flex">
+                                    <img src="https://www.svgrepo.com/show/532425/credit-card-alt-1.svg" class="icon op-75">
+                                    <div class="ml-1">
+                                        <div class="bold">Cartões</div>
+                                        <div class="d-flex align-items-center jus">
+                                            <img src="<%= cliente[0].cardFlag %>" class="card-flag">                                    
+                                            <div class="ml-1"><%= cliente[0].cardNumber %> - <%= cliente[0].cardName %></div>
+                                            <a href="/card/delete/<%= cliente[0].cardId %>" style="display: inline-block;">
+                                                <img src="https://www.svgrepo.com/show/502606/delete-3.svg" alt="Deletar"
+                                                    class="icon-min ml-05">
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <a href="/clients/edit/<%= cliente[0].clientId %>" class="btn btn-primary">Editar Conta</a>
+                        </div>
+                    </div>
+                </div>
             
+            </div>
+            <div id="pedidos" class="hidden">
+                <div class="title center">Pedidos</div>
+                    <% console.log(pedidos); %>
+                    <% pedidos.forEach((pedido) => { %>
+                        <div class="medium-card">
+                            <div class="b-line orderData p-2">
+                                <div class="badge"><%= pedido.situacao %></div>
+                                <div class="d-flex">
+                                    <div class="r-line p-2">Pedido feito em: <%= pedido.dataPedido %></div>
+                                    <div class="p-2">
+                                        <a href="#">Detalhes do pedido > </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="orderData">
+                                <div class="p-2">
+                                    <% pedido.livrosImagens.forEach((imagem) => { %>
+                                        <img src="<%= imagem %>" alt="Livro" width="100">
+                                    <% }) %>
+                                </div>
+                                <div class="center">
+                                    <div class="mt-05">
+                                        Total: <%= pedido.total %>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-primary mt-05">Adicionar ao Carrinho</button>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-danger mt-05">Deletar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+            </div>
         </div>
     </div>
 </div>
 
 <%- include('footer.ejs') %>
+
+<script>
+
+    function toggleDiv(divToShow, divToHide) {
+        var divToShow = document.getElementById(divToShow);
+        var divToHide = document.getElementById(divToHide)
+        
+        divToShow.style.display = "block";
+        divToHide.style.display = "none";
+    }
+
+</script>

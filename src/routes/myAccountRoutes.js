@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router();
 
-const myAccountView = require("../controllers/myAccountController");
+const myAccountController = require("../controllers/myAccountController");
 
-router.get("/category", myAccountView.myAccountView);
-router.get("/addresses", myAccountView.addressesView);
-router.get("/cards", myAccountView.cardsView);
+router.get("/myAccount", myAccountController.myAccountView);
+router.get("/addresses", myAccountController.addressesView);
+router.get("/cards", myAccountController.cardsView);
 
 module.exports = router;
