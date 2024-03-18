@@ -9,8 +9,6 @@ router.get("/admin/clients", clientController.clientsView);
 
 router.get("/admin/client/:id", clientController.clientView);
 
-router.get("/myAccount/:id", clientController.clientView);
-
 router.get("/signin", clientController.signinView);
 
 router.get("/clients/delete/:id", clientController.deleteClient);

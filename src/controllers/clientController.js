@@ -2,7 +2,6 @@ const Client = require('../models/ClientModel');
 const Address = require('../models/AddressModel');
 const Phone = require('../models/PhoneModel');
 const Card = require('../models/CardModel');
-const { get } = require('../routes/clientRoutes');
 
 const bcrypt = require('bcrypt');
 const moment = require('moment');
