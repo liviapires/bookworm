@@ -1,5 +1,0 @@
-Tela de visualização de compras para o Cliente
-Tela de edição de senha, telefones e endereços
-
-Deve ter mais
-Procure
