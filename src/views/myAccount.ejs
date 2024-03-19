@@ -6,13 +6,13 @@
             <img src="https://www.svgrepo.com/show/532906/book-open.svg" alt="Livro" width="150">
             <div class="ml-1 r-line">
                 <div class="mt-5">
-                    <button onclick="toggleDiv('dadosPessoais', 'pedidos')" class="btn-primary btn w-79">Dados Pessoais</button>
+                    <button onclick="toggleDiv('dadosPessoais', 'pedidos')" class="btnLink">Dados Pessoais</button>
                 </div>
                 <div class="mt-5">
-                    <button onclick="toggleDiv('pedidos', 'dadosPessoais')" class="btn-primary btn w-79">Pedidos</button>
+                    <button onclick="toggleDiv('pedidos', 'dadosPessoais')" class="btnLink">Pedidos</button>
                 </div>
                 <div class="mt-5">
-                    <button class="btn-danger btn w-79">Sair</button>
+                    <button class="btnLink-danger">Sair</button>
                 </div>
             </div>
         </div>
@@ -63,7 +63,7 @@
                                                 (<%= cliente[0].ddd %>) <%= cliente[0].phoneNumber %>
                                             </div>
                                             <div>
-                                                <a href="/phone/<%= cliente[0].phoneId %>">
+                                                <a href="/client/edit/phone/<%= cliente[0].phoneId %>">
                                                     <img src="https://www.svgrepo.com/show/522527/edit-3.svg" alt="Editar"
                                                         class="icon-min ml-05">
                                                 </a>
@@ -89,7 +89,7 @@
                                                 <%= cliente[0].city %>, <%= cliente[0].state %> - <%= cliente[0].zipCode %>
                                             </div>
                                             <div>
-                                                <a href="/edit/address/<%= cliente[0].addressId %>">
+                                                <a href="/client/edit/address/<%= cliente[0].addressId %>">
                                                     <img src="https://www.svgrepo.com/show/522527/edit-3.svg" alt="Editar"
                                                         class="icon-min ml-1">
                                                 </a>
@@ -125,42 +125,10 @@
                         </div>
                     </div>
                 </div>
-            
             </div>
+            
             <div id="pedidos" class="hidden">
-                <div class="title center">Pedidos</div>
-                    <% console.log(pedidos); %>
-                    <% pedidos.forEach((pedido) => { %>
-                        <div class="medium-card">
-                            <div class="b-line orderData p-2">
-                                <div class="badge"><%= pedido.situacao %></div>
-                                <div class="d-flex">
-                                    <div class="r-line p-2">Pedido feito em: <%= pedido.dataPedido %></div>
-                                    <div class="p-2">
-                                        <a href="#">Detalhes do pedido > </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="orderData">
-                                <div class="p-2">
-                                    <% pedido.livrosImagens.forEach((imagem) => { %>
-                                        <img src="<%= imagem %>" alt="Livro" width="100">
-                                    <% }) %>
-                                </div>
-                                <div class="center">
-                                    <div class="mt-05">
-                                        Total: <%= pedido.total %>
-                                    </div>
-                                    <div>
-                                        <button class="btn btn-primary mt-05">Adicionar ao Carrinho</button>
-                                    </div>
-                                    <div>
-                                        <button class="btn btn-danger mt-05">Deletar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <% }); %>
+                <%- include('orders.ejs') %>
             </div>
         </div>
     </div>
