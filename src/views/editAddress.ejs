@@ -1,0 +1,35 @@
+<%- include('header.ejs') %>
+
+<div id="body" class="body">
+    <div class="center">
+        <div class="card-big mt-1">
+            <div class="title center mt-1">Editar Endereço</div>
+            <form action="" method="POST">
+                <div class="forms">
+                    <input class="w-100 form-control" placeholder="ID" type="text" name="id" id="id" value="<%= address[0].addressId %>" hidden>
+
+                    <input class="w-100 mt-2 form-control" placeholder="Rua" type="text" name="street" id="street" value="<%= address[0].street %>">
+
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                        <input class="w-50 form-control" placeholder="Número" type="text" name="addressNumber" id="addressNumber" value="<%= address[0].addressNumber %>">
+                        <input class="w-49 form-control" placeholder="Complemento" type="text" name="complement" id="complement" value="<%= address[0].complement %>">
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                        <input class="w-50 form-control" placeholder="Bairro" type="text" name="neighborhood" id="neighborhood" value="<%= address[0].neighborhood %>">
+                        <input class="w-49 form-control" placeholder="Cidade" type="text" name="city" id="city" value="<%= address[0].city %>">
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                        <input class="w-50 form-control" placeholder="Estado" type="text" name="state" id="state" value="<%= address[0].state %>">
+                        <input class="w-49 form-control" placeholder="CEP" type="text" name="zipCode" id="zipCode" value="<%= address[0].zipCode %>">
+                    </div>
+                </div>
+                <a href="/myAccount" class="btn btn-outline-secondary w-49 mt-2">Voltar</a>
+                <button type="submit" class="btn btn-primary w-49 mt-2">Salvar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('footer.ejs') %>

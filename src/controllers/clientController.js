@@ -210,6 +210,24 @@ async function editClientView (req, res) {
     });
 }
 
+async function editAddressView (req, res) {
+    const address = await anAddress.getAddressByClientId(req.params.id);
+
+    res.render('editAddress', {
+        title: 'Editar Endereço',
+        address: address
+    });
+}
+
+async function editPhoneView (req, res) {
+    const phone = await aPhone.getPhoneByClientId(req.params.id);
+
+    res.render('editPhone', {
+        title: 'Editar Telefone',
+        phone: phone
+    });
+}
+
 module.exports = {
     signinView,
     clientsView,
@@ -217,5 +235,7 @@ module.exports = {
     editClientView,
     createClient,
     deleteClient,
-    updateClient
+    updateClient,
+    editAddressView,
+    editPhoneView
 }
