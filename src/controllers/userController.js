@@ -1,4 +1,4 @@
-const Client = require('../models/ClientModel');
+const Client = require('../models/UserModel');
 const Address = require('../models/AddressModel');
 const Phone = require('../models/PhoneModel');
 const Card = require('../models/CardModel');

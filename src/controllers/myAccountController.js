@@ -173,7 +173,7 @@ let pedidos = [
     }
 ]
 
-const Client = require('../models/ClientModel');
+const Client = require('../models/UserModel');
 
 const aClient = new Client();
 
