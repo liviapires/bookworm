@@ -1,13 +1,13 @@
 const db = require("../../config/db");
 
 class Phone {
-    constructor(ddd, phonephoneNumber, type, createdAt, updatedAt, clientId) {
+    constructor(ddd, phoneNumber, phoneType, createdAt, updatedAt, userId) {
         this.ddd = ddd;
-        this.phoneNumber = phonephoneNumber;
-        this.type = type;
+        this.phoneNumber = phoneNumber;
+        this.phoneType = phoneType;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.clientId = clientId;
+        this.userId = userId;
     }
 
     // get all phones
@@ -22,14 +22,14 @@ class Phone {
     // create phone
     async createPhone(phone) {
         const [results, metadata] = await db.query(
-            `INSERT INTO phones (ddd, phoneNumber, type, createdAt, updatedAt, clientId) 
+            `INSERT INTO phones (ddd, phoneNumber, phoneType, createdAt, updatedAt, userId) 
                 VALUES (
                     '${phone.ddd}',
                     '${phone.phoneNumber}',
-                    '${phone.type}',
+                    '${phone.phoneType}',
                     '${phone.createdAt}',
                     '${phone.updatedAt}',
-                    '${phone.clientId}'
+                    '${phone.userId}'
                 );`
         );
 
@@ -42,7 +42,7 @@ class Phone {
             `UPDATE phones SET 
                 ddd = '${phone.ddd}',
                 phoneNumber = '${phone.phoneNumber}',
-                type = '${phone.type}',
+                type = '${phone.phoneType}',
                 updatedAt = '${phone.updatedAt}'
             WHERE phoneId = '${phone.phoneId}';`
         );
@@ -51,38 +51,36 @@ class Phone {
     }
 
     // delete phone by id
-    async deletePhone(id) {
+    async deletePhone(phoneId) {
         const [results, metadata] = await db.query(
-            `DELETE FROM phones WHERE phoneId = '${id}';`
+            `DELETE FROM phones WHERE phoneId = '${phoneId}';`
         );
 
         return results;
     }
 
     // get phone by id
-    async getPhoneById(id) {
+    async getPhoneById(phoneId) {
         const [results, metadata] = await db.query(
-            `SELECT * FROM phones WHERE phoneId = '${id}';`
+            `SELECT * FROM phones WHERE phoneId = '${phoneId}';`
         );
 
         return results;
     }
 
-    // get phone by client id
-
-    async getPhoneByClientId(id) {
+    // get phone by userId
+    async getPhoneByUserId(userId) {
         const [results, metadata] = await db.query(
-            `SELECT * FROM phones WHERE clientId = '${id}';`
+            `SELECT * FROM phones WHERE userId = '${userId}';`
         );
 
         return results;
     }
 
-    // delete phone by client id
-
-    async deletePhoneByClientId(id) {
+    // delete phone by userId
+    async deletePhoneByUserId(userId) {
         const [results, metadata] = await db.query(
-            `DELETE FROM phones WHERE clientId = '${id}';`
+            `DELETE FROM phones WHERE userId = '${userId}';`
         );
 
         return results;

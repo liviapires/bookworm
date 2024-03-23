@@ -1,21 +1,22 @@
 const db = require("../../config/db");
 
 class Card {
-    constructor(cardNumber, cardName, expirationDate, cardFlag, cvv, createdAt, updatedAt, clientId) {
+    constructor(cardNumber, cardName, cardFlag, securityCode, expirationDate, preferred, createdAt, updatedAt, userId) {
         this.cardNumber = cardNumber;
         this.cardName = cardName;
-        this.expirationDate = expirationDate;
         this.cardFlag = cardFlag;
-        this.cvv = cvv;
+        this.securityCode = securityCode;
+        this.expirationDate = expirationDate;
+        this.preferred = preferred;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.clientId = clientId;
+        this.userId = userId;
     }
 
     // get all cards
     async getAllCards() {
         const [results, metadata] = await db.query(
-            `SELECT * FROM cards;`
+            `SELECT * FROM creditCards;`
         );
 
         return results;
@@ -24,51 +25,36 @@ class Card {
     // create a new card
     async createCard(card) {
         const [results, metadata] = await db.query(
-            `INSERT INTO cards (cardNumber, cardName, expirationDate, cardFlag, cvv, createdAt, updatedAt, clientId) \
+            `INSERT INTO creditCards (cardNumber, cardName, cardFlag, securityCode, expirationDate, preferred, createdAt, updatedAt, userId) \
                 VALUES (
                     '${card.cardNumber}',
                     '${card.cardName}',
-                    '${card.expirationDate}',
                     '${card.cardFlag}',
-                    '${card.cvv}',
+                    '${card.securityCode}',
+                    '${card.expirationDate}',
+                    '${card.preferred}',
                     '${card.createdAt}',
                     '${card.updatedAt}',
-                    '${card.clientId}'
+                    '${card.userId}'
                 );`
         );
 
         return results;
     }
 
-    // update a card
-    async updateCard(card) {
-        const [results, metadata] = await db.query(
-            `UPDATE cards SET 
-                cardNumber = '${card.cardNumber}',
-                cardName = '${card.cardName}',
-                expirationDate = '${card.expirationDate}',
-                cardFlag = '${card.cardFlag}',
-                cvv = '${card.cvv}',
-                updatedAt = '${card.updatedAt}'
-            WHERE cardId = ?;`
-        );
-
-        return results;
-    }
-
     // delete a card
-    async deleteCard(id) {
+    async deleteCard(cardId) {
         const [results, metadata] = await db.query(
-            `DELETE FROM cards WHERE cardId = '${id}';`
+            `DELETE FROM creditCards WHERE cardId = '${cardId}';`
         );
 
         return results;
     }
 
     // get card by id
-    async getCardById(id) {
+    async getCardById(cardId) {
         const [results, metadata] = await db.query(
-            `SELECT * FROM cards WHERE cardId = '${id}';`
+            `SELECT * FROM creditCards WHERE cardId = '${cardId}';`
         );
 
         return results;
@@ -77,7 +63,7 @@ class Card {
     // get card id
     async getCardId(card) {
         const [results, metadata] = await db.query(
-            `SELECT cardId FROM cards 
+            `SELECT cardId FROM creditCards 
                 WHERE cardNumber = '${card.cardNumber}' 
                     AND cardName = '${card.cardName}' 
                     AND expirationDate = '${card.expirationDate}'
@@ -89,19 +75,19 @@ class Card {
         return results;
     }
 
-    // get card by clientId
-    async getCardByClientId(id) {
+    // get card by userId
+    async getCardByUserId(userId) {
         const [results, metadata] = await db.query(
-            `SELECT * FROM cards WHERE clientId = '${id}';`
+            `SELECT * FROM creditCards WHERE userId = '${userId}';`
         );
 
         return results;
     }
 
-    // delete card by clientId
-    async deleteCardByClientId(id) {
+    // delete card by userId
+    async deleteCardByUserId(userId) {
         const [results, metadata] = await db.query(
-            `DELETE FROM cards WHERE clientId = '${id}';`
+            `DELETE FROM creditCards WHERE userId = '${userId}';`
         );
 
         return results;

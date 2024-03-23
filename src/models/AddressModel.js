@@ -1,19 +1,19 @@
 const db = require("../../config/db");
 
 class Address {
-    constructor(zipCode, street, addressNumber, neighborhood, complement, city, state, country, observation, createdAt, updatedAt, clientId) {
-        this.zipCode = zipCode;
+    constructor(residenceType, street, number, neighborhood, zipCode, city, state, country, notes, createdAt, updatedAt, userId) {
+        this.residenceType = residenceType;
         this.street = street;
-        this.addressNumber = addressNumber;
+        this.number = number;
         this.neighborhood = neighborhood;
-        this.complement = complement;
+        this.zipCode = zipCode;
         this.city = city;
         this.state = state;
         this.country = country;
-        this.observation = observation;
+        this.notes = notes;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.clientId = clientId;
+        this.userId = userId;
     }
 
     // get all addresses
@@ -28,20 +28,20 @@ class Address {
     // create address
     async createAddress(address) {
         const [results, metadata] = await db.query(
-            `INSERT INTO addresses (zipCode, street, addressNumber, neighborhood, complement, city, state, country, observation, createdAt, updatedAt, clientId) \
+            `INSERT INTO addresses (residenceType, street, number, neighborhood, zipCode, city, state, country, notes, createdAt, updatedAt, userId) \
             VALUES (
-                '${address.zipCode}',
+                '${address.residenceType}',
                 '${address.street}',
-                '${address.addressNumber}',
+                '${address.number}',
                 '${address.neighborhood}',
-                '${address.complement}',
+                '${address.zipCode}',
                 '${address.city}',
                 '${address.state}',
                 '${address.country}',
-                '${address.observation}',
+                '${address.notes}',
                 '${address.createdAt}',
                 '${address.updatedAt}',
-                '${address.clientId}'
+                '${address.userId}'
             );`
         );
 
@@ -52,15 +52,15 @@ class Address {
     async updateAddress(address) {
         const [results, metadata] = await db.query(
             `UPDATE addresses SET 
-                zipCode = '${address.zipCode}', 
-                street = '${address.street}', 
-                addressNumber = '${address.addressNumber}',
-                neighborhood = '${address.neighborhood}', 
-                complement = '${address.complement}', 
-                city = '${address.city}', 
-                state = '${address.state}', 
+                residenceType = '${address.residenceType}',
+                street = '${address.street}',
+                number = '${address.number}',
+                neighborhood = '${address.neighborhood}',
+                zipCode = '${address.zipCode}',
+                city = '${address.city}',
+                state = '${address.state}',
                 country = '${address.country}',
-                observation = '${address.observation}',
+                notes = '${address.notes}',
                 updatedAt = '${address.updatedAt}'
             WHERE addressId = '${address.addressId}';`
         );
@@ -69,36 +69,36 @@ class Address {
     }
 
     // delete address by id
-    async deleteAddress(id) {
+    async deleteAddress(addressId) {
         const [results, metadata] = await db.query(
-            `DELETE FROM addresses WHERE addressId = '${id}';`
+            `DELETE FROM addresses WHERE addressId = '${addressId}';`
         );
 
         return results;
     }
 
     // get address by id
-    async getAddressById(id) {
+    async getAddressById(addressId) {
         const [results, metadata] = await db.query(
-            `SELECT * FROM addresses WHERE addressId = '${id}';`
+            `SELECT * FROM addresses WHERE addressId = '${addressId}';`
         );
 
         return results;
     }
 
-    // get address by clientId
-    async getAddressByClientId(id) {
+    // get address by userId
+    async getAddressByUserId(userId) {
         const [results, metadata] = await db.query(
-            `SELECT * FROM addresses WHERE clientId = '${id}';`
+            `SELECT * FROM addresses WHERE userId = '${userId}';`
         );
 
         return results;
     }
 
-    // delete address by clientId
-    async deleteAddressByClientId(id) {
+    // delete address by userId
+    async deleteAddressByUserId(userId) {
         const [results, metadata] = await db.query(
-            `DELETE FROM addresses WHERE clientId = '${id}';`
+            `DELETE FROM addresses WHERE userId = '${userId}';`
         );
 
         return results;
