@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 # DB config
-/config/db.js
+config/db.js
