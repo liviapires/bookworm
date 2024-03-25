@@ -1,12 +1,12 @@
 <%- include('header.ejs') %>
-
+<% console.log(cliente, 'LOG CLIENTE FRONT AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'); %>
     <div id="body" class="body">
         <div class="center">
             <div class="card-big mt-1">
                 <div class="title center mt-1">Editar Cliente</div>
                 <form action="/editClient" method="POST">
                     <div class="forms">
-                        <input class="w-100 form-control" placeholder="ID" type="text" name="id" id="id" value="<%= cliente[0].clientId %>" hidden>
+                        <input class="w-100 form-control" placeholder="ID" type="text" name="id" id="id" value="<%= cliente[0].userId %>" hidden>
 
                         <input class="w-100 mt-2 form-control" placeholder="Email" type="email" name="email" id="email" value="<%= cliente[0].email %>">
 
@@ -21,7 +21,7 @@
                             <input class="w-49 form-control" placeholder="Data de Nascimento" type="date" name="birthDate" id="birthDate" value="<%= cliente[0].birthDate %>">
                         </div>
                     </div>
-                    <a href="/admin/client/<%= cliente[0].clientId %>" class="btn btn-outline-secondary w-49 mt-2">Voltar</a>
+                    <a href="/admin/client/<%= cliente[0].userId %>" class="btn btn-outline-secondary w-49 mt-2">Voltar</a>
                     <button type="submit" class="btn btn-primary w-49 mt-2">Salvar</button>
                 </form>
             </div>

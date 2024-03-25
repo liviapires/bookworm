@@ -42,7 +42,7 @@ class Phone {
             `UPDATE phones SET 
                 ddd = '${phone.ddd}',
                 phoneNumber = '${phone.phoneNumber}',
-                type = '${phone.phoneType}',
+                phoneType = '${phone.phoneType}',
                 updatedAt = '${phone.updatedAt}'
             WHERE phoneId = '${phone.phoneId}';`
         );

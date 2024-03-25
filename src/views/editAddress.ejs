@@ -4,7 +4,7 @@
     <div class="center">
         <div class="card-big mt-1">
             <div class="title center mt-1">Editar Endereço</div>
-            <form action="" method="POST">
+            <form action="/editAddress" method="POST">
                 <div class="forms">
                     <input class="w-100 form-control" placeholder="ID" type="text" name="id" id="id" value="<%= address[0].addressId %>" hidden>
 
@@ -25,7 +25,7 @@
                         <input class="w-49 form-control" placeholder="CEP" type="text" name="zipCode" id="zipCode" value="<%= address[0].zipCode %>">
                     </div>
                 </div>
-                <a href="/myAccount" class="btn btn-outline-secondary w-49 mt-2">Voltar</a>
+                <a href="/admin/client/<%= address[0].addressId %>" class="btn btn-outline-secondary w-49 mt-2">Voltar</a>
                 <button type="submit" class="btn btn-primary w-49 mt-2">Salvar</button>
             </form>
         </div>

@@ -7,9 +7,11 @@ const userController = require("../controllers/userController");
 
 router.get("/admin/clients", userController.clientsView);
 router.get("/admin/client/:id", userController.clientView);
+
 router.get("/signin", userController.signinView);
-router.get("/clients/delete/:id", userController.deleteClient);
-router.get("/clients/edit/:id", userController.editClientView);
+
+router.get("/client/delete/:id", userController.deleteClient);
+router.get("/client/edit/:id", userController.editClientView);
 router.get("/client/edit/phone/:id", userController.editPhoneView);
 router.get("/client/edit/address/:id", userController.editAddressView);
 
@@ -18,5 +20,7 @@ router.get("/client/edit/address/:id", userController.editAddressView);
 
 router.post("/signin/newClient", userController.createClient);
 router.post("/editClient", userController.updateClient);
+router.post("/editAddress", userController.updateAddress);
+router.post("/editPhone", userController.updatePhone);
 
 module.exports = router;

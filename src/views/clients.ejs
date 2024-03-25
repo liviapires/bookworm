@@ -14,7 +14,7 @@
                 <th class="veronica">Bairro</th>
                 <th class="veronica">CEP</th>
                 <th class="veronica">Estado</th>
-                <th class="veronica">Opções</th>
+                <th class="veronica">Mais</th>
             </tr>
         </thead>
         <tbody>
@@ -48,13 +48,8 @@
                         <%= client.state %>
                     </td>
                     <td>
-                        <a href="/admin/client/<%= client.clientId %>">
-                            <img src="https://www.svgrepo.com/show/522719/zoom-plus.svg" alt="Ver mais"
-                                class="icon">
-                        </a>
-                        <a href="/clients/delete/<%= client.clientId %>" style="display: inline-block;">
-                            <img src="https://www.svgrepo.com/show/502606/delete-3.svg" alt="Deletar"
-                                class="icon">
+                        <a href="/admin/client/<%= client.userId %>">
+                            <img src="https://www.svgrepo.com/show/522719/zoom-plus.svg" alt="Ver mais" class="icon">
                         </a>
                     </td>
                 </tr>

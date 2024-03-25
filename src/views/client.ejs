@@ -69,12 +69,12 @@
                                                 <img src="https://www.svgrepo.com/show/491219/dot.svg" alt="Editar" class="icon-max">
                                             </div>
                                             <div>
-                                                <%= cliente[0].street %>, <%= cliente[0].addressNumber %>, <%= cliente[0].neighborhood %>
+                                                <%= cliente[0].street %>, <%= cliente[0].number %>, <%= cliente[0].neighborhood %>
                                                 <br>
                                                 <%= cliente[0].city %>, <%= cliente[0].state %> - <%= cliente[0].zipCode %>
                                             </div>
                                             <div>
-                                                <a href="/client/edit/address/4">
+                                                <a href="/client/edit/address/<%= cliente[0].addressId  %>">
                                                     <img src="https://www.svgrepo.com/show/522527/edit-3.svg" alt="Editar"
                                                         class="icon-min ml-1">
                                                 </a>
@@ -106,40 +106,15 @@
                             </div>
                         </div>
                         <div class="mt-2">
-                            <a href="/clients/edit/<%= cliente[0].clientId %>" class="btn btn-primary">Editar</a>
-                            <a href="/clients/delete/<%= cliente[0].clientId %>" class="btn btn-danger">Deletar</a>
+                            <a href="/client/edit/<%= cliente[0].userId %>" class="btn btn-primary">Editar</a>
+                            <div class="btn btn-danger" id="delete">Deletar</div>
+                            <%- include('deleteClient.ejs')  %>
                         </div>
                     </div>
                 </div>
-
-                <div id="edit" class="">
-
-                    <!-- FORM FOR CLIENT EDIT -->
-                    <!-- get id from client -->
-                    <input type="text" id="id" value="<%= cliente[0].id %>" hidden>
-                    
-
-                </div>
-
                 <a href="/admin/clients" class="mt-5 btn btn-primary">Voltar</a>
             </div>
         </div>
+    </div>
 
-
-        </div>
-
-        <%- include('footer.ejs') %>
-
-<script>
-    
-    // when the page is loaded, hide the edit form
-    $(document).ready(function() {
-        $("#edit").hide();
-    });
-
-    // when the edit button is clicked, show the edit form
-    $("#edit-btn").click(function() {
-        $("#edit").show();
-    });
-
-</script>
+<%- include('footer.ejs') %>

@@ -14,6 +14,9 @@ const aCard = new Card();
 // create a new client
 async function createClient (req, res) {
 
+    // log the post data
+    // console.log(req.body);
+
     // gera um código aleatório
     const code = Math.floor(Math.random() * 1000000);
 
@@ -23,68 +26,78 @@ async function createClient (req, res) {
 
     // faz o parse da data de nascimento
     const birthDate = moment(req.body.birthDate).format('YYYY-MM-DD HH:mm:ss');
-
+    
+    const admin = 0;
     const ranking = 1;
     const active = 1;
-
+    const role = 'client';
+    
     // date in mysql format
     const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
     const updatedAt = createdAt;
-
+    
     let client = {
         code: code,
         name: req.body.name,
-        birthDate: birthDate,
+        admin: admin,
         gender: req.body.gender,
+        birthDate: birthDate,
         cpf: req.body.cpf,
         email: req.body.email,
         password: hashedPassword,
         ranking: ranking,
+        role: role,
         active: active,
         createdAt: createdAt,
         updatedAt: updatedAt
     }
     
-    await aClient.createClient(client);
-
+    await aClient.createUser(client);
+    
     // get the id of the new client
     let clientId = await aClient.getClientId(client);
-
-    clientId = clientId[0].clientId;
-
+    
+    clientId = clientId[0].userId;
+    
     let phone = {
         ddd: req.body.ddd,
         phoneNumber: req.body.phoneNumber,
-        type: req.body.type,
+        phoneType: req.body.type,
         createdAt: createdAt,
         updatedAt: updatedAt,
-        clientId: clientId
+        userId: clientId
     }
+    
+    const country = 'Brasil';
 
     let address = {
+        residenceType: req.body.residenceType,
         street: req.body.street,
-        addressNumber: req.body.addressNumber,
-        complement: req.body.complement,
+        number: req.body.addressNumber,
         neighborhood: req.body.neighborhood,
+        zipCode: req.body.zipCode,
         city: req.body.city,
         state: req.body.state,
-        country: req.body.country,
-        zipCode: req.body.zipCode,
-        observation: req.body.observation,
+        country: country,
+        complement: req.body.complement,
+        notes: req.body.observation,
         createdAt: createdAt,
         updatedAt: updatedAt,
-        clientId: clientId
+        userId: clientId
     }
+
+    let preferred = 1;
 
     let creditCard = {
         cardNumber: req.body.cardNumber,
         cardName: req.body.cardName,
-        expirationDate: req.body.expiration,
         cardFlag: req.body.cardFlag,
-        cvv: req.body.cvv,
+        securityCode: req.body.securityCode,
+        expirationDate: req.body.expiration,
+        preferred: preferred,
         createdAt: createdAt,
         updatedAt: updatedAt,
-        clientId: clientId
+        userId: clientId
     }
 
     // create phone
@@ -104,19 +117,11 @@ async function createClient (req, res) {
 // update a client
 
 async function updateClient (req, res) {
-
-    console.log(req.body);
-
-    // get client by id
-    let client = await aClient.getClientById(req.body.id);
-
-    console.log(client);
-
     // get post data
     let birthDate = moment(req.body.birthDate).format('YYYY-MM-DD HH:mm:ss');
 
     let clientData = {
-        id: client[0].clientId,
+        id: req.body.id,
         name: req.body.name,
         birthDate: birthDate,
         gender: req.body.gender,
@@ -126,30 +131,96 @@ async function updateClient (req, res) {
     }
 
     // update client
-    await aClient.updateClient(clientData);
+    await aClient.updateUser(clientData);
 
     // redirect to the client page
-    res.redirect(`/client/${req.body.id}`);
+    res.redirect(`/admin/client/${req.body.id}`);
 }
     
 // delete a client and its dependencies
 async function deleteClient (req, res) {
 
         // delete client's addresses
-        await anAddress.deleteAddressByClientId(req.params.id);
+        await anAddress.deleteAddressByUserId(req.params.id);
 
         // delete client's phones
-        await aPhone.deletePhoneByClientId(req.params.id);
+        await aPhone.deletePhoneByUserId(req.params.id);
 
         // delete client's cards
-        await aCard.deleteCardByClientId(req.params.id);
+        await aCard.deleteCardByUserId(req.params.id);
 
         // delete client
-        await aClient.deleteClient(req.params.id);
+        await aClient.deleteUser(req.params.id);
     
         // redirect to the clients page
-        res.redirect('/clients');
+        res.redirect('/admin/clients');
 }
+
+// update a client's address
+async function updateAddress (req, res) {
+
+    // get post data
+    let addressData = {
+        addressId: req.body.id,
+        residenceType: req.body.residenceType,
+        street: req.body.street,
+        number: req.body.addressNumber,
+        neighborhood: req.body.neighborhood,
+        zipCode: req.body.zipCode,
+        city: req.body.city,
+        state: req.body.state,
+        country: 'Brasil',
+        complement: req.body.complement,
+        notes: req.body.observation,
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+    }
+
+    // update address
+    await anAddress.updateAddress(addressData);
+
+    // redirect to the client page
+    res.redirect(`/admin/client/${req.body.id}`);
+}
+
+// update a client's phone
+async function updatePhone (req, res) {
+
+    // get post data
+    let phoneData = {
+        phoneId: req.body.phoneId,
+        ddd: req.body.ddd,
+        phoneNumber: req.body.phoneNumber,
+        phoneType: req.body.phoneType,
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+    }
+
+    // update phone
+    await aPhone.updatePhone(phoneData);
+
+    // redirect to the client page
+    res.redirect(`/admin/client/${req.body.userId}`);
+}
+
+// delete a client's address
+async function deleteAddress (req, res) {
+
+    // delete address
+    await anAddress.deleteAddress(req.params.id);
+
+    // redirect to the client page
+    res.redirect(`/admin/client/${req.params.id}`);
+}
+
+// delete a client's phone
+async function deletePhone (req, res) {
+
+    // delete phone
+    await aPhone.deletePhone(req.params.id);
+
+    // redirect to the client page
+    res.redirect(`/admin/client/${req.params.id}`);
+}
+
 
 // Renderiza a view signin
 const signinView = (req, res) => {
@@ -173,7 +244,7 @@ async function clientsView (req, res) {
 // Renderiza a view client
 async function clientView (req, res) {
     
-    const cliente = await aClient.getClientById(req.params.id);
+    const cliente = await aClient.getUserById(req.params.id);
 
     // get different image depending on the cardFlag
 
@@ -202,7 +273,7 @@ async function clientView (req, res) {
 // Renderiza a view editClient
 
 async function editClientView (req, res) {
-    const cliente = await aClient.getClientById(req.params.id);
+    const cliente = await aClient.getUserById(req.params.id);
 
     res.render('editClient', {
         title: 'Editar Cliente',
@@ -211,7 +282,7 @@ async function editClientView (req, res) {
 }
 
 async function editAddressView (req, res) {
-    const address = await anAddress.getAddressByClientId(req.params.id);
+    const address = await anAddress.getAddressByUserId(req.params.id);
 
     res.render('editAddress', {
         title: 'Editar Endereço',
@@ -220,7 +291,7 @@ async function editAddressView (req, res) {
 }
 
 async function editPhoneView (req, res) {
-    const phone = await aPhone.getPhoneByClientId(req.params.id);
+    const phone = await aPhone.getPhoneByUserId(req.params.id);
 
     res.render('editPhone', {
         title: 'Editar Telefone',
@@ -229,13 +300,17 @@ async function editPhoneView (req, res) {
 }
 
 module.exports = {
+    createClient,
+    deleteClient,
+    updateClient,
+    updateAddress,
+    updatePhone,
+    deleteAddress,
+    deletePhone,
     signinView,
     clientsView,
     clientView,
     editClientView,
-    createClient,
-    deleteClient,
-    updateClient,
     editAddressView,
     editPhoneView
 }

@@ -37,7 +37,13 @@
                             <input class="w-79 form-control" placeholder="Endereço" type="text" name="street" id="street">
                             <input class="w-20 form-control" placeholder="Número" type="number" name="addressNumber" id="addressNumber">
                         </div>
-                        <input class="w-100 mt-1 form-control" placeholder="Complemento" type="text" name="complement" id="complement">
+                        <div class="d-flex justify-content-between align-items-center mt-1">
+                            <input class="w-79 form-control" placeholder="Complemento" type="text" name="complement" id="complement">
+                            <select name="residenceType" id="residenceType" class="form-control w-20">
+                                <option value="Apartamento">Apartamento</option>
+                                <option value="Casa">Casa</option>
+                            </select>
+                        </div>
                         <div class="d-flex justify-content-between align-items-center mt-1">
                             <input class="w-50 form-control" placeholder="Cidade" type="text" name="city" id="city">
                             <input class="w-49 form-control" placeholder="Bairro" type="text" name="neighborhood" id="neighborhood">
@@ -91,7 +97,7 @@
                                 <option value="Elo">Elo</option>
                                 <option value="American Express">American Express</option>
                             </select>
-                            <input class="w-49 form-control" placeholder="CVV" type="number" name="cvv" id="cvv">
+                            <input class="w-49 form-control" placeholder="Código de Segurança" type="number" name="securityCode" id="securityCode">
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary w-100 mt-5">Cadastrar-se</button>

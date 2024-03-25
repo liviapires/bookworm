@@ -1,7 +1,7 @@
 const db = require(`../../config/db`);
 
 class user {
-    constructor(code, name, admin, gender, birthDate, cpf, email, password, ranking, role, active, inactiveReason, inactiveDate, createdAt, updatedAt) {
+    constructor(code, name, admin, gender, birthDate, cpf, email, password, ranking, role, active, createdAt, updatedAt) {
         this.code = code;
         this.name = name;
         this.admin = admin;
@@ -13,8 +13,6 @@ class user {
         this.ranking = ranking;
         this.role = role;
         this.active = active;
-        this.inactiveReason = inactiveReason;
-        this.inactiveDate = inactiveDate;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -32,9 +30,23 @@ class user {
         return results;
     }
 
+    // get all clients with their phones, addresses and cards
+
+    async getAllClients() {
+        const [results, metadata] = await db.query(
+            `SELECT * FROM users 
+                INNER JOIN phones ON users.userId = phones.userId
+                INNER JOIN addresses ON users.userId = addresses.userId
+                INNER JOIN creditCards ON users.userId = creditCards.userId
+                WHERE role = 'client';`
+        );
+
+        return results;
+    }
+
     async createUser(user) {
         const [results, metadata] = await db.query(
-            `INSERT INTO users (code, name, admin, gender, birthDate, cpf, email, password, ranking, role, active, inactiveReason, inactiveDate, createdAt, updatedAt)
+            `INSERT INTO users (code, name, admin, gender, birthDate, cpf, email, password, ranking, role, active, createdAt, updatedAt)
                 VALUES (
                     '${user.code}',
                     '${user.name}',
@@ -47,8 +59,6 @@ class user {
                     '${user.ranking}',
                     '${user.role}',
                     '${user.active}',
-                    '${user.inactiveReason}',
-                    '${user.inactiveDate}',
                     '${user.createdAt}',
                     '${user.updatedAt}'
                 );`
@@ -66,7 +76,7 @@ class user {
                 cpf = '${user.cpf}',
                 email = '${user.email}',
                 updatedAt = '${user.updatedAt}'
-            WHERE userId = '${user.userId}';`
+            WHERE userId = '${user.id}';`
         );
 
         return results;
@@ -94,9 +104,9 @@ class user {
         return results;
     }
 
-    // get user id
+    // get client id
 
-    async getuserId(user) {
+    async getClientId(user) {
         const [results, metadata] = await db.query(
             `SELECT userId FROM users 
                 WHERE code = '${user.code}';`

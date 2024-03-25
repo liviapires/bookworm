@@ -1,0 +1,35 @@
+<div class="modalDeletar">
+    <div class="conteudoModalDeletar">
+        <div class="closeModal center" id="closeDeletar"><img src="https://www.svgrepo.com/show/521590/cross.svg" alt="Fechar" class="icon"></div>
+        <div class="center">
+            <div class="bold">Deseja realmente deletar este cliente?</div>
+            <div class="d-flex justify-content-between mt-2">
+                <a href="/client/delete/<%= cliente[0].userId %>" class="btn btn-danger">Sim, deletar</a>
+                <div class="btn btn-secondary ml-05" id="nao">Não, voltar</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // toogle modal deletar
+    const switchModalDeletar = () => {
+        const modalDeletar = document.querySelector('.modalDeletar');
+        const actualState = modalDeletar.style.display;
+        if (actualState === 'block') {
+            modalDeletar.style.display = 'none';
+        } else {
+            modalDeletar.style.display = 'block';
+        }
+    }
+
+    const btnDeletar = document.querySelector('#delete');
+    btnDeletar.addEventListener('click', switchModalDeletar);
+
+    const closeModalDeletar = document.querySelector('#closeDeletar');
+    closeModalDeletar.addEventListener('click', switchModalDeletar);
+
+    const btnNao = document.querySelector('#nao');
+    btnNao.addEventListener('click', switchModalDeletar);
+
+</script>
