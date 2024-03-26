@@ -1,0 +1,32 @@
+<%- include('header.ejs') %>
+
+    <div id="body" class="body">
+        <div class="center">
+            <div class="card-big mt-1">
+                <div class="title center mt-1">Adicionar Cartão</div>
+                <form action="/addCard" method="POST">
+                    <div class="forms">
+                        <input class="w-100 form-control" placeholder="ID" type="text" name="userId" id="userId" value="<%= cliente[0].userId %>" hidden>
+                        <div class="d-flex justify-content-between align-items-center mt-1">
+                            <input class="w-50 form-control" placeholder="Número do Cartão" type="number" name="cardNumber" id="cardNumber">
+                            <input class="w-49 form-control" placeholder="Validade" type="text" name="expiration" id="expiration">
+                        </div>
+                        <input class="w-100 mt-1 form-control" placeholder="Nome Impresso no Cartão" type="text" name="cardName" id="cardName">
+                        <div class="d-flex justify-content-between align-items-center mt-1">
+                            <select name="cardFlag" id="cardFlag" class="form-control w-50">
+                                <option value="Visa">Visa</option>
+                                <option value="Mastercard">Mastercard</option>
+                                <option value="Elo">Elo</option>
+                                <option value="American Express">American Express</option>
+                            </select>
+                            <input class="w-49 form-control" placeholder="Código de Segurança" type="number" name="securityCode" id="securityCode">
+                        </div>
+                    </div>
+                    <a href="/client/<%= cliente[0].userId %>" class="btn btn-outline-secondary w-49 mt-2">Voltar</a>
+                    <button type="submit" class="btn btn-primary w-49 mt-2">Salvar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<%- include('footer.ejs') %>

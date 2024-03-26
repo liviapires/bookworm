@@ -244,3 +244,20 @@ CONSTRAINT `FK_13` FOREIGN KEY `FK_2` (`exchangeId`) REFERENCES `exchanges` (`ex
 KEY `FK_3` (`exchangeCuponId`),
 CONSTRAINT `FK_14` FOREIGN KEY `FK_3` (`exchangeCuponId`) REFERENCES `exchangeCupons` (`exchangeCuponId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+
+
+-- TENTATIVA QUERY
+
+SELECT 
+	*,
+    (
+		SELECT CONVERT(CONCAT('[', GROUP_CONCAT(CONCAT('"', phones.phoneId, ':', "(", phones.ddd, ") " , phones.phoneNumber, '"')), ']') using utf8)
+        FROM phones WHERE phones.phoneId = userId
+    ) AS phones,
+    (
+		SELECT CONVERT(CONCAT('[', GROUP_CONCAT(CONCAT('"', adress.adressId, ':', "(", phones.ddd, ") " , phones.phoneNumber, '"')), ']') using utf8)
+        FROM phones WHERE phones.phoneId = userId
+    ) AS adresses
+FROM
+	users

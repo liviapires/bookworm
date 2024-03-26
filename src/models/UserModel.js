@@ -19,26 +19,12 @@ class user {
 
     // get all users with their phones, addresses and cards
 
-    async getAllUsers() {
-        const [results, metadata] = await db.query(
-            `SELECT * FROM users 
-                INNER JOIN phones ON users.userId = phones.userId
-                INNER JOIN addresses ON users.userId = addresses.userId
-                INNER JOIN creditCards ON users.userId = creditCards.userId;`
-        );
-
-        return results;
-    }
-
-    // get all clients with their phones, addresses and cards
-
     async getAllClients() {
         const [results, metadata] = await db.query(
             `SELECT * FROM users 
-                INNER JOIN phones ON users.userId = phones.userId
-                INNER JOIN addresses ON users.userId = addresses.userId
-                INNER JOIN creditCards ON users.userId = creditCards.userId
-                WHERE role = 'client';`
+                LEFT JOIN phones ON users.userId = phones.userId
+                LEFT JOIN addresses ON users.userId = addresses.userId
+                LEFT JOIN creditCards ON users.userId = creditCards.userId;`
         );
 
         return results;
@@ -95,9 +81,9 @@ class user {
     async getUserById(userId) {
         const [results, metadata] = await db.query(
             `SELECT * FROM users 
-                INNER JOIN phones ON users.userId = phones.userId
-                INNER JOIN addresses ON users.userId = addresses.userId
-                INNER JOIN creditCards ON users.userId = creditCards.userId
+                LEFT JOIN phones ON users.userId = phones.userId
+                LEFT JOIN addresses ON users.userId = addresses.userId
+                LEFT JOIN creditCards ON users.userId = creditCards.userId
                 WHERE users.userId = '${userId}';`
         );
 
@@ -110,6 +96,42 @@ class user {
         const [results, metadata] = await db.query(
             `SELECT userId FROM users 
                 WHERE code = '${user.code}';`
+        );
+
+        return results;
+    }
+
+    // get client by phone id
+
+    async getClientByPhoneId(phoneId) {
+        const [results, metadata] = await db.query(
+            `SELECT * FROM users 
+                LEFT JOIN phones ON users.userId = phones.userId
+                WHERE phones.phoneId = '${phoneId}';`
+        );
+
+        return results;
+    }
+
+    // get client by address id
+
+    async getClientByAddressId(addressId) {
+        const [results, metadata] = await db.query(
+            `SELECT * FROM users 
+                LEFT JOIN addresses ON users.userId = addresses.userId
+                WHERE addresses.addressId = '${addressId}';`
+        );
+
+        return results;
+    }
+
+    // get client by card id
+
+    async getClientByCardId(cardId) {
+        const [results, metadata] = await db.query(
+            `SELECT * FROM users 
+                LEFT JOIN creditCards ON users.userId = creditCards.userId
+                WHERE creditCards.cardId = '${cardId}';`
         );
 
         return results;

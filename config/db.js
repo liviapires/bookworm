@@ -1,10 +1,10 @@
 const Sequelize = require('sequelize');
 
 // sequelize order (databaseName, user, password, options)
-const componentSequelize = new Sequelize("teste", "teste", "teste123@", {
+const componentSequelize = new Sequelize("bookworm", "bookworm", "bookworm123@", {
     dialect: "mysql",
     host: "localhost",
-    port: 3307
+    port: 3306
 });
 
 module.exports = componentSequelize;

@@ -1,5 +1,5 @@
 <%- include('header.ejs') %>
-
+<% console.log(phone); %>
 <div id="body" class="body">
     <div class="center">
         <div class="card-big mt-1">
@@ -19,7 +19,7 @@
                         </select>
                     </div>
                 </div>
-                <a href="/client/<%= phone[0].phoneId %>" class="btn btn-outline-secondary w-49 mt-2">Voltar</a>
+                <a href="/client/<%= phone[0].userId %>" class="btn btn-outline-secondary w-49 mt-2">Voltar</a>
                 <button type="submit" class="btn btn-primary w-49 mt-2">Salvar</button>
             </form>
         </div>

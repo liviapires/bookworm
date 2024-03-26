@@ -1,5 +1,4 @@
 <%- include('header.ejs') %>
-
 <div class="main-center container">
 
     <h1 class="title center mt-5">Clientes</h1>
@@ -33,19 +32,30 @@
                     <td>
                         <%= client.cpf %>
                     </td>
-                    <td>(<%= client.ddd %>) <%= client.phoneNumber %>
+                    <!-- if there is no number, show empty -->
+                    <td>
+                        <% if (client.phoneNumber) { %>
+                            (<%= client.ddd %>) <%= client.phoneNumber %>
+                        <% } %>
+                    </td>
+                    <!-- if there is no address, show empty -->
+                    <td>
+                        <% if (client.street) { %>
+                            <%= client.street %>, <%= client.number %>
+                        <% } %>
                     </td>
                     <td>
-                        <%= client.street %>, <%= client.addressNumber %>
-                    </td>
-                    <td>
-                        <%= client.neighborhood %>
+                        <% if (client.neighborhood) { %>
+                            <%= client.neighborhood %>
+                        <% } %>
                     </td>
                     <td>
                         <%= client.zipCode %>
                     </td>
                     <td>
-                        <%= client.state %>
+                        <% if (client.state) { %>
+                            <%= client.state %>
+                        <% } %>
                     </td>
                     <td>
                         <a href="/client/<%= client.userId %>">

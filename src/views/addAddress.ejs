@@ -1,9 +1,8 @@
 <%- include('header.ejs') %>
-
 <div id="body" class="body">
     <div class="center">
         <div class="card-big mt-1">
-            <div class="title center mt-1">Editar Endereço</div>
+            <div class="title center mt-1">Adicionar Endereço</div>
             <form action="/addAddress" method="POST">
                 <div class="forms">
                     <input class="w-100 form-control" placeholder="ID" type="text" name="userId" id="userId" value="<%= cliente[0].userId %>" hidden>
@@ -56,7 +55,7 @@
                             <option value="Casa">Casa</option>
                         </select>
                     </div>
-                    <input class="w-100 mt-05 form-control" placeholder="Observações" type="text" name="observation" id="observation">
+                    <input class="w-100 mt-1 form-control" placeholder="Observações" type="text" name="observation" id="observation">
                 </div>
                 <a href="/client/<%= cliente[0].userId %>" class="btn btn-outline-secondary w-49 mt-2">Voltar</a>
                 <button type="submit" class="btn btn-primary w-49 mt-2">Salvar</button>

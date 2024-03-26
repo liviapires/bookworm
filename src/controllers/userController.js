@@ -217,11 +217,13 @@ async function updateAddress (req, res) {
 // delete a client's address
 async function deleteAddress (req, res) {
     
+    const cliente = await aClient.getClientByAddressId(req.params.id);
+
     // delete address
     await anAddress.deleteAddress(req.params.id);
     
     // redirect to the client page
-    res.redirect(`/client/${req.params.id}`);
+    res.redirect(`/client/${cliente[0].userId}`);
 }
 
 
@@ -250,6 +252,8 @@ async function createPhone (req, res) {
 // update a client's phone
 async function updatePhone (req, res) {
 
+    console.log(req.body);
+
     // get post data
     let phoneData = {
         phoneId: req.body.phoneId,
@@ -268,14 +272,51 @@ async function updatePhone (req, res) {
 
 // delete a client's phone
 async function deletePhone (req, res) {
-    
+    const cliente = await aClient.getClientByPhoneId(req.params.id);
+
     // delete phone
     await aPhone.deletePhone(req.params.id);
     
     // redirect to the client page
-    res.redirect(`/client/${req.params.id}`);
+    res.redirect(`/client/${cliente[0].userId}`);
 }
 
+
+// CARD CONTROLLERS
+
+// create a new card
+async function createCard (req, res) {
+
+    // get post data
+    let cardData = {
+        cardNumber: req.body.cardNumber,
+        cardName: req.body.cardName,
+        cardFlag: req.body.cardFlag,
+        securityCode: req.body.securityCode,
+        expirationDate: req.body.expiration,
+        preferred: 0,
+        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        userId: req.body.userId
+    }
+
+    // create card
+    await aCard.createCard(cardData);
+
+    // redirect to the client page
+    res.redirect(`/client/${req.body.userId}`);
+}
+
+// delete a client's card
+async function deleteCard (req, res) {
+    const cliente = await aClient.getClientByCardId(req.params.id);
+
+    // delete card
+    await aCard.deleteCard(req.params.id);
+    
+    // redirect to the client page
+    res.redirect(`/client/${cliente[0].userId}`);
+}
 
 // VIEWS CONTROLLERS
 
@@ -316,10 +357,11 @@ async function clientView (req, res) {
     }
 
     // censor the credit card number
-
-    let cardNumber = cliente[0].cardNumber;
-    let censoredCardNumber = cardNumber.replace(/\d(?=\d{4})/g, "*");
-    cliente[0].cardNumber = censoredCardNumber;
+    if (cliente[0].cardNumber) {
+        let cardNumber = cliente[0].cardNumber;
+        let censoredCardNumber = cardNumber.replace(/\d(?=\d{4})/g, "*");
+        cliente[0].cardNumber = censoredCardNumber;
+    }
 
     res.render('client', {
         title: cliente[0].name,
@@ -390,12 +432,14 @@ module.exports = {
     createClient,
     createAddress,
     createPhone,
+    createCard,
     updateClient,
     updateAddress,
     updatePhone,
     deleteClient,
     deleteAddress,
     deletePhone,
+    deleteCard,
     signinView,
     clientsView,
     clientView,

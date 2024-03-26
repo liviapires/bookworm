@@ -1,5 +1,4 @@
 <%- include('header.ejs') %>
-<% console.log(cliente); %>
         <div class="container h-100">
 
             <div class="title center mt-5">Cliente</div>
@@ -10,14 +9,19 @@
                         <img src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/yellow-business-leadership-book-cover-design-template-dce2f5568638ad4643ccb9e725e5d6ff_screen.jpg?ts=1637017516"
                             width="250rem" class="icon-person">
                         <div class="d-flex align-items-center mt-1">
-                            <div class="bold"><%= cliente[0].name %></div>
-                            <div class="badge ml-1"><%= cliente[0].ranking %></div>
+                            <div class="bold">
+                                <%= cliente[0].name %>
+                            </div>
+                            <div class="badge ml-1">
+                                <%= cliente[0].ranking %>
+                            </div>
                         </div>
                     </div>
                     <div class="info-client ml-7">
                         <div class="d-flex justify-content-between">
                             <div class="d-flex">
-                                <img src="https://www.svgrepo.com/show/532167/document-layout-right.svg" class="icon op-75">
+                                <img src="https://www.svgrepo.com/show/532167/document-layout-right.svg"
+                                    class="icon op-75">
                                 <div class="ml-1">
                                     <div class="bold">CPF</div>
                                     <%= cliente[0].cpf %>
@@ -38,6 +42,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                         <div class="d-flex mt-2">
                             <div class="w-49">
                                 <div class="d-flex">
@@ -45,41 +50,49 @@
                                     <div class="ml-1">
                                         <div class="d-flex align-items-center">
                                             <div class="bold">Telefones</div>
-                                            <a href="/client/addPhone/<%= cliente[0].userId %>" style="display: inline-block;" class="ml-05">
-                                                <img src="https://www.svgrepo.com/show/509388/plus-circle.svg" alt="Adicionar Telefone"
-                                                class="icon-min">
+                                            <a href="/client/addPhone/<%= cliente[0].userId %>"
+                                                style="display: inline-block;" class="ml-05">
+                                                <img src="https://www.svgrepo.com/show/509388/plus-circle.svg"
+                                                    alt="Adicionar Telefone" class="icon-min">
                                             </a>
-                                        </div>
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div>
-                                                (<%= cliente[0].ddd %>) <%= cliente[0].phoneNumber %>
+                                        </div> 
+                                        <% if (cliente[0].phoneNumber) { %>
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div>
+                                                    (<%= cliente[0].ddd %>) <%= cliente[0].phoneNumber %>
+                                                </div>
+                                                <div>
+                                                    <a href="/client/editPhone/<%= cliente[0].userId %>">
+                                                        <img src="https://www.svgrepo.com/show/522527/edit-3.svg"
+                                                            alt="Editar Telefone" class="icon-min ml-05">
+                                                    </a>
+                                                    <a href="/client/deletePhone/<%= cliente[0].phoneId %>"
+                                                        style="display: inline-block;">
+                                                        <img src="https://www.svgrepo.com/show/502606/delete-3.svg"
+                                                            alt="Deletar Telefone" class="icon-min">
+                                                    </a>
+                                                </div> 
                                             </div>
-                                            <div>
-                                                <a href="/client/editPhone/<%= cliente[0].phoneId %>">
-                                                    <img src="https://www.svgrepo.com/show/522527/edit-3.svg" alt="Editar Telefone"
-                                                        class="icon-min ml-05">
-                                                </a>
-                                                <a href="/client/deletePhone/<%= cliente[0].phoneId %>" style="display: inline-block;">
-                                                    <img src="https://www.svgrepo.com/show/502606/delete-3.svg" alt="Deletar Telefone"
-                                                        class="icon-min">
-                                                </a>
-                                            </div>
-                                        </div>
+                                        <% } %>
                                     </div>
                                 </div>
-                                <div class="d-flex mt-2">
-                                    <img src="https://www.svgrepo.com/show/532540/location-pin-alt-1.svg" class="icon op-75">
-                                    <div class="ml-1">
-                                        <div class="d-flex align-items-center">
-                                            <div class="bold">Endereços</div>
-                                            <a href="/client/addAddress/<%= cliente[0].addressId %>" style="display: inline-block;" class="ml-05">
-                                                <img src="https://www.svgrepo.com/show/509388/plus-circle.svg" alt="Adicionar Endereço"
-                                                class="icon-min">
-                                            </a>
-                                        </div>
+                            </div>
+                            <div class="d-flex mt-2">
+                                <img src="https://www.svgrepo.com/show/532540/location-pin-alt-1.svg"
+                                    class="icon op-75">
+                                <div class="ml-1">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bold">Endereços</div>
+                                        <a href="/client/addAddress/<%= cliente[0].userId %>" style="display: inline-block;" class="ml-05">
+                                            <img src="https://www.svgrepo.com/show/509388/plus-circle.svg"
+                                                alt="Adicionar Endereço" class="icon-min">
+                                        </a>
+                                    </div>
+                                    <% if (cliente[0].street) { %>
                                         <div class="d-flex align-items-center justify-content-between">
                                             <div>
-                                                <img src="https://www.svgrepo.com/show/491219/dot.svg" alt="Editar" class="icon-max">
+                                                <img src="https://www.svgrepo.com/show/491219/dot.svg" alt="Editar"
+                                                    class="icon-max">
                                             </div>
                                             <div>
                                                 <%= cliente[0].street %>, <%= cliente[0].number %>, <%= cliente[0].neighborhood %>
@@ -89,53 +102,57 @@
                                                 (<%= cliente[0].notes %>)
                                             </div>
                                             <div>
-                                                <a href="/client/editAddress/<%= cliente[0].addressId  %>">
-                                                    <img src="https://www.svgrepo.com/show/522527/edit-3.svg" alt="Editar Endereço"
-                                                        class="icon-min ml-1">
+                                                <a href="/client/editAddress/<%= cliente[0].userId  %>">
+                                                    <img src="https://www.svgrepo.com/show/522527/edit-3.svg"
+                                                        alt="Editar Endereço" class="icon-min ml-1">
                                                 </a>
-                                                <a href="/client/deleteAddress/<%= cliente[0].addressId %>" style="display: inline-block;">
-                                                    <img src="https://www.svgrepo.com/show/502606/delete-3.svg" alt="Deletar Endereço"
-                                                        class="icon-min">
+                                                <a href="/client/deleteAddress/<%= cliente[0].addressId %>"
+                                                    style="display: inline-block;">
+                                                    <img src="https://www.svgrepo.com/show/502606/delete-3.svg"
+                                                        alt="Deletar Endereço" class="icon-min">
                                                 </a>
                                             </div>
                                         </div>
-                                    </div>
+                                    <% } %>
                                 </div>
                             </div>
-                            <div class="w-49">
-                                <!-- cards -->
-                                <div class="d-flex">
-                                    <img src="https://www.svgrepo.com/show/532425/credit-card-alt-1.svg" class="icon op-75">
-                                    <div class="ml-1">
-                                        <div class="d-flex align-items-center">
-                                            <div class="bold">Cartões</div>
-                                            <a href="/client/addCard/<%= cliente[0].addressId %>" style="display: inline-block;" class="ml-05">
-                                                <img src="https://www.svgrepo.com/show/509388/plus-circle.svg" alt="Adicionar Endereço"
-                                                class="icon-min">
-                                            </a>
-                                        </div>
+                        </div>
+                        <div class="w-49">
+                            <!-- cards -->
+                            <div class="d-flex">
+                                <img src="https://www.svgrepo.com/show/532425/credit-card-alt-1.svg" class="icon op-75">
+                                <div class="ml-1">
+                                    <div class="d-flex align-items-center">
+                                        <div class="bold">Cartões</div>
+                                        <a href="/client/addCard/<%= cliente[0].userId %>"
+                                            style="display: inline-block;" class="ml-05">
+                                            <img src="https://www.svgrepo.com/show/509388/plus-circle.svg"
+                                                alt="Adicionar Endereço" class="icon-min">
+                                        </a>
+                                    </div>
+                                    <% if (cliente[0].cardNumber) {%>
                                         <div class="d-flex align-items-center jus">
-                                            <img src="<%= cliente[0].cardFlag %>" class="card-flag">                                    
-                                            <div class="ml-1"><%= cliente[0].cardNumber %> - <%= cliente[0].cardName %></div>
-                                            <a href="/card/delete/<%= cliente[0].cardId %>" style="display: inline-block;">
+                                            <img src="<%= cliente[0].cardFlag %>" class="card-flag">
+                                            <div class="ml-1">
+                                                <%= cliente[0].cardNumber %> - <%= cliente[0].cardName %>
+                                            </div>
+                                            <a href="/client/deleteCard/<%= cliente[0].cardId %>" style="display: inline-block;">
                                                 <img src="https://www.svgrepo.com/show/502606/delete-3.svg" alt="Deletar"
                                                     class="icon-min ml-05">
                                             </a>
                                         </div>
-                                    </div>
+                                    <% } %>
                                 </div>
                             </div>
                         </div>
-                        <div class="mt-2">
-                            <a href="/client/edit/<%= cliente[0].userId %>" class="btn btn-primary">Editar</a>
-                            <div class="btn btn-danger" id="delete">Deletar</div>
-                            <%- include('deleteClient.ejs')  %>
-                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <a href="/client/editClient/<%= cliente[0].userId %>" class="btn btn-primary">Editar</a>
+                        <div class="btn btn-danger" id="delete">Deletar</div>
+                        <%- include('deleteClient.ejs') %>
                     </div>
                 </div>
-                <a href="/clients" class="mt-5 btn btn-primary">Voltar</a>
             </div>
+            <a href="/clients" class="mt-5 btn btn-primary">Voltar</a>
         </div>
-    </div>
-
-<%- include('footer.ejs') %>
+        <%- include('footer.ejs') %>
