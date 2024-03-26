@@ -11,6 +11,8 @@ const anAddress = new Address();
 const aPhone = new Phone();
 const aCard = new Card();
 
+// CLIENT CONTROLLERS
+
 // create a new client
 async function createClient (req, res) {
 
@@ -134,7 +136,7 @@ async function updateClient (req, res) {
     await aClient.updateUser(clientData);
 
     // redirect to the client page
-    res.redirect(`/admin/client/${req.body.id}`);
+    res.redirect(`/client/${req.body.id}`);
 }
     
 // delete a client and its dependencies
@@ -153,7 +155,37 @@ async function deleteClient (req, res) {
         await aClient.deleteUser(req.params.id);
     
         // redirect to the clients page
-        res.redirect('/admin/clients');
+        res.redirect('/clients');
+}
+
+
+// ADDRESS CONTROLLERS
+
+// add a new address
+async function createAddress (req, res) {
+
+    // get post data
+    let addressData = {
+        residenceType: req.body.residenceType,
+        street: req.body.street,
+        number: req.body.addressNumber,
+        neighborhood: req.body.neighborhood,
+        zipCode: req.body.zipCode,
+        city: req.body.city,
+        state: req.body.state,
+        country: 'Brasil',
+        complement: req.body.complement,
+        notes: req.body.observation,
+        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        userId: req.body.userId
+    }
+
+    // create address
+    await anAddress.createAddress(addressData);
+
+    // redirect to the client page
+    res.redirect(`/client/${req.body.userId}`);
 }
 
 // update a client's address
@@ -179,7 +211,40 @@ async function updateAddress (req, res) {
     await anAddress.updateAddress(addressData);
 
     // redirect to the client page
-    res.redirect(`/admin/client/${req.body.id}`);
+    res.redirect(`/client/${req.body.id}`);
+}
+
+// delete a client's address
+async function deleteAddress (req, res) {
+    
+    // delete address
+    await anAddress.deleteAddress(req.params.id);
+    
+    // redirect to the client page
+    res.redirect(`/client/${req.params.id}`);
+}
+
+
+// PHONE CONTROLLERS
+
+// create a new phone
+async function createPhone (req, res) {
+
+    // get post data
+    let phoneData = {
+        ddd: req.body.ddd,
+        phoneNumber: req.body.phone,
+        phoneType: req.body.phoneType,
+        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        userId: req.body.userId
+    }
+
+    // create phone
+    await aPhone.createPhone(phoneData);
+
+    // redirect to the client page
+    res.redirect(`/client/${req.body.userId}`);
 }
 
 // update a client's phone
@@ -189,7 +254,7 @@ async function updatePhone (req, res) {
     let phoneData = {
         phoneId: req.body.phoneId,
         ddd: req.body.ddd,
-        phoneNumber: req.body.phoneNumber,
+        phoneNumber: req.body.phone,
         phoneType: req.body.phoneType,
         updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
     }
@@ -198,29 +263,21 @@ async function updatePhone (req, res) {
     await aPhone.updatePhone(phoneData);
 
     // redirect to the client page
-    res.redirect(`/admin/client/${req.body.userId}`);
-}
-
-// delete a client's address
-async function deleteAddress (req, res) {
-
-    // delete address
-    await anAddress.deleteAddress(req.params.id);
-
-    // redirect to the client page
-    res.redirect(`/admin/client/${req.params.id}`);
+    res.redirect(`/client/${req.body.userId}`);
 }
 
 // delete a client's phone
 async function deletePhone (req, res) {
-
+    
     // delete phone
     await aPhone.deletePhone(req.params.id);
-
+    
     // redirect to the client page
-    res.redirect(`/admin/client/${req.params.id}`);
+    res.redirect(`/client/${req.params.id}`);
 }
 
+
+// VIEWS CONTROLLERS
 
 // Renderiza a view signin
 const signinView = (req, res) => {
@@ -299,12 +356,44 @@ async function editPhoneView (req, res) {
     });
 }
 
+async function addPhoneView (req, res) {
+
+    const cliente = await aClient.getUserById(req.params.id);
+
+    res.render('addPhone', {
+        title: 'Adicionar Telefone',
+        cliente: cliente
+    });
+}
+
+async function addAddressView (req, res) {
+
+    const cliente = await aClient.getUserById(req.params.id);
+
+    res.render('addAddress', {
+        title: 'Adicionar Endereço',
+        cliente: cliente
+    });
+}
+
+async function addCardView (req, res) {
+
+    const cliente = await aClient.getUserById(req.params.id);
+
+    res.render('addCard', {
+        title: 'Adicionar Cartão',
+        cliente: cliente
+    });
+}
+
 module.exports = {
     createClient,
-    deleteClient,
+    createAddress,
+    createPhone,
     updateClient,
     updateAddress,
     updatePhone,
+    deleteClient,
     deleteAddress,
     deletePhone,
     signinView,
@@ -312,5 +401,8 @@ module.exports = {
     clientView,
     editClientView,
     editAddressView,
-    editPhoneView
+    editPhoneView,
+    addPhoneView,
+    addAddressView,
+    addCardView
 }

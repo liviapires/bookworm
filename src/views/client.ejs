@@ -1,4 +1,5 @@
 <%- include('header.ejs') %>
+<% console.log(cliente); %>
         <div class="container h-100">
 
             <div class="title center mt-5">Cliente</div>
@@ -42,18 +43,24 @@
                                 <div class="d-flex">
                                     <img src="https://www.svgrepo.com/show/533285/phone.svg" class="icon op-75">
                                     <div class="ml-1">
-                                        <div class="bold">Telefones</div>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bold">Telefones</div>
+                                            <a href="/client/addPhone/<%= cliente[0].userId %>" style="display: inline-block;" class="ml-05">
+                                                <img src="https://www.svgrepo.com/show/509388/plus-circle.svg" alt="Adicionar Telefone"
+                                                class="icon-min">
+                                            </a>
+                                        </div>
                                         <div class="d-flex align-items-center justify-content-between">
                                             <div>
                                                 (<%= cliente[0].ddd %>) <%= cliente[0].phoneNumber %>
                                             </div>
                                             <div>
-                                                <a href="/client/edit/phone/<%= cliente[0].phoneId %>">
-                                                    <img src="https://www.svgrepo.com/show/522527/edit-3.svg" alt="Editar"
+                                                <a href="/client/editPhone/<%= cliente[0].phoneId %>">
+                                                    <img src="https://www.svgrepo.com/show/522527/edit-3.svg" alt="Editar Telefone"
                                                         class="icon-min ml-05">
                                                 </a>
-                                                <a href="/phone/delete/<%= cliente[0].phoneId %>" style="display: inline-block;">
-                                                    <img src="https://www.svgrepo.com/show/502606/delete-3.svg" alt="Deletar"
+                                                <a href="/client/deletePhone/<%= cliente[0].phoneId %>" style="display: inline-block;">
+                                                    <img src="https://www.svgrepo.com/show/502606/delete-3.svg" alt="Deletar Telefone"
                                                         class="icon-min">
                                                 </a>
                                             </div>
@@ -63,7 +70,13 @@
                                 <div class="d-flex mt-2">
                                     <img src="https://www.svgrepo.com/show/532540/location-pin-alt-1.svg" class="icon op-75">
                                     <div class="ml-1">
-                                        <div class="bold">Endereços</div>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bold">Endereços</div>
+                                            <a href="/client/addAddress/<%= cliente[0].addressId %>" style="display: inline-block;" class="ml-05">
+                                                <img src="https://www.svgrepo.com/show/509388/plus-circle.svg" alt="Adicionar Endereço"
+                                                class="icon-min">
+                                            </a>
+                                        </div>
                                         <div class="d-flex align-items-center justify-content-between">
                                             <div>
                                                 <img src="https://www.svgrepo.com/show/491219/dot.svg" alt="Editar" class="icon-max">
@@ -72,14 +85,16 @@
                                                 <%= cliente[0].street %>, <%= cliente[0].number %>, <%= cliente[0].neighborhood %>
                                                 <br>
                                                 <%= cliente[0].city %>, <%= cliente[0].state %> - <%= cliente[0].zipCode %>
+                                                <br>
+                                                (<%= cliente[0].notes %>)
                                             </div>
                                             <div>
-                                                <a href="/client/edit/address/<%= cliente[0].addressId  %>">
-                                                    <img src="https://www.svgrepo.com/show/522527/edit-3.svg" alt="Editar"
+                                                <a href="/client/editAddress/<%= cliente[0].addressId  %>">
+                                                    <img src="https://www.svgrepo.com/show/522527/edit-3.svg" alt="Editar Endereço"
                                                         class="icon-min ml-1">
                                                 </a>
-                                                <a href="/delete/address/<%= cliente[0].addressId %>" style="display: inline-block;">
-                                                    <img src="https://www.svgrepo.com/show/502606/delete-3.svg" alt="Deletar"
+                                                <a href="/client/deleteAddress/<%= cliente[0].addressId %>" style="display: inline-block;">
+                                                    <img src="https://www.svgrepo.com/show/502606/delete-3.svg" alt="Deletar Endereço"
                                                         class="icon-min">
                                                 </a>
                                             </div>
@@ -92,7 +107,13 @@
                                 <div class="d-flex">
                                     <img src="https://www.svgrepo.com/show/532425/credit-card-alt-1.svg" class="icon op-75">
                                     <div class="ml-1">
-                                        <div class="bold">Cartões</div>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bold">Cartões</div>
+                                            <a href="/client/addCard/<%= cliente[0].addressId %>" style="display: inline-block;" class="ml-05">
+                                                <img src="https://www.svgrepo.com/show/509388/plus-circle.svg" alt="Adicionar Endereço"
+                                                class="icon-min">
+                                            </a>
+                                        </div>
                                         <div class="d-flex align-items-center jus">
                                             <img src="<%= cliente[0].cardFlag %>" class="card-flag">                                    
                                             <div class="ml-1"><%= cliente[0].cardNumber %> - <%= cliente[0].cardName %></div>
@@ -112,7 +133,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="/admin/clients" class="mt-5 btn btn-primary">Voltar</a>
+                <a href="/clients" class="mt-5 btn btn-primary">Voltar</a>
             </div>
         </div>
     </div>

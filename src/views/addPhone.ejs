@@ -1,0 +1,28 @@
+<%- include('header.ejs') %>
+
+<div id="body" class="body">
+    <div class="center">
+        <div class="card-big mt-1">
+            <div class="title center mt-1">Adicionar Telefone</div>
+            <form action="/addPhone" method="POST">
+                <div class="forms">
+                    <input class="w-100 mt-2 form-control" placeholder="Cliente" type="text" name="userId" id="userId" value="<%= cliente[0].userId %>" hidden>
+
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                        <input class="w-20 form-control" placeholder="DDD" type="text" name="ddd" id="ddd">
+                        <input class="w-59 form-control" placeholder="Telefone" type="text" name="phone" id="phone"">
+                        <select name="phoneType" id="phoneType" class="form-control w-20">
+                            <option value="Celular">Celular</option>
+                            <option value="Residencial">Residencial</option>
+                            <option value="Comercial">Comercial</option>
+                        </select>
+                    </div>
+                </div>
+                <a href="/client/<%= cliente[0].userId %>" class="btn btn-outline-secondary w-49 mt-2">Voltar</a>
+                <button type="submit" class="btn btn-primary w-49 mt-2">Salvar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('footer.ejs') %>

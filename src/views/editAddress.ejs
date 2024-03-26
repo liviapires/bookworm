@@ -24,8 +24,9 @@
                         <input class="w-50 form-control" placeholder="Estado" type="text" name="state" id="state" value="<%= address[0].state %>">
                         <input class="w-49 form-control" placeholder="CEP" type="text" name="zipCode" id="zipCode" value="<%= address[0].zipCode %>">
                     </div>
+                    <input class="w-100 mt-05 form-control" placeholder="Observações" type="text" name="observation" id="observation" value="<%= address[0].notes %>">
                 </div>
-                <a href="/admin/client/<%= address[0].addressId %>" class="btn btn-outline-secondary w-49 mt-2">Voltar</a>
+                <a href="/client/<%= address[0].addressId %>" class="btn btn-outline-secondary w-49 mt-2">Voltar</a>
                 <button type="submit" class="btn btn-primary w-49 mt-2">Salvar</button>
             </form>
         </div>

@@ -1,0 +1,68 @@
+<%- include('header.ejs') %>
+
+<div id="body" class="body">
+    <div class="center">
+        <div class="card-big mt-1">
+            <div class="title center mt-1">Editar Endereço</div>
+            <form action="/addAddress" method="POST">
+                <div class="forms">
+                    <input class="w-100 form-control" placeholder="ID" type="text" name="userId" id="userId" value="<%= cliente[0].userId %>" hidden>
+
+                    <input class="w-100 mt-2 form-control" placeholder="Rua" type="text" name="street" id="street">
+
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                        <input class="w-50 form-control" placeholder="Número" type="text" name="addressNumber" id="addressNumber">
+                        <input class="w-49 form-control" placeholder="Complemento" type="text" name="complement" id="complement">
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                        <input class="w-50 form-control" placeholder="Bairro" type="text" name="neighborhood" id="neighborhood">
+                        <input class="w-49 form-control" placeholder="Cidade" type="text" name="city" id="city">
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                        <select name="state" id="state" class="form-control w-20">
+                            <option value="Acre" id="AC">AC</option>
+                            <option value="Alagoas" id="AL">AL</option>
+                            <option value="Amapá" id="AP">AP</option>
+                            <option value="Amazonas" id="AM">AM</option>
+                            <option value="Bahia" id="BA">BH</option>
+                            <option value="Ceará" id="CE">CE</option>
+                            <option value="Distrito Federal" id="DF">DF</option>
+                            <option value="Espírito Santo" id="ES">ES</option>
+                            <option value="Goiás" id="GO">GO</option>
+                            <option value="Maranhão" id="MA">MA</option>
+                            <option value="Mato Grosso" id="MT">MT</option>
+                            <option value="Mato Grosso do Sul" id="MS">MS</option>
+                            <option value="Minas Gerais" id="MG">MG</option>
+                            <option value="Pará" id="PA">PA</option>
+                            <option value="Paraíba" id="PB">PB</option>
+                            <option value="Paraná" id="PR">PR</option>
+                            <option value="Pernambuco" id="PE">PE</option>
+                            <option value="Piauí" id="PI">PI</option>
+                            <option value="Rio de Janeiro" id="RJ">RJ</option>
+                            <option value="Rio Grande do Norte" id="RN">RN</option>
+                            <option value="Rio Grande do Sul" id="RS">RS</option>
+                            <option value="Rondônia" id="RO">RO</option>
+                            <option value="Roraima" id="RR">RR</option>
+                            <option value="Santa Catarina" id="SC">SC</option>
+                            <option value="São Paulo" id="SP">SP</option>
+                            <option value="Sergipe" id="SE">SE</option>
+                            <option value="Tocantins" id="TO">TO</option>
+                        </select>
+                        <input class="w-59 form-control" placeholder="CEP" type="text" name="zipCode" id="zipCode">
+                        <select name="residenceType" id="residenceType" class="form-control w-20">
+                            <option value="Apartamento">Apartamento</option>
+                            <option value="Casa">Casa</option>
+                        </select>
+                    </div>
+                    <input class="w-100 mt-05 form-control" placeholder="Observações" type="text" name="observation" id="observation">
+                </div>
+                <a href="/client/<%= cliente[0].userId %>" class="btn btn-outline-secondary w-49 mt-2">Voltar</a>
+                <button type="submit" class="btn btn-primary w-49 mt-2">Salvar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('footer.ejs') %>
