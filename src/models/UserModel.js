@@ -21,10 +21,7 @@ class user {
 
     async getAllClients() {
         const [results, metadata] = await db.query(
-            `SELECT * FROM users 
-                LEFT JOIN phones ON users.userId = phones.userId
-                LEFT JOIN addresses ON users.userId = addresses.userId
-                LEFT JOIN creditCards ON users.userId = creditCards.userId;`
+            `SELECT * FROM users;`
         );
 
         return results;
@@ -85,6 +82,16 @@ class user {
                 LEFT JOIN addresses ON users.userId = addresses.userId
                 LEFT JOIN creditCards ON users.userId = creditCards.userId
                 WHERE users.userId = '${userId}';`
+        );
+
+        return results;
+    }
+
+    // get client by id
+
+    async getClientById(clientId) {
+        const [results, metadata] = await db.query(
+            `SELECT * FROM users WHERE userId = '${clientId}';`
         );
 
         return results;

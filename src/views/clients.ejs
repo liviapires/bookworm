@@ -1,5 +1,5 @@
 <%- include('header.ejs') %>
-<div class="main-center container">
+<div class="center container">
 
     <h1 class="title center mt-5">Clientes</h1>
 
@@ -8,12 +8,8 @@
             <tr>
                 <th class="veronica">Nome</th>
                 <th class="veronica">CPF</th>
-                <th class="veronica">Telefone</th>
-                <th class="veronica">Endereço</th>
-                <th class="veronica">Bairro</th>
-                <th class="veronica">CEP</th>
-                <th class="veronica">Estado</th>
-                <th class="veronica">Mais</th>
+                <th class="veronica">Quantidade de Compras</th>
+                <th class="veronica">Ver mais</th>
             </tr>
         </thead>
         <tbody>
@@ -25,6 +21,7 @@
             <% } %>
 
             <% clients.forEach(function(client) { %>
+                
                 <tr>
                     <td class="bold">
                         <%= client.name %>
@@ -32,30 +29,8 @@
                     <td>
                         <%= client.cpf %>
                     </td>
-                    <!-- if there is no number, show empty -->
                     <td>
-                        <% if (client.phoneNumber) { %>
-                            (<%= client.ddd %>) <%= client.phoneNumber %>
-                        <% } %>
-                    </td>
-                    <!-- if there is no address, show empty -->
-                    <td>
-                        <% if (client.street) { %>
-                            <%= client.street %>, <%= client.number %>
-                        <% } %>
-                    </td>
-                    <td>
-                        <% if (client.neighborhood) { %>
-                            <%= client.neighborhood %>
-                        <% } %>
-                    </td>
-                    <td>
-                        <%= client.zipCode %>
-                    </td>
-                    <td>
-                        <% if (client.state) { %>
-                            <%= client.state %>
-                        <% } %>
+                        :D
                     </td>
                     <td>
                         <a href="/client/<%= client.userId %>">

@@ -174,35 +174,52 @@ let pedidos = [
 ]
 
 const Client = require('../models/UserModel');
+const Phone = require('../models/PhoneModel');
+const Address = require('../models/AddressModel');
+const Card = require('../models/CardModel');
 
 const aClient = new Client();
+const aPhone = new Phone();
+const anAddress = new Address();
+const aCard = new Card();
 
 // Renderiza a view myAccount
 async function myAccountView (req, res) {
 
-    const cliente = await aClient.getClientById(4);
+    const clientId = 3;
+
+    const cliente = await aClient.getClientById(clientId);
+    const clientPhones = await aPhone.getPhoneByUserId(clientId);
+    const clientAddresses = await anAddress.getAddressByUserId(clientId);
+    const clientCards = await aCard.getCardByUserId(clientId);
 
     // get different image depending on the cardFlag
 
-    if (cliente[0].cardFlag == 'Visa') {
-        cliente[0].cardFlag = 'https://www.svgrepo.com/show/508730/visa-classic.svg';
-    } else if (cliente[0].cardFlag == 'Mastercard') {
-        cliente[0].cardFlag = 'https://www.svgrepo.com/show/508703/mastercard.svg';
-    } else if (cliente[0].cardFlag == 'American Express') {
-        cliente[0].cardFlag = 'https://www.svgrepo.com/show/508403/amex.svg';
-    } else if (cliente[0].cardFlag == 'Elo') {
-        cliente[0].cardFlag = 'https://www.svgrepo.com/show/508421/elo.svg';
-    }
+    clientCards.forEach(card => {
+        if (card.cardFlag == 'Visa') {
+            card.cardFlag = 'https://www.svgrepo.com/show/508730/visa-classic.svg';
+        } else if (card.cardFlag == 'Mastercard') {
+            card.cardFlag = 'https://www.svgrepo.com/show/508703/mastercard.svg';
+        } else if (card.cardFlag == 'American Express') {
+            card.cardFlag = 'https://www.svgrepo.com/show/508403/amex.svg';
+        } else if (card.cardFlag == 'Elo') {
+            card.cardFlag = 'https://www.svgrepo.com/show/508421/elo.svg';
+        }
+    });
 
     // censor the credit card number
-
-    let cardNumber = cliente[0].cardNumber;
-    let censoredCardNumber = cardNumber.replace(/\d(?=\d{4})/g, "*");
-    cliente[0].cardNumber = censoredCardNumber;
+    clientCards.forEach(card => {
+        let cardNumber = card.cardNumber;
+        let censoredCardNumber = cardNumber.replace(/\d(?=\d{4})/g, "*");
+        card.cardNumber = censoredCardNumber;
+    });
 
     res.render('myAccount', {
         title: 'Minha Conta',
         cliente: cliente,
+        phones: clientPhones,
+        addresses: clientAddresses,
+        cards: clientCards,
         pedidos: pedidos
     });
 }

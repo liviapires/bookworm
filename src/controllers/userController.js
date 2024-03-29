@@ -342,30 +342,38 @@ async function clientsView (req, res) {
 // Renderiza a view client
 async function clientView (req, res) {
     
-    const cliente = await aClient.getUserById(req.params.id);
+    const cliente = await aClient.getClientById(req.params.id);
+    const clientPhones = await aPhone.getPhoneByUserId(req.params.id);
+    const clientAddresses = await anAddress.getAddressByUserId(req.params.id);
+    const clientCards = await aCard.getCardByUserId(req.params.id);
 
     // get different image depending on the cardFlag
 
-    if (cliente[0].cardFlag == 'Visa') {
-        cliente[0].cardFlag = 'https://www.svgrepo.com/show/508730/visa-classic.svg';
-    } else if (cliente[0].cardFlag == 'Mastercard') {
-        cliente[0].cardFlag = 'https://www.svgrepo.com/show/508703/mastercard.svg';
-    } else if (cliente[0].cardFlag == 'American Express') {
-        cliente[0].cardFlag = 'https://www.svgrepo.com/show/508403/amex.svg';
-    } else if (cliente[0].cardFlag == 'Elo') {
-        cliente[0].cardFlag = 'https://www.svgrepo.com/show/508421/elo.svg';
-    }
+    clientCards.forEach(card => {
+        if (card.cardFlag == 'Visa') {
+            card.cardFlag = 'https://www.svgrepo.com/show/508730/visa-classic.svg';
+        } else if (card.cardFlag == 'Mastercard') {
+            card.cardFlag = 'https://www.svgrepo.com/show/508703/mastercard.svg';
+        } else if (card.cardFlag == 'American Express') {
+            card.cardFlag = 'https://www.svgrepo.com/show/508403/amex.svg';
+        } else if (card.cardFlag == 'Elo') {
+            card.cardFlag = 'https://www.svgrepo.com/show/508421/elo.svg';
+        }
+    });
 
     // censor the credit card number
-    if (cliente[0].cardNumber) {
-        let cardNumber = cliente[0].cardNumber;
+    clientCards.forEach(card => {
+        let cardNumber = card.cardNumber;
         let censoredCardNumber = cardNumber.replace(/\d(?=\d{4})/g, "*");
-        cliente[0].cardNumber = censoredCardNumber;
-    }
+        card.cardNumber = censoredCardNumber;
+    });
 
     res.render('client', {
         title: cliente[0].name,
-        cliente: cliente
+        cliente: cliente,
+        phones: clientPhones,
+        addresses: clientAddresses,
+        cards: clientCards
     });
 }
 
@@ -390,7 +398,7 @@ async function editAddressView (req, res) {
 }
 
 async function editPhoneView (req, res) {
-    const phone = await aPhone.getPhoneByUserId(req.params.id);
+    const phone = await aPhone.getPhoneById(req.params.id);
 
     res.render('editPhone', {
         title: 'Editar Telefone',
