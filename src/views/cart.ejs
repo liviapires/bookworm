@@ -25,10 +25,6 @@
                         <% cart.forEach((livro) => { %>
                             <div class="col-md-5 mb-1">
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <img src="<%= livro.image %>" class="img-fluid" alt="<%= livro.title %>"
-                                            width="50">
-                                    </div>
                                     <div class="col-md-8">
                                         <div class="font-weight-bold">
                                             <%= livro.title %>
@@ -70,7 +66,7 @@
                             <% }); %>
                     </div>
                 </div>
-                <button type="button" class="btn btn-secondary mt-3">Limpar o Carrinho</button>
+                <a href="/emptyCart" class="btn btn-secondary mt-3">Limpar o Carrinho</a>
             </div>
             <div class="d-block right">
                 <div class="bg-gray">
@@ -102,14 +98,41 @@
                 </div>
                 <div class="mt-3 slight-bold">Calcular Frete</div>
                 <div class="bg-gray mt-3">
-                    <input type="text" class="form-control" placeholder="CEP">
+                    <input type="text" class="form-control" placeholder="CEP" id="cep">
                     <div class="d-flex justify-content-between align-items-baseline">
-                        <div>Valor</div>
-                        <button type="button" class="btn btn-secondary w-50 mt-1">Calcular</button>
+                        <div class="d-flex align-items-center">
+                            <div>
+                                Valor: 
+                            </div>
+                            <span class="hidden ml-1" id="dinheiro">R$ </span>
+                            <input id="frete" class="form-control w-50 hidden ml-05"></input>                      
+                        </div>
+                        <button type="button" class="btn btn-secondary w-50 mt-1" id="calcularFrete">Calcular</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 <%- include('footer.ejs') %>
+
+<script>
+
+    // botão calcularFrete define valor aleatório para o frete conforme valor do input CEP
+    document.getElementById('calcularFrete').addEventListener('click', () => {
+        if (document.getElementById('cep').value.length === 8) {
+            // unhide frete
+            document.getElementById('frete').style.display = 'block';
+            // mostra o dinheiro
+            document.getElementById('dinheiro').style.display = 'block';
+            // define valor aleatório para o frete com 2 casas decimais
+            document.getElementById('frete').value = (Math.random() * 100).toFixed(2);
+        } else {
+            alert('CEP inválido');
+            // hide frete if CEP is invalid or empty and zero the value and the money
+            document.getElementById('frete').style.display = 'none';
+            document.getElementById('frete').value = 0;
+            document.getElementById('dinheiro').style.display = 'none';
+        }
+    });
+
+</script>

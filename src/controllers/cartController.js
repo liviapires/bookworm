@@ -55,13 +55,17 @@ async function cartView(req, res) {
 
 const cartContinueView = (req, res) => {
 
+    // get frete from input if exists
+    let frete = req.body.frete || 0;
+
+    // set frete in session
+    req.session.frete = frete;
+
     let livros = req.session.cart || [];
 
     let total = req.session.total || 0;
 
     let cartoes = req.session.cartoes || [];
-
-    let frete = req.session.frete || 0;
 
     let precoFinal = total;
 
@@ -85,7 +89,7 @@ async function cartCheckoutView(req, res) {
 
     let total = req.session.total || 0;
 
-    let frete = 7.4;
+    let frete = req.session.frete || 0;
 
     let precoFinal = total;
 
@@ -114,9 +118,6 @@ async function finishPurchase(req, res) {
 
 // add book to cart function
 async function addToCart (req, res) {
-    // zerar o total
-    total = 0;
-
     let id = req.body.id;
 
     let livros = await aBook.getBookById(id);
@@ -128,15 +129,49 @@ async function addToCart (req, res) {
 
         if (livroNoCarrinho) {
             livroNoCarrinho.quantity++;
-            livroNoCarrinho.bookSubtotal = livroNoCarrinho.quantity * livroNoCarrinho.price;
+            // atualiza o subtotal do livro com duas casas decimais
+            livroNoCarrinho.bookSubtotal = (livroNoCarrinho.quantity * livro.price).toFixed(2);
         } else {
-            cart.push({ ...livro, quantity: 1, bookSubtotal: livro.price });
+            cart.push({ ...livro, quantity: 1, bookSubtotal: (livro.price).toFixed(2) });
         }
 
-        total += Number(livro.price);
+        // soma o subtotal do livro ao total se o carrinho não estiver vazio
+        if (cart.length > 0) {
+            total += livro.price;
+        } else {
+            total = livro.price;
+        }
     });
 
+    req.session.total = (total).toFixed(2);
+
+    req.session.cart = cart;
+
+    res.redirect('/cart');
+}
+
+// empty cart function
+async function emptyCart (req, res) {
+    req.session.cart = [];
+    total = 0;
     req.session.total = total;
+    req.session.frete = 0;
+    res.redirect('/cart');
+}
+
+// remove book from cart function
+async function removeFromCart (req, res) {
+    let id = req.params.id;
+
+    let cart = req.session.cart || [];
+
+    let livro = cart.find(item => item.bookId === id);
+
+    if (livro) {
+        total -= livro.bookSubtotal;
+        req.session.total = total;
+        cart = cart.filter(item => item.bookId !== id);
+    }
 
     req.session.cart = cart;
 
@@ -148,5 +183,7 @@ module.exports = {
     cartContinueView,
     cartCheckoutView,
     finishPurchase,
-    addToCart
+    addToCart,
+    emptyCart,
+    removeFromCart
 }

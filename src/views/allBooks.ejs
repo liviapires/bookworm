@@ -35,11 +35,9 @@
                 </div>
             <% }); %>
         </div>
-
         <div class="items">
             <% livros.forEach((livro) => { %>
                 <div class="card-item">
-                    <img src="<%= livro.image %>" width="150rem">
                     <div class="ml-3 info-item">
                         <div class="title-item"><%= livro.title %></div>
                         <div class="price-item">R$ <%= livro.price %></div>

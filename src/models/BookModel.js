@@ -2,28 +2,30 @@ const db = require("../../config/db");
 
 class Book {
 
-    constructor(title, year, publisher, edition, isbn, pages, synopsis, height, width, depth, weight, price, barcode, createdAt, updatedAt) {
+    constructor(title, author, year, publisher, edition, isbn, numPages, synopsis, height, width, weight, depth, barcode, active, createdAt, updatedAt, pricingGroupId) {
         this.title = title;
+        this.author = author;
         this.year = year;
         this.publisher = publisher;
         this.edition = edition;
         this.isbn = isbn;
-        this.pages = pages;
+        this.numPages = numPages;
         this.synopsis = synopsis;
         this.height = height;
         this.width = width;
-        this.depth = depth;
         this.weight = weight;
-        this.price = price;
+        this.depth = depth;
         this.barcode = barcode;
+        this.active = active;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.pricingGroupId = pricingGroupId;
     }
 
-    // get all books
+    // get all books with pricing group
     async getAllBooks() {
         const [results, metadata] = await db.query(
-            `SELECT * FROM books;`
+            `SELECT b.*, pg.value as price FROM books b LEFT JOIN pricingGroups pg ON b.pricingGroupId = pg.pricingGroupId;`
         );
 
         return results;
@@ -32,23 +34,25 @@ class Book {
     // create book
     async createBook(book) {
         const [results, metadata] = await db.query(
-            `INSERT INTO books (title, year, publisher, edition, isbn, pages, synopsis, height, width, depth, weight, price, barcode, createdAt, updatedAt) \
+            `INSERT INTO books (title, author, year, publisher, edition, isbn, numPages, synopsis, height, width, weight, depth, barcode, active, createdAt, updatedAt, pricingGroupId) \
             VALUES (
                 '${book.title}',
+                '${book.author}',
                 '${book.year}',
                 '${book.publisher}',
                 '${book.edition}',
                 '${book.isbn}',
-                '${book.pages}',
+                '${book.numPages}',
                 '${book.synopsis}',
                 '${book.height}',
                 '${book.width}',
-                '${book.depth}',
                 '${book.weight}',
-                '${book.price}',
+                '${book.depth}',
                 '${book.barcode}',
+                '${book.active}',
                 '${book.createdAt}',
-                '${book.updatedAt}'
+                '${book.updatedAt}',
+                '${book.pricingGroupId}'
             );`
         );
 
@@ -60,19 +64,21 @@ class Book {
         const [results, metadata] = await db.query(
             `UPDATE books SET 
                 title = '${book.title}', 
+                author = '${book.author}',
                 year = '${book.year}', 
                 publisher = '${book.publisher}',
                 edition = '${book.edition}', 
                 isbn = '${book.isbn}', 
-                pages = '${book.pages}', 
+                numPages = '${book.numPages}', 
                 synopsis = '${book.synopsis}', 
                 height = '${book.height}',
                 width = '${book.width}',
                 depth = '${book.depth}',
                 weight = '${book.weight}',
-                price = '${book.price}',
                 barcode = '${book.barcode}',
-                updatedAt = '${book.updatedAt}'
+                active = '${book.active}',
+                updatedAt = '${book.updatedAt}',
+                pricingGroupId = '${book.pricingGroupId}'
             WHERE bookId = ${book.id};`
         );
 
@@ -91,7 +97,7 @@ class Book {
     // get book by id
     async getBookById(id) {
         const [results, metadata] = await db.query(
-            `SELECT * FROM books WHERE bookId = ${id};`
+            `SELECT b.*, pg.value as price FROM books b LEFT JOIN pricingGroups pg ON b.pricingGroupId = pg.pricingGroupId WHERE b.bookId = ${id};`
         );
 
         return results;

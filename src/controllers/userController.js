@@ -16,9 +16,6 @@ const aCard = new Card();
 // create a new client
 async function createClient (req, res) {
 
-    // log the post data
-    // console.log(req.body);
-
     // gera um código aleatório
     const code = Math.floor(Math.random() * 1000000);
 
@@ -251,8 +248,6 @@ async function createPhone (req, res) {
 
 // update a client's phone
 async function updatePhone (req, res) {
-
-    console.log(req.body);
 
     // get post data
     let phoneData = {
