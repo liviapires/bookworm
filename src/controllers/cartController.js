@@ -42,6 +42,9 @@ let total = 0;
 
 // Renderiza a view cart
 async function cartView(req, res) {
+
+    let frete = req.session.frete || 0;
+
     let cart = req.session.cart || [];
 
     let total = req.session.total || 0;
@@ -49,17 +52,15 @@ async function cartView(req, res) {
     res.render('cart', {
         title: 'Carrinho',
         cart: cart,
-        total: total
+        total: total,
+        frete: frete
     });
 }
 
 const cartContinueView = (req, res) => {
 
-    // get frete from input if exists
-    let frete = req.body.frete || 0;
-
-    // set frete in session
-    req.session.frete = frete;
+    // get frete from url params
+    let frete = req.session.frete || 0;
 
     let livros = req.session.cart || [];
 
@@ -69,7 +70,10 @@ const cartContinueView = (req, res) => {
 
     let precoFinal = total;
 
-    let precoFinalComFrete = total + frete;
+    // parse to float
+    precoFinal = parseFloat(precoFinal);
+
+    let precoFinalComFrete = precoFinal + frete;
 
     res.render('cartContinue', {
         title: 'Carrinho',
@@ -116,6 +120,13 @@ async function finishPurchase(req, res) {
     });
 }
 
+// set frete
+async function frete(req, res) {
+    let { frete } = req.body;
+    req.session.frete = parseFloat(frete);
+    res.redirect(req.get('referer'));
+}
+
 // add book to cart function
 async function addToCart (req, res) {
     let id = req.body.id;
@@ -147,7 +158,7 @@ async function addToCart (req, res) {
 
     req.session.cart = cart;
 
-    res.redirect('/cart');
+    res.redirect(req.get('referer'));
 }
 
 // empty cart function
@@ -185,5 +196,6 @@ module.exports = {
     finishPurchase,
     addToCart,
     emptyCart,
-    removeFromCart
+    removeFromCart,
+    frete
 }

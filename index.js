@@ -9,8 +9,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
     cookie: { maxAge: 600000 }
-})); 
-
+}));
 
 // The following line tells Express that we are using views as our view directory.
 app.set("views", "./src/views");
