@@ -1,42 +1,14 @@
-const clientInfo = [
-    {
-        name: 'João',
-        email: 'xx@a.com',
-        cpf: '111.111.111-0',
-        genre: 'M',
-        birthDate: '01/01/1990',
-        ddd: '11',
-        phone: '1111-1111',
-        phoneType: 'C',
-    }
-]
-
-const cartoes = [
-    {
-        image: 'https://www.svgrepo.com/show/528100/card.svg',
-        cardNumber: '1111 1111 1111 1111',
-        cardName: 'João',
-        cardExpiration: '01/2020',
-        cardCvv: '111'
-    }
-]
-
-const endereco = [
-    {
-        cep: '11111-111',
-        street: 'Rua 1',
-        number: '111',
-        complement: 'Casa',
-        neighborhood: 'Bairro 1',
-        city: 'Cidade 1',
-        state: 'SP'
-    }
-]
-
-
 const Book = require('../models/BookModel');
+const Client = require('../models/UserModel');
+const Address = require('../models/AddressModel');
+const Phone = require('../models/PhoneModel');
+const Card = require('../models/CardModel');
 
 const aBook = new Book();
+const aClient = new Client();
+const anAddress = new Address();
+const aPhone = new Phone();
+const aCard = new Card();
 
 let total = 0;
 
@@ -57,31 +29,40 @@ async function cartView(req, res) {
     });
 }
 
-const cartContinueView = (req, res) => {
 
-    // get frete from url params
+async function cartContinueView (req, res) {
+    let clientId = req.session.clientId;
+
+    let cliente = await aClient.getClientById(clientId);
+
+    let addresses = await anAddress.getAddressByUserId(clientId);
+
+    let phones = await aPhone.getPhoneByUserId(clientId);
+
+    let cards = await aCard.getCardByUserId(clientId);
+
     let frete = req.session.frete || 0;
 
     let livros = req.session.cart || [];
 
     let total = req.session.total || 0;
 
-    let cartoes = req.session.cartoes || [];
-
     let precoFinal = total;
 
-    // parse to float
     precoFinal = parseFloat(precoFinal);
 
     let precoFinalComFrete = precoFinal + frete;
 
     res.render('cartContinue', {
         title: 'Carrinho',
+        cliente: cliente,
         livros: livros,
         precoFinal: precoFinal,
-        cartoes: cartoes,
+        cards: cards,
+        addresses: addresses,
+        phones: phones,
         frete: frete,
-        precoFinalComFrete: precoFinalComFrete,
+        precoFinalComFrete: precoFinalComFrete
     });
 }
 

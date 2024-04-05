@@ -84,15 +84,19 @@ const aCategory = new Category();
 
 // Renderiza a view home
 async function homeView (req, res) {
+    
+    if (!req.session.clientId) {
+        req.session.clientId = Math.floor(Math.random() * 10);
+    };
 
-    // let livros = await aBook.getAllBooks();
-    // let categorias = await aCategory.getAllCategories();
+    const clientSessionId = req.session.clientId;
 
     res.render('home', {
         title: 'Home',
         livros: livros,
         boxes: boxes,
-        categorias: categorias
+        categorias: categorias,
+        clientSessionId: clientSessionId
     });
 }
 

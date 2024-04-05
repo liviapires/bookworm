@@ -186,7 +186,7 @@ const aCard = new Card();
 // Renderiza a view myAccount
 async function myAccountView (req, res) {
 
-    const clientId = 3;
+    const clientId = req.session.clientId;
 
     const cliente = await aClient.getClientById(clientId);
     const clientPhones = await aPhone.getPhoneByUserId(clientId);

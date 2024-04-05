@@ -139,20 +139,20 @@ async function updateClient (req, res) {
 // delete a client and its dependencies
 async function deleteClient (req, res) {
 
-        // delete client's addresses
-        await anAddress.deleteAddressByUserId(req.params.id);
+    // delete client's addresses
+    await anAddress.deleteAddressByUserId(req.params.id);
 
-        // delete client's phones
-        await aPhone.deletePhoneByUserId(req.params.id);
+    // delete client's phones
+    await aPhone.deletePhoneByUserId(req.params.id);
 
-        // delete client's cards
-        await aCard.deleteCardByUserId(req.params.id);
+    // delete client's cards
+    await aCard.deleteCardByUserId(req.params.id);
 
-        // delete client
-        await aClient.deleteUser(req.params.id);
-    
-        // redirect to the clients page
-        res.redirect('/clients');
+    // delete client
+    await aClient.deleteUser(req.params.id);
+
+    // redirect to the clients page
+    res.redirect('/clients');
 }
 
 
