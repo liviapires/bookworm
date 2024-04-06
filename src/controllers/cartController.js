@@ -31,52 +31,45 @@ async function cartView(req, res) {
 
 
 async function cartContinueView (req, res) {
-    let clientId = req.session.clientId;
-
-    let cliente = await aClient.getClientById(clientId);
-
-    let addresses = await anAddress.getAddressByUserId(clientId);
-
-    let phones = await aPhone.getPhoneByUserId(clientId);
-
-    let cards = await aCard.getCardByUserId(clientId);
-
-    let frete = req.session.frete || 0;
+    let cliente = req.session.clientInfo || {};
+    let enderecos = req.session.addresses || [];
+    let telefones = req.session.phones || [];
+    let cartoes = req.session.cards || [];
 
     let livros = req.session.cart || [];
 
-    let total = req.session.total || 0;
-
-    let precoFinal = total;
-
-    precoFinal = parseFloat(precoFinal);
-
-    let precoFinalComFrete = precoFinal + frete;
+    let total = parseFloat(req.session.total) || 0;
+    let frete = parseFloat(req.session.frete) || 0;
+    let precoFinalComFrete = total + frete;
 
     res.render('cartContinue', {
         title: 'Carrinho',
         cliente: cliente,
+        enderecos: enderecos,
+        telefones: telefones,
+        cartoes: cartoes,
         livros: livros,
-        precoFinal: precoFinal,
-        cards: cards,
-        addresses: addresses,
-        phones: phones,
+        total: total,
         frete: frete,
         precoFinalComFrete: precoFinalComFrete
     });
+
 }
 
 // cartCheckoutView
 
 async function cartCheckoutView(req, res) {
 
+    let clientInfo = req.session.clientInfo || {};
+    let endereco = req.session.addresses || [];
+    let telefone = req.session.phones || [];
+    let cartoes = req.session.cards || [];
+
     let livros = req.session.cart || [];
 
     let total = req.session.total || 0;
 
     let frete = req.session.frete || 0;
-
-    let precoFinal = total;
 
     let precoFinalComFrete = total + frete;
 
@@ -84,11 +77,11 @@ async function cartCheckoutView(req, res) {
         title: 'Carrinho',
         clientInfo: clientInfo,
         endereco: endereco,
+        telefone: telefone,
+        cartoes: cartoes,
         livros: livros,
         total: total,
-        cartoes: cartoes,
         frete: frete,
-        precoFinal: precoFinal,
         precoFinalComFrete: precoFinalComFrete
     });
 }
@@ -99,6 +92,7 @@ async function finishPurchase(req, res) {
     res.render('finishPurchase', {
         title: 'Compra Realizada'
     });
+
 }
 
 // set frete

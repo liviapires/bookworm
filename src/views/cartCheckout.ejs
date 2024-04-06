@@ -35,17 +35,11 @@
                         <input class="w-49 form-control" value="<%= endereco[0].state %>" disabled>
                         <input class="w-49 form-control" value="<%= endereco[0].cep %>" disabled>
                     </div>
-                     
+                    
                     <hr class="mt-5">
-                    <div class="page-title mt-5">Pagamento</div>
                     <div class="d-flex align-items-center justify-content-between">
-                        <div class="d-flex align-items-center mt-1">
-                            <div class="slight-bold">Seus Cartões</div>
-                            <a class="btn" data-toggle="tooltip" data-placement="left" title="O valor pago em cada cartão não pode ser menor que R$ 10,00. (Se o valor final da sua compra for menor que R$ 20,00, o uso de mais de um cartão será barrado.)">
-                                <img src="https://www.svgrepo.com/show/511031/info.svg" alt="info" class="icon-min">
-                            </a>
-                        </div>
-                        <a href="#">Usar mais de um cartão</a>
+                        <div class="page-title">Pagamento</div>
+                        <a href="#" data-toggle="tooltip" data-placement="left" title="O valor pago em cada cartão não pode ser menor que R$ 10,00. (Se o valor final da sua compra for menor que R$ 20,00, o uso de mais de um cartão será barrado.)">Usar mais de um cartão</a>
                     </div>
                     <div class="mt-1"></div>
                     <div class="cards">
@@ -65,7 +59,7 @@
                                 </div>
                             </div>
                             <hr>
-                            <% }); %>
+                        <% }); %>
                     </div>
                 </div>
             </div>
@@ -104,7 +98,7 @@
                 <div class="bg-gray mt-3">
                     <div class="d-flex">
                         <div class="slight-bold">Subtotal</div>
-                        <div class="ml-auto">R$ <%= precoFinal %></div>
+                        <div class="ml-auto">R$ <%= total %></div>
                     </div>
                     <hr>
                     <div class="d-flex">
@@ -127,6 +121,8 @@
 
 <script>
     $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
+        // show the tooltip when hovering over the element imeadiately
+
+        $('[data-toggle="tooltip"]').tooltip()    
     })
 </script>

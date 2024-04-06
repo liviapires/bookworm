@@ -42,7 +42,7 @@ CREATE TABLE `addresses` (
 CREATE TABLE `phones` (
     `phoneId` integer NOT NULL AUTO_INCREMENT,
     `ddd` varchar(255) NOT NULL,
-    `phoneNumber` varbinary(255) NOT NULL,
+    `phoneNumber` varchar(255) NOT NULL,
     `phoneType` varchar(255) NOT NULL,
     `createdAt` datetime NOT NULL,
     `updatedAt` datetime NOT NULL,

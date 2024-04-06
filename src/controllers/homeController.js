@@ -76,27 +76,33 @@ const categorias = [
     }
 ]
 
-const Book = require('../models/BookModel');
-const Category = require('../models/CategoryModel');
+const Client = require('../models/UserModel');
+const Address = require('../models/AddressModel');
+const Phone = require('../models/PhoneModel');
+const Card = require('../models/CardModel');
 
-const aBook = new Book();
-const aCategory = new Category();
+const aClient = new Client();
+const anAddress = new Address();
+const aPhone = new Phone();
+const aCard = new Card();
 
 // Renderiza a view home
 async function homeView (req, res) {
     
     if (!req.session.clientId) {
-        req.session.clientId = Math.floor(Math.random() * 10);
+        // gera um número aleatorio a partir de 1 até 10 e salva na sessão
+        req.session.clientId = Math.floor(Math.random() * 10) + 1;
+        req.session.clientInfo = await aClient.getClientById(req.session.clientId);
+        req.session.addresses = await anAddress.getAddressByUserId(req.session.clientId);
+        req.session.phones = await aPhone.getPhoneByUserId(req.session.clientId);
+        req.session.cards = await aCard.getCardByUserId(req.session.clientId);
     };
-
-    const clientSessionId = req.session.clientId;
 
     res.render('home', {
         title: 'Home',
         livros: livros,
         boxes: boxes,
-        categorias: categorias,
-        clientSessionId: clientSessionId
+        categorias: categorias
     });
 }
 

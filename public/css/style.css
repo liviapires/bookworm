@@ -31,6 +31,10 @@
     width: 49% !important;
 }
 
+.w-63 {
+    width: 63% !important;
+}
+
 .w-79 {
     width: 79% !important;
 }
@@ -115,6 +119,10 @@
 
 .c-green {
     color: var(--avocado);
+}
+
+.mr-05 {
+    margin-right: 0.5rem !important;
 }
 
 .mr-1 {
