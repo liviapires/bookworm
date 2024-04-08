@@ -15,22 +15,22 @@
         </div>
         <div class="orderData">
             <div class="p-2 bookInfo">
-                <% pedido.livros.forEach((livro) => {%>
+                <% livros.forEach((livro) => {%>
                     <img src="<%= livro.imagem %>" alt="Livro" width="100" class="ml-05">
                 <% }) %>
-                <% if (pedido.livros.length === 1) { %>
+                <% if (livros.length === 1) { %>
                     <div class="ml-05 d-block">
                         <div class="mt-05">
-                            <%= pedido.livros[0].titulo %>
+                            <%= livros.titulo %>
                         </div>
                         <div class="mt-05">
-                            <%= pedido.livros[0].autor %>, <%= pedido.livros[0].editora %> - <%= pedido.livros[0].ano %>
+                            <%= livros.autor %>, <%= livros.editora %> - <%= livros.ano %>
                         </div>
                         <div class="mt-05">
-                            <%= pedido.livros[0].isbn %>
+                            <%= livros.isbn %>
                         </div>
                         <div>
-                            <% pedido.livros[0].categorias.forEach((categoria) => { %>
+                            <% livros.categorias.forEach((categoria) => { %>
                                 <span class="mini-badge mt-05"><%= categoria %></span>
                             <% }) %>
                         </div>

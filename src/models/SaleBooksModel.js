@@ -33,6 +33,22 @@ class saleBooks {
 
         return results;
     }
+
+    async getAllSaleBooks() {
+        const [results, metadata] = await db.query(
+            `SELECT * FROM saleBooks;`
+        );
+
+        return results;
+    }
+
+    async getSaleBooksBySaleId(saleId) {
+        const [results, metadata] = await db.query(
+            `SELECT * FROM saleBooks WHERE saleId = ${saleId};`
+        );
+
+        return results;
+    }
 }
 
 module.exports = saleBooks;

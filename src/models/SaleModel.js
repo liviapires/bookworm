@@ -76,6 +76,16 @@ class sale {
 
         return results;
     }
+
+    async getSaleByUserId(userId) {
+        const [results, metadata] = await db.query(
+            `SELECT * FROM sales 
+                LEFT JOIN addresses ON sales.addressId = addresses.addressId
+                WHERE sales.userId = ${userId};`
+        );
+
+        return results;
+    }
 }
 
 module.exports = sale;

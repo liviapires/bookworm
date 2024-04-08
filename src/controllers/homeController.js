@@ -80,11 +80,13 @@ const Client = require('../models/UserModel');
 const Address = require('../models/AddressModel');
 const Phone = require('../models/PhoneModel');
 const Card = require('../models/CardModel');
+const Sale = require('../models/SaleModel');
 
 const aClient = new Client();
 const anAddress = new Address();
 const aPhone = new Phone();
 const aCard = new Card();
+const aSale = new Sale();
 
 // Renderiza a view home
 async function homeView (req, res) {

@@ -29,6 +29,22 @@ class saleCards {
 
         return results;
     }
+
+    async getAllSaleCards() {
+        const [results, metadata] = await db.query(
+            `SELECT * FROM saleCards;`
+        );
+
+        return results;
+    }
+
+    async getSaleCardsBySaleId(saleId) {
+        const [results, metadata] = await db.query(
+            `SELECT * FROM saleCards WHERE saleId = ${saleId};`
+        );
+
+        return results;
+    }
 }
 
 module.exports = saleCards;

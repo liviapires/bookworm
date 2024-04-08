@@ -173,29 +173,40 @@ let pedidos = [
     }
 ]
 
-// get order by id from the array
-async function getOrderById(id) {
-    return pedidos.find(pedido => pedido.id == id);
-}
+const Books = require('../models/BookModel');
+const Sales = require('../models/SaleModel');
+const SalesBooks = require('../models/SaleBooksModel');
+const SalesCards = require('../models/SaleCardsModel');
+
+const aBook = new Books();
+const aSale = new Sales();
+const theSaleBooks = new SalesBooks();
+const theSaleCards = new SalesCards();
 
 
 async function orderView (req, res) {
 
-    const pedido = await getOrderById(req.params.id);
+    const pedido = await aSale.getSaleById(req.params.id);
+    const livros = await theSaleBooks.getSaleBooksBySaleId(pedido.id);
+    const cartoes = await theSaleCards.getSaleCardsBySaleId(pedido.id);
 
     res.render('order', {
         title: 'Meus Pedidos',
-        pedido: pedido
+        pedido: pedido,
+        livros: livros,
+        cartoes: cartoes
     });
 }
 
 async function doOrderView (req, res) {
     
-    const pedido = await getOrderById(req.params.id);
+    const pedido = await aSale.getSaleById(req.params.id);
+    const livros = await theSaleBooks.getSaleBooksBySaleId(pedido.id);
 
     res.render('doOrder', {
         title: 'Solicitação de Troca/Devolução',
-        pedido: pedido
+        pedido: pedido,
+        livros: livros
     });
 }
 
