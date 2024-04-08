@@ -10,10 +10,6 @@
                         <div class="page-title mt-5">Informações de Contato</div>
                     </div>
                     <div class="mt-05">
-                        <% console.log("Cliente: ", cliente); %>
-                        <% console.log("Endereços: ", enderecos); %>
-                        <% console.log("Telefones: ", telefones); %>
-                        <% console.log("Cartoes: ", cartoes); %>
                         <div class="d-flex">
                             <div class="slight-bold">
                                 <%= cliente[0].name  %> | <%= cliente[0].cpf %>
@@ -45,28 +41,48 @@
 
                     <div class="d-flex align-items-center justify-content-between mt-5">
                         <div class="page-title">Pagamento</div>
-                        <a href="#" data-toggle="tooltip" data-placement="left" title="O valor pago em cada cartão não pode ser menor que R$ 10,00. (Se o valor final da sua compra for menor que R$ 20,00, o uso de mais de um cartão será barrado.)">Usar mais de um cartão</a>
+                        <!-- <div id="addCard" data-toggle="tooltip" data-placement="left" title="O valor pago em cada cartão não pode ser menor que R$ 10,00. (Se o valor final da sua compra for menor que R$ 20,00, o uso de mais de um cartão será barrado.)">
+                            <div class="d-flex align-items-center">
+                                <img src="https://www.svgrepo.com/show/511031/info.svg" alt="Pesquisar" class="search-icon">
+                                <div class="ml-05">
+                                    Uso de mais de um cartão
+                                </div>
+                            </div>
+                        </div> -->
                     </div>
-                    <div class="cards" id="card">
-                        <% cartoes.forEach((cartao) => { 
-                        if (cartao.preferred == 1) {%>
+                    <% cartoes.forEach((cartao) => { %>
+                        <div class="cards">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <input type="radio" value="<%= cartao.cardId %>" checked>
                                     <div class="ml-1">
+                                        <input type="hidden" id="cardId" value="<%= cartao.cardId %>">
                                         <div><%= cartao.cardNumber %></div>
                                         <div><%= cartao.cardName %></div>
                                         <div>Vence em: <%= cartao.expirationDate %></div>
                                     </div>
                                 </div>
+                                <div class="al-t-r">
+                                    <% if (cartao.preferred == 1){ %> 
+                                        <div data-toggle="tooltip" data-placement="left" title="Você está utilizando este cartão para pagamento total da conta.">
+                                            <div class="d-flex align-items-center">
+                                                <img src="https://www.svgrepo.com/show/511031/info.svg" alt="Pesquisar" class="search-icon">
+                                                <div class="ml-05">
+                                                    Usando este cartão
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% } else { %>
+                                        <a href="/togglePreferredCard/<%= cartao.cardId %>" class="btn btn-secondary" id="useCard">Usar este cartão</a>
+                                    <% } %>
+                                </div>
                             </div>
-                        <%}}); %>
-                    </div>
+                        </div>
+                    <%}); %>
                 </div>
             </div>
             <!-- RIGHT PART -->
             <div class="d-block right">
-                <% livros.forEach((liv) => { %>
+                <% cart.forEach((liv) => { %>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex ">
                             <div class="ml-1 t-left">
@@ -121,7 +137,9 @@
 <%- include('footer.ejs') %>
 
 <script>
+
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
-    })
+    });
+
 </script>

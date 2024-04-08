@@ -30,6 +30,7 @@ CREATE TABLE `addresses` (
     `country` varchar(255) NOT NULL,
     `complement` text NOT NULL,
     `notes` text NOT NULL,
+    `preferred` tinyint NOT NULL,
     `createdAt` datetime NOT NULL,
     `updatedAt` datetime NOT NULL,
     `userId` integer NOT NULL,
@@ -128,35 +129,51 @@ CREATE TABLE `bookCategories` (
 -- ************************************** `sales`
 CREATE TABLE `sales` (
     `saleId` integer NOT NULL AUTO_INCREMENT,
-    `status` enum(
-        'processing, in transit, delivered, authorized for exchange, exchanged'
-    ) NOT NULL,
+    `code` varchar(255) NOT NULL,
+    `status` varchar(255) NOT NULL,
     `purchaseDate` datetime NOT NULL,
-    `paymentMethod` enum('card, coupon') NOT NULL,
+    `paymentMethod` varchar(255) NOT NULL,
     `totalQuantity` integer NOT NULL,
     `totalValue` float NOT NULL,
     `createdAt` datetime NOT NULL,
     `updatedAt` datetime NOT NULL,
     `userId` integer NOT NULL,
+    `addressId` integer NOT NULL,
     PRIMARY KEY (`saleId`),
     KEY `FK_1` (`userId`),
-    CONSTRAINT `FK_7` FOREIGN KEY `FK_1` (`userId`) REFERENCES `users` (`userId`)
+    CONSTRAINT `FK_7` FOREIGN KEY `FK_1` (`userId`) REFERENCES `users` (`userId`),
+    KEY `FK_2` (`addressId`),
+    CONSTRAINT `FK_8` FOREIGN KEY `FK_2` (`addressId`) REFERENCES `addresses` (`addressId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
--- ************************************** `saleItems`
+-- ************************************** `saleCards`
+CREATE TABLE `saleCards` (
+    `saleCardId` integer NOT NULL AUTO_INCREMENT,
+    `createdAt` datetime NOT NULL,
+    `updatedAt` datetime NOT NULL,
+    `saleId` integer NOT NULL,
+    `cardId` integer NOT NULL,
+    PRIMARY KEY (`saleCardId`),
+    KEY `FK_1` (`saleId`),
+    CONSTRAINT `FK_9` FOREIGN KEY `FK_1` (`saleId`) REFERENCES `sales` (`saleId`),
+    KEY `FK_2` (`cardId`),
+    CONSTRAINT `FK_10` FOREIGN KEY `FK_2` (`cardId`) REFERENCES `creditCards` (`cardId`)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
+
+-- ************************************** `saleBooks`
 CREATE TABLE `saleBooks` (
-    `saleItemId` integer NOT NULL AUTO_INCREMENT,
+    `saleBookId` integer NOT NULL AUTO_INCREMENT,
     `quantity` integer NOT NULL,
     `unitValue` float NOT NULL,
     `createdAt` datetime NOT NULL,
     `updatedAt` datetime NOT NULL,
     `saleId` integer NOT NULL,
     `bookId` integer NOT NULL,
-    PRIMARY KEY (`saleItemId`),
+    PRIMARY KEY (`saleBookId`),
     KEY `FK_1` (`saleId`),
-    CONSTRAINT `FK_10` FOREIGN KEY `FK_1` (`saleId`) REFERENCES `sales` (`saleId`),
+    CONSTRAINT `FK_11` FOREIGN KEY `FK_1` (`saleId`) REFERENCES `sales` (`saleId`),
     KEY `FK_2` (`bookId`),
-    CONSTRAINT `FK_11` FOREIGN KEY `FK_2` (`bookId`) REFERENCES `books` (`bookId`)
+    CONSTRAINT `FK_12` FOREIGN KEY `FK_2` (`bookId`) REFERENCES `books` (`bookId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
 -- ************************************** `exchanges`
@@ -189,11 +206,11 @@ CREATE TABLE `saleExchanges` (
     `saleId` integer NOT NULL,
     PRIMARY KEY (`saleExchangesId`),
     KEY `FK_1` (`saleId`),
-    CONSTRAINT `FK_12` FOREIGN KEY `FK_1` (`saleId`) REFERENCES `sales` (`saleId`),
+    CONSTRAINT `FK_13` FOREIGN KEY `FK_1` (`saleId`) REFERENCES `sales` (`saleId`),
     KEY `FK_2` (`exchangeId`),
-    CONSTRAINT `FK_13` FOREIGN KEY `FK_2` (`exchangeId`) REFERENCES `exchanges` (`exchangeId`),
+    CONSTRAINT `FK_14` FOREIGN KEY `FK_2` (`exchangeId`) REFERENCES `exchanges` (`exchangeId`),
     KEY `FK_3` (`exchangeCuponId`),
-    CONSTRAINT `FK_14` FOREIGN KEY `FK_3` (`exchangeCuponId`) REFERENCES `exchangeCupons` (`exchangeCuponId`)
+    CONSTRAINT `FK_15` FOREIGN KEY `FK_3` (`exchangeCuponId`) REFERENCES `exchangeCupons` (`exchangeCuponId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
 
@@ -276,8 +293,8 @@ VALUES
 -- Inserção de informações de endereço, telefone e cartão de crédito para cada cliente
 
 -- Cliente 1
-INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `createdAt`, `updatedAt`, `userId`)
-VALUES ('Casa', 'Rua A', '123', 'Bairro 1', '12345-678', 'Cidade A', 'Estado A', 'País A', 'Complemento 1', 'Observação 1', NOW(), NOW(), 1);
+INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `preferred`, `createdAt`, `updatedAt`, `userId`)
+VALUES ('Casa', 'Rua A', '123', 'Bairro 1', '12345-678', 'Cidade A', 'Estado A', 'País A', 'Complemento 1', 'Observação 1', 1, NOW(), NOW(), 1);
 
 INSERT INTO `phones` (`ddd`, `phoneNumber`, `phoneType`, `createdAt`, `updatedAt`, `userId`)
 VALUES ('11', '99999-9999', 'Celular', NOW(), NOW(), 1);
@@ -286,18 +303,18 @@ INSERT INTO `creditCards` (`cardNumber`, `cardName`, `cardFlag`, `securityCode`,
 VALUES ('1111222233334444', 'João Silva', 'Visa', '123', '12/25', 1, NOW(), NOW(), 1);
 
 -- Cliente 2
-INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `createdAt`, `updatedAt`, `userId`)
-VALUES ('Apartamento', 'Rua B', '456', 'Bairro 2', '54321-987', 'Cidade B', 'Estado B', 'País B', 'Complemento 2', 'Observação 2', NOW(), NOW(), 2);
+INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `preferred`, `createdAt`, `updatedAt`, `userId`)
+VALUES ('Apartamento', 'Rua B', '456', 'Bairro 2', '54321-987', 'Cidade B', 'Estado B', 'País B', 'Complemento 2', 'Observação 2', 1, NOW(), NOW(), 2);
 
 INSERT INTO `phones` (`ddd`, `phoneNumber`, `phoneType`, `createdAt`, `updatedAt`, `userId`)
 VALUES ('22', '88888-8888', 'Residencial', NOW(), NOW(), 2);
 
 INSERT INTO `creditCards` (`cardNumber`, `cardName`, `cardFlag`, `securityCode`, `expirationDate`, `preferred`, `createdAt`, `updatedAt`, `userId`)
-VALUES ('2222333344445555', 'Maria Santos', 'Mastercard', '456', '11/24', 0, NOW(), NOW(), 2);
+VALUES ('2222333344445555', 'Maria Santos', 'Mastercard', '456', '11/24', 1, NOW(), NOW(), 2);
 
 -- Cliente 3
-INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `createdAt`, `updatedAt`, `userId`)
-VALUES ('Casa', 'Rua C', '789', 'Bairro 3', '98765-432', 'Cidade C', 'Estado C', 'País C', 'Complemento 3', 'Observação 3', NOW(), NOW(), 3);
+INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `preferred`, `createdAt`, `updatedAt`, `userId`)
+VALUES ('Casa', 'Rua C', '789', 'Bairro 3', '98765-432', 'Cidade C', 'Estado C', 'País C', 'Complemento 3', 'Observação 3', 1, NOW(), NOW(), 3);
 
 INSERT INTO `phones` (`ddd`, `phoneNumber`, `phoneType`, `createdAt`, `updatedAt`, `userId`)
 VALUES ('33', '77777-7777', 'Celular', NOW(), NOW(), 3);
@@ -306,18 +323,18 @@ INSERT INTO `creditCards` (`cardNumber`, `cardName`, `cardFlag`, `securityCode`,
 VALUES ('3333444455556666', 'Antônio Oliveira', 'Visa', '789', '03/23', 1, NOW(), NOW(), 3);
 
 -- Cliente 4
-INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `createdAt`, `updatedAt`, `userId`)
-VALUES ('Apartamento', 'Rua D', '1011', 'Bairro 4', '12345-678', 'Cidade D', 'Estado D', 'País D', 'Complemento 4', 'Observação 4', NOW(), NOW(), 4);
+INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `preferred`, `createdAt`, `updatedAt`, `userId`)
+VALUES ('Apartamento', 'Rua D', '1011', 'Bairro 4', '12345-678', 'Cidade D', 'Estado D', 'País D', 'Complemento 4', 'Observação 4', 1, NOW(), NOW(), 4);
 
 INSERT INTO `phones` (`ddd`, `phoneNumber`, `phoneType`, `createdAt`, `updatedAt`, `userId`)
 VALUES ('44', '66666-6666', 'Residencial', NOW(), NOW(), 4);
 
 INSERT INTO `creditCards` (`cardNumber`, `cardName`, `cardFlag`, `securityCode`, `expirationDate`, `preferred`, `createdAt`, `updatedAt`, `userId`)
-VALUES ('4444555566667777', 'Ana Oliveira', 'Mastercard', '101', '06/25', 0, NOW(), NOW(), 4);
+VALUES ('4444555566667777', 'Ana Oliveira', 'Mastercard', '101', '06/25', 1, NOW(), NOW(), 4);
 
 -- Cliente 5
-INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `createdAt`, `updatedAt`, `userId`)
-VALUES ('Casa', 'Rua E', '1213', 'Bairro 5', '54321-987', 'Cidade E', 'Estado E', 'País E', 'Complemento 5', 'Observação 5', NOW(), NOW(), 5);
+INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `preferred`, `createdAt`, `updatedAt`, `userId`)
+VALUES ('Casa', 'Rua E', '1213', 'Bairro 5', '54321-987', 'Cidade E', 'Estado E', 'País E', 'Complemento 5', 'Observação 5', 1, NOW(), NOW(), 5);
 
 INSERT INTO `phones` (`ddd`, `phoneNumber`, `phoneType`, `createdAt`, `updatedAt`, `userId`)
 VALUES ('55', '55555-5555', 'Celular', NOW(), NOW(), 5);
@@ -326,18 +343,18 @@ INSERT INTO `creditCards` (`cardNumber`, `cardName`, `cardFlag`, `securityCode`,
 VALUES ('5555666677778888', 'Pedro Silva', 'Visa', '121', '09/24', 1, NOW(), NOW(), 5);
 
 -- Cliente 6
-INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `createdAt`, `updatedAt`, `userId`)
-VALUES ('Casa', 'Rua F', '1415', 'Bairro 6', '98765-432', 'Cidade F', 'Estado F', 'País F', 'Complemento 6', 'Observação 6', NOW(), NOW(), 6);
+INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `preferred`, `createdAt`, `updatedAt`, `userId`)
+VALUES ('Casa', 'Rua F', '1415', 'Bairro 6', '98765-432', 'Cidade F', 'Estado F', 'País F', 'Complemento 6', 'Observação 6', 1, NOW(), NOW(), 6);
 
 INSERT INTO `phones` (`ddd`, `phoneNumber`, `phoneType`, `createdAt`, `updatedAt`, `userId`)
 VALUES ('66', '44444-4444', 'Residencial', NOW(), NOW(), 6);
 
 INSERT INTO `creditCards` (`cardNumber`, `cardName`, `cardFlag`, `securityCode`, `expirationDate`, `preferred`, `createdAt`, `updatedAt`, `userId`)
-VALUES ('6666777788889999', 'Laura Santos', 'Mastercard', '141', '12/23', 0, NOW(), NOW(), 6);
+VALUES ('6666777788889999', 'Laura Santos', 'Mastercard', '141', '12/23', 1, NOW(), NOW(), 6);
 
 -- Cliente 7
-INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `createdAt`, `updatedAt`, `userId`)
-VALUES ('Casa', 'Rua G', '1617', 'Bairro 7', '13579-246', 'Cidade G', 'Estado G', 'País G', 'Complemento 7', 'Observação 7', NOW(), NOW(), 7);
+INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `preferred`, `createdAt`, `updatedAt`, `userId`)
+VALUES ('Casa', 'Rua G', '1617', 'Bairro 7', '13579-246', 'Cidade G', 'Estado G', 'País G', 'Complemento 7', 'Observação 7', 1, NOW(), NOW(), 7);
 
 INSERT INTO `phones` (`ddd`, `phoneNumber`, `phoneType`, `createdAt`, `updatedAt`, `userId`)
 VALUES ('77', '77777-7777', 'Celular', NOW(), NOW(), 7);
@@ -346,18 +363,18 @@ INSERT INTO `creditCards` (`cardNumber`, `cardName`, `cardFlag`, `securityCode`,
 VALUES ('7777888899990000', 'Maria Oliveira', 'Visa', '161', '03/26', 1, NOW(), NOW(), 7);
 
 -- Cliente 8
-INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `createdAt`, `updatedAt`, `userId`)
-VALUES ('Apartamento', 'Rua H', '1819', 'Bairro 8', '24680-135', 'Cidade H', 'Estado H', 'País H', 'Complemento 8', 'Observação 8', NOW(), NOW(), 8);
+INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `preferred`, `createdAt`, `updatedAt`, `userId`)
+VALUES ('Apartamento', 'Rua H', '1819', 'Bairro 8', '24680-135', 'Cidade H', 'Estado H', 'País H', 'Complemento 8', 'Observação 8', 1, NOW(), NOW(), 8);
 
 INSERT INTO `phones` (`ddd`, `phoneNumber`, `phoneType`, `createdAt`, `updatedAt`, `userId`)
 VALUES ('88', '88888-8888', 'Residencial', NOW(), NOW(), 8);
 
 INSERT INTO `creditCards` (`cardNumber`, `cardName`, `cardFlag`, `securityCode`, `expirationDate`, `preferred`, `createdAt`, `updatedAt`, `userId`)
-VALUES ('8888999900001111', 'Rafaela Silva', 'Mastercard', '181', '07/27', 0, NOW(), NOW(), 8);
+VALUES ('8888999900001111', 'Rafaela Silva', 'Mastercard', '181', '07/27', 1, NOW(), NOW(), 8);
 
 -- Cliente 9
-INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `createdAt`, `updatedAt`, `userId`)
-VALUES ('Casa', 'Rua I', '2021', 'Bairro 9', '36912-485', 'Cidade I', 'Estado I', 'País I', 'Complemento 9', 'Observação 9', NOW(), NOW(), 9);
+INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `preferred`, `createdAt`, `updatedAt`, `userId`)
+VALUES ('Casa', 'Rua I', '2021', 'Bairro 9', '36912-485', 'Cidade I', 'Estado I', 'País I', 'Complemento 9', 'Observação 9', 1, NOW(), NOW(), 9);
 
 INSERT INTO `phones` (`ddd`, `phoneNumber`, `phoneType`, `createdAt`, `updatedAt`, `userId`)
 VALUES ('99', '99999-9999', 'Celular', NOW(), NOW(), 9);
@@ -366,11 +383,29 @@ INSERT INTO `creditCards` (`cardNumber`, `cardName`, `cardFlag`, `securityCode`,
 VALUES ('9999000011112222', 'Mateus Oliveira', 'Visa', '202', '09/25', 1, NOW(), NOW(), 9);
 
 -- Cliente 10
-INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `createdAt`, `updatedAt`, `userId`)
-VALUES ('Apartamento', 'Rua J', '2223', 'Bairro 10', '48536-921', 'Cidade J', 'Estado J', 'País J', 'Complemento 10', 'Observação 10', NOW(), NOW(), 10);
+INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `preferred`, `createdAt`, `updatedAt`, `userId`)
+VALUES ('Apartamento', 'Rua J', '2223', 'Bairro 10', '48536-921', 'Cidade J', 'Estado J', 'País J', 'Complemento 10', 'Observação 10', 1, NOW(), NOW(), 10);
 
 INSERT INTO `phones` (`ddd`, `phoneNumber`, `phoneType`, `createdAt`, `updatedAt`, `userId`)
 VALUES ('10', '101010-1010', 'Residencial', NOW(), NOW(), 10);
 
 INSERT INTO `creditCards` (`cardNumber`, `cardName`, `cardFlag`, `securityCode`, `expirationDate`, `preferred`, `createdAt`, `updatedAt`, `userId`)
-VALUES ('1010111122223333', 'Gabriel Silva', 'Mastercard', '222', '12/24', 0, NOW(), NOW(), 10);
+VALUES ('1010111122223333', 'Gabriel Silva', 'Mastercard', '222', '12/24', 1, NOW(), NOW(), 10);
+
+
+-- Insert de mais cartões de crédito para os clientes
+INSERT INTO creditCards (cardNumber, cardName, cardFlag, securityCode, expirationDate, preferred, createdAt, updatedAt, userId)
+SELECT 
+    CONCAT(FLOOR(RAND() * (9999 - 1000 + 1)) + 1000, FLOOR(RAND() * (9999 - 1000 + 1)) + 1000, FLOOR(RAND() * (9999 - 1000 + 1)) + 1000, FLOOR(RAND() * (9999 - 1000 + 1)) + 1000),
+    'Cardholder Name', 
+    'Visa', 
+    '123', 
+    '12/25', 
+    0, 
+    NOW(), 
+    NOW(), 
+    userId
+FROM 
+    users
+WHERE 
+    userId BETWEEN 1 AND 10;

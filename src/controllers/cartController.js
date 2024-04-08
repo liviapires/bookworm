@@ -1,114 +1,156 @@
 const Book = require('../models/BookModel');
-const Client = require('../models/UserModel');
-const Address = require('../models/AddressModel');
-const Phone = require('../models/PhoneModel');
-const Card = require('../models/CardModel');
+const Sale = require('../models/SaleModel');
+const SaleBooks = require('../models/SaleBooksModel');
+const SaleCards = require('../models/SaleCardsModel');
+
+const moment = require('moment');
 
 const aBook = new Book();
-const aClient = new Client();
-const anAddress = new Address();
-const aPhone = new Phone();
-const aCard = new Card();
+const aSale = new Sale();
+const aSaleBooks = new SaleBooks();
+const aSaleCards = new SaleCards();
 
 let total = 0;
 
 // Renderiza a view cart
 async function cartView(req, res) {
-
-    let frete = req.session.frete || 0;
-
-    let cart = req.session.cart || [];
-
-    let total = req.session.total || 0;
-
     res.render('cart', {
         title: 'Carrinho',
-        cart: cart,
-        total: total,
-        frete: frete
+        cart: req.session.cart || [],
+        total: req.session.total || 0,
+        frete: req.session.frete || 0
     });
 }
 
-
 async function cartContinueView (req, res) {
-    let cliente = req.session.clientInfo || {};
-    let enderecos = req.session.addresses || [];
-    let telefones = req.session.phones || [];
-    let cartoes = req.session.cards || [];
-
-    let livros = req.session.cart || [];
-
-    let total = parseFloat(req.session.total) || 0;
-    let frete = parseFloat(req.session.frete) || 0;
-    let precoFinalComFrete = total + frete;
-
     res.render('cartContinue', {
         title: 'Carrinho',
-        cliente: cliente,
-        enderecos: enderecos,
-        telefones: telefones,
-        cartoes: cartoes,
-        livros: livros,
-        total: total,
-        frete: frete,
-        precoFinalComFrete: precoFinalComFrete
+        cliente: req.session.clientInfo || {},
+        enderecos: req.session.addresses || [],
+        telefones: req.session.phones || [],
+        cartoes: req.session.cards || [],
+        cart: req.session.cart || [],
+        total: req.session.total || 0,
+        frete: req.session.frete || 0,
+        precoFinalComFrete: req.session.precoFinalComFrete || 0
     });
-
 }
 
 // cartCheckoutView
 
 async function cartCheckoutView(req, res) {
-
-    let clientInfo = req.session.clientInfo || {};
-    let endereco = req.session.addresses || [];
-    let telefone = req.session.phones || [];
-    let cartoes = req.session.cards || [];
-
-    let livros = req.session.cart || [];
-
-    let total = req.session.total || 0;
-
-    let frete = req.session.frete || 0;
-
-    let precoFinalComFrete = total + frete;
-
     res.render('cartCheckout', {
         title: 'Carrinho',
-        clientInfo: clientInfo,
-        endereco: endereco,
-        telefone: telefone,
-        cartoes: cartoes,
-        livros: livros,
-        total: total,
-        frete: frete,
-        precoFinalComFrete: precoFinalComFrete
+        cliente: req.session.clientInfo || {},
+        enderecos: req.session.addresses || [],
+        telefones: req.session.phones || [],
+        cartoes: req.session.cards || [],
+        cart: req.session.cart || [],
+        total: req.session.total || 0,
+        frete: req.session.frete || 0,
+        precoFinalComFrete: req.session.precoFinalComFrete || 0
     });
 }
 
 // finishPurchase
 async function finishPurchase(req, res) {
+    let cart = req.session.cart;
+    let cards = req.session.cards;
+    let addresses = req.session.addresses;
+    let totalQuantity = 0;
+    let cardId = 0;
+    let addressId = 0;
 
-    res.render('finishPurchase', {
-        title: 'Compra Realizada'
+    // generate a code for the sale considering the number of sales in the database with the length of the array + 1 and a bunch of zeros in front
+    let sales = await aSale.getAllSales();
+    let code = '0'.repeat(10 - (sales.length + 1).toString().length) + (sales.length + 1).toString();
+
+    cart.forEach(livro => {
+        totalQuantity = totalQuantity + livro.quantity;
     });
 
+    addresses.forEach(address => {
+        if (address.preferred) {
+            addressId = address.addressId;
+        }
+    });
+    
+    let sale = {
+        status: 'processing',
+        code: code,
+        purchaseDate: moment().format('YYYY-MM-DD HH:mm:ss'),
+        paymentMethod: 'card',
+        totalQuantity: totalQuantity,
+        totalValue: req.session.precoFinalComFrete,
+        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        userId: req.session.clientId,
+        addressId: addressId
+    }
+    
+    await aSale.createSale(sale);
+
+    let theSale = await aSale.getSaleByCode(code);
+
+    cards.forEach(card => {
+        if (card.preferred) {
+            cardId = card.cardId;
+        }
+    });
+
+    let saleCards = {
+        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        saleId: theSale[0].saleId,
+        cardId: cardId
+    }
+
+    await aSaleCards.createSaleCards(saleCards);
+
+    cart.forEach(async livro => {
+        console.log(livro);
+        let saleBooks = {
+            quantity: livro.quantity,
+            unitValue: livro.price,
+            createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+            updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+            saleId: theSale[0].saleId,
+            bookId: livro.bookId
+        }
+
+        await aSaleBooks.createSaleBooks(saleBooks);
+    });
+
+    // limpar o carrinho
+    req.session.cart = [];
+    req.session.total = 0;
+    req.session.frete = 0;
+    req.session.precoFinalComFrete = 0;
+
+    res.render('finishPurchase', {
+        title: 'Compra Realizada',
+        code: code
+    });
 }
 
 // set frete
 async function frete(req, res) {
     let { frete } = req.body;
+
     req.session.frete = parseFloat(frete);
+
+    precoFinalComFrete = parseFloat(req.session.total) + req.session.frete;
+    req.session.precoFinalComFrete = parseFloat((precoFinalComFrete).toFixed(2));
+
     res.redirect(req.get('referer'));
 }
 
 // add book to cart function
 async function addToCart (req, res) {
     let id = req.body.id;
-
     let livros = await aBook.getBookById(id);
-
     let cart = req.session.cart || [];
+    let total = req.session.total || 0;
 
     livros.forEach(livro => {
         const livroNoCarrinho = cart.find(item => item.bookId === livro.bookId);
@@ -116,20 +158,23 @@ async function addToCart (req, res) {
         if (livroNoCarrinho) {
             livroNoCarrinho.quantity++;
             // atualiza o subtotal do livro com duas casas decimais
-            livroNoCarrinho.bookSubtotal = (livroNoCarrinho.quantity * livro.price).toFixed(2);
+            livroNoCarrinho.bookSubtotal = parseFloat((livroNoCarrinho.quantity * livro.price).toFixed(2));
         } else {
-            cart.push({ ...livro, quantity: 1, bookSubtotal: (livro.price).toFixed(2) });
+            cart.push({ ...livro, quantity: 1, bookSubtotal: parseFloat((livro.price).toFixed(2)) });
         }
 
         // soma o subtotal do livro ao total se o carrinho não estiver vazio
         if (cart.length > 0) {
-            total += livro.price;
+            total += parseFloat((livro.price).toFixed(2));
         } else {
-            total = livro.price;
+            total = parseFloat((livro.price).toFixed(2));
         }
     });
 
-    req.session.total = (total).toFixed(2);
+    req.session.total = parseFloat((total).toFixed(2));
+
+    let precoFinalComFrete = parseFloat(req.session.total) + req.session.frete;
+    req.session.precoFinalComFrete = parseFloat((precoFinalComFrete).toFixed(2));
 
     req.session.cart = cart;
 
@@ -139,9 +184,9 @@ async function addToCart (req, res) {
 // empty cart function
 async function emptyCart (req, res) {
     req.session.cart = [];
-    total = 0;
-    req.session.total = total;
+    req.session.total = 0;
     req.session.frete = 0;
+    req.session.precoFinalComFrete = 0;
     res.redirect('/cart');
 }
 
@@ -164,6 +209,24 @@ async function removeFromCart (req, res) {
     res.redirect('/cart');
 }
 
+// toggle preferred card
+async function togglePreferredCard(req, res) {
+    let cardId = req.params.id;
+    let cards = req.session.cards || [];
+
+    cards.forEach(card => {
+        if (card.cardId == cardId) {
+            card.preferred = true;
+        } else {
+            card.preferred = false;
+        }
+    });
+
+    req.session.cards = cards;
+
+    res.redirect(req.get('referer'));
+}
+
 module.exports = {
     cartView,
     cartContinueView,
@@ -172,5 +235,6 @@ module.exports = {
     addToCart,
     emptyCart,
     removeFromCart,
-    frete
+    frete,
+    togglePreferredCard
 }

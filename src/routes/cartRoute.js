@@ -10,8 +10,9 @@ router.get("/finishPurchase", cartController.finishPurchase);
 router.get("/emptyCart", cartController.emptyCart);
 router.get("/removeFromCart", cartController.removeFromCart);
 
+router.get("/togglePreferredCard/:id", cartController.togglePreferredCard);
+
 router.post("/addToCart", cartController.addToCart);
 router.post("/frete", cartController.frete);
-
 
 module.exports = router;

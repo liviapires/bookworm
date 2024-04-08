@@ -80,6 +80,7 @@ async function createClient (req, res) {
         country: country,
         complement: req.body.complement,
         notes: req.body.observation,
+        preferred: 1,
         createdAt: createdAt,
         updatedAt: updatedAt,
         userId: clientId
@@ -173,6 +174,7 @@ async function createAddress (req, res) {
         country: 'Brasil',
         complement: req.body.complement,
         notes: req.body.observation,
+        preferred: 0,
         createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
         updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
         userId: req.body.userId
@@ -201,6 +203,7 @@ async function updateAddress (req, res) {
         country: 'Brasil',
         complement: req.body.complement,
         notes: req.body.observation,
+        preferred: 0,
         updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
     }
 

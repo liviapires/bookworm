@@ -88,7 +88,6 @@ const aCard = new Card();
 
 // Renderiza a view home
 async function homeView (req, res) {
-    
     if (!req.session.clientId) {
         // gera um número aleatorio a partir de 1 até 10 e salva na sessão
         req.session.clientId = Math.floor(Math.random() * 10) + 1;

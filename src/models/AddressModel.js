@@ -1,7 +1,7 @@
 const db = require("../../config/db");
 
 class Address {
-    constructor(residenceType, street, number, neighborhood, zipCode, city, state, country, complement, notes, createdAt, updatedAt, userId) {
+    constructor(residenceType, street, number, neighborhood, zipCode, city, state, country, complement, notes, preferred, createdAt, updatedAt, userId) {
         this.residenceType = residenceType;
         this.street = street;
         this.number = number;
@@ -12,6 +12,7 @@ class Address {
         this.country = country;
         this.complement = complement;
         this.notes = notes;
+        this.preferred = preferred;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.userId = userId;
@@ -29,7 +30,7 @@ class Address {
     // create address
     async createAddress(address) {
         const [results, metadata] = await db.query(
-            `INSERT INTO addresses (residenceType, street, number, neighborhood, zipCode, city, state, country, complement, notes, createdAt, updatedAt, userId) \
+            `INSERT INTO addresses (residenceType, street, number, neighborhood, zipCode, city, state, country, complement, notes, preferred, createdAt, updatedAt, userId) \
             VALUES (
                 '${address.residenceType}',
                 '${address.street}',
@@ -41,6 +42,7 @@ class Address {
                 '${address.country}',
                 '${address.complement}',
                 '${address.notes}',
+                '${address.preferred}',
                 '${address.createdAt}',
                 '${address.updatedAt}',
                 '${address.userId}'
@@ -63,6 +65,7 @@ class Address {
                 state = '${address.state}',
                 country = '${address.country}',
                 notes = '${address.notes}',
+                preferred = '${address.preferred}',
                 updatedAt = '${address.updatedAt}'
             WHERE addressId = '${address.addressId}';`
         );
