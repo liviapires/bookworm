@@ -1,0 +1,54 @@
+<%- include('header.ejs') %>
+<div class="center container">
+
+    <h1 class="title center mt-5">Todas as Compras</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="veronica">Código</th>
+                <th class="veronica">Situação</th>
+                <th class="veronica">Data de Compra</th>
+                <th class="veronica">Valor Total</th>
+                <th class="veronica">Ver mais</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <% if (sales.length==0) { %>
+                <tr>
+                    <td colspan="8" class="text-center">Nenhuma Compra</td>
+                </tr>
+            <% } %>
+
+            <% sales.forEach(function(sale) { %>
+                
+                <tr>
+                    <td class="bold">
+                        <%= sale.code %>
+                    </td>
+                    <td>
+                        <%= sale.status %>
+                    </td>
+                    <td>
+                        <%= sale.purchaseDate %>
+                    </td>
+                    <td>
+                        R$ <%= sale.totalValue %>
+                    </td>
+                    <td>
+                        <a href="/sale/<%= sale.saleId %>">
+                            <img src="https://www.svgrepo.com/show/522719/zoom-plus.svg" alt="Ver mais" class="icon">
+                        </a>
+                    </td>
+                </tr>
+            <% }); %>
+
+        </tbody>
+    </table>
+    
+    <a href="/signin" class="btn btn-primary">Novo Cliente</a>
+
+</div>
+
+<%- include('footer.ejs') %>

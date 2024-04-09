@@ -3,44 +3,49 @@
     <div class="medium-card">
         <div class="b-line orderData p-2">
             <div class="badge">
-                <%= pedido.situacao %>
+                <%= pedido.status %>
             </div>
             <div class="d-flex">
-                <div class="r-line p-2">Pedido feito em: <%= pedido.dataPedido %>
-                </div>
+                <div class="r-line p-2">Pedido feito em: <%= pedido.purchaseDate %></div>
                 <div class="p-2">
-                    <a href="/order/<%= pedido.id %>" class="orderDetailsLink">Detalhes do pedido > </a>
+                    <a href="/order/<%= pedido.saleId %>" class="orderDetailsLink">Detalhes do pedido > </a>
                 </div>
             </div>
         </div>
         <div class="orderData">
             <div class="p-2 bookInfo">
-                <% livros.forEach((livro) => {%>
-                    <img src="<%= livro.imagem %>" alt="Livro" width="100" class="ml-05">
-                <% }) %>
-                <% if (livros.length === 1) { %>
+                <% pedido.livros.slice(-6).forEach((livro) => {%>
+                    <img src="<%= livro.bookImage %>" alt="Livro" width="100" class="ml-05">
+                    <% if (pedido.livros.length === 1) { %>
+                        <div class="ml-05 d-block">
+                            <div class="mt-05">
+                                <%= livro.title %>
+                            </div>
+                            <div class="mt-05">
+                                <%= livro.author %>, <%= livro.publisher %> - <%= livro.year %>
+                            </div>
+                            <div class="mt-05">
+                                <%= livro.isbn %>
+                            </div>
+                            <div>
+                                <% livro.categories.forEach((category) => {
+                                    if (category !== "") { %>
+                                    <span class="badge badge-secondary mt-05"><%= category %></span>
+                                <% }}); %>
+                            </div>
+                        </div>
+                <% }}); %>
+                <% if (pedido.livros.length > 6) { %>
                     <div class="ml-05 d-block">
-                        <div class="mt-05">
-                            <%= livros.titulo %>
-                        </div>
-                        <div class="mt-05">
-                            <%= livros.autor %>, <%= livros.editora %> - <%= livros.ano %>
-                        </div>
-                        <div class="mt-05">
-                            <%= livros.isbn %>
-                        </div>
-                        <div>
-                            <% livros.categorias.forEach((categoria) => { %>
-                                <span class="mini-badge mt-05"><%= categoria %></span>
-                            <% }) %>
+                        <div class="mt-05 c-gray">
+                            (+ <%= pedido.livros.length - 6 %>)
                         </div>
                     </div>
                 <% } %>
-
             </div>
             <div class="center">
                 <div class="mt-05">
-                    Total: <%= pedido.total %>
+                    Total: <%= pedido.totalValue %>
                 </div>
                 <div>
                     <button class="btn btn-primary mt-05">Adicionar ao Carrinho</button>

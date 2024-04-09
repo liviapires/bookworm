@@ -146,20 +146,6 @@ CREATE TABLE `sales` (
     CONSTRAINT `FK_8` FOREIGN KEY `FK_2` (`addressId`) REFERENCES `addresses` (`addressId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
--- ************************************** `saleCards`
-CREATE TABLE `saleCards` (
-    `saleCardId` integer NOT NULL AUTO_INCREMENT,
-    `createdAt` datetime NOT NULL,
-    `updatedAt` datetime NOT NULL,
-    `saleId` integer NOT NULL,
-    `cardId` integer NOT NULL,
-    PRIMARY KEY (`saleCardId`),
-    KEY `FK_1` (`saleId`),
-    CONSTRAINT `FK_9` FOREIGN KEY `FK_1` (`saleId`) REFERENCES `sales` (`saleId`),
-    KEY `FK_2` (`cardId`),
-    CONSTRAINT `FK_10` FOREIGN KEY `FK_2` (`cardId`) REFERENCES `creditCards` (`cardId`)
-) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
-
 -- ************************************** `saleBooks`
 CREATE TABLE `saleBooks` (
     `saleBookId` integer NOT NULL AUTO_INCREMENT,

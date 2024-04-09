@@ -1,8 +1,9 @@
 <%- include('header.ejs') %>
+<% console.log(pedido); %>
 <div class="container">
     <div class="big-card d-block">
         <div class="badge">
-            <%= pedido.situacao %>
+            <%= pedido.status %>
         </div>
         <div class="mt-05">
             Se o item que você recebeu estiver com defeito ou não estiver conforme descrito, você pode abrir uma solicitação de troca/devolução dentro de 15 dias do recebimento.
@@ -18,7 +19,7 @@
                 <button class="btn btn-primary mt-05">Recibo</button>
             </div>
             <div class="ml-05">
-                <a href="/doOrder/<%= pedido.id %>" class="btn btn-danger mt-05">Solicitar Troca/Devolução</a>
+                <a href="/doOrder/<%= pedido.saleId %>" class="btn btn-danger mt-05">Solicitar Troca/Devolução</a>
             </div>
         </div>
     </div>
@@ -28,12 +29,12 @@
             <div class="d-flex">
                 <img src="https://www.svgrepo.com/show/532540/location-pin-alt-1.svg" class="icon op-75">
                 <div class="ml-1">
-                    <div class=""><%= pedido.nomeCliente %></div>
+                    <div class=""><%= pedido.userName %></div>
                     <div class="mt-05">
-                        <%= pedido.telefone.codigoPais %> <%= pedido.telefone.ddd %> <%= pedido.telefone.numero %>
+                        <%= pedido.phones[0].ddd %> <%= pedido.phones[0].phoneNumber %>
                     </div>
                     <div class="mt-05">
-                        <%= pedido.endereco.rua %>, <%= pedido.endereco.numero %>, <%= pedido.endereco.bairro %>, <%= pedido.endereco.cidade %>, <%= pedido.endereco.estado %>, <%= pedido.endereco.cep %>
+                        <%= pedido.street %>, <%= pedido.number %>, <%= pedido.neighborhood %>, <%= pedido.city %>, <%= pedido.state %>, <%= pedido.zipCode %>
                     </div>
                 </div>
             </div>
@@ -42,12 +43,12 @@
             <div class="d-flex">
                 <img src="https://www.svgrepo.com/show/66839/sheet.svg" class="icon op-75">
                 <div class="ml-1">
-                    <div class="">Pedido: <%= pedido.id %></div>
+                    <div class="">Pedido: <%= pedido.code %></div>
                     <div class="mt-05">
-                        Data: <%= pedido.dataPedido %>
+                        Data: <%= pedido.purchaseDate %>
                     </div>
                     <div class="mt-05">
-                        Forma de Pagamento: <%= pedido.pagamento.forma %>                        
+                        Forma de Pagamento: <%= pedido.paymentMethod %>                        
                     </div>
                 </div>                
             </div>
@@ -59,28 +60,28 @@
             <img src="https://www.svgrepo.com/show/533043/cart-shopping.svg" class="icon op-75">
             <div class="ml-1 bold">Itens</div>
         </div>
-            <% pedido.livros.forEach((livro) => {%>
+            <% pedido.books.forEach((livro) => {%>
                 <div class="orderData ml-05 mt-05 b-line p-2">
                     <div class="bookInfo">
-                        <img src="<%= livro.imagem %>" alt="Livro" width="100">
+                        <img src="<%= livro.bookImage %>" alt="Livro" width="100">
                         <div class="ml-05 d-block">
                             <div class="mt-05">
-                                <%= livro.titulo %>
+                                <%= livro.title %>
                             </div>
                             <div class="mt-05">
-                                <%= livro.autor %>, <%= livro.editora %> - <%= livro.ano %>
+                                <%= livro.author %>, <%= livro.publisher %> - <%= livro.year %>
                             </div>
                             <div class="mt-05">
                                 <%= livro.isbn %>
                             </div>
                             <div>
-                                <% livro.categorias.forEach((categoria) => { %>
+                                <% livro.categories.forEach((categoria) => { %>
                                     <span class="mini-badge mt-05"><%= categoria %></span>
                                 <% }); %>
                             </div>
 
                             <div class="mt-05">
-                                <%= livro.preco %> x <%= livro.quantidade %>
+                                R$ <%= livro.price %>
                             </div>
                         </div>
                     </div>
@@ -93,13 +94,7 @@
                 <img src="https://www.svgrepo.com/show/491278/money-dollars.svg" class="icon op-75">
                 <div class="d-block ml-05">
                     <div>
-                        Subtotal: <%= pedido.subtotal %>
-                    </div>
-                    <div>
-                        Frete: <%= pedido.frete %>
-                    </div>
-                    <div>
-                        Total: <%= pedido.total %>
+                        Total: <%= pedido.totalValue %>
                     </div>
                 </div>
             </div>

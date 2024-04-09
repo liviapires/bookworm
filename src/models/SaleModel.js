@@ -63,7 +63,10 @@ class sale {
 
     async getSaleById(saleId) {
         const [results, metadata] = await db.query(
-            `SELECT * FROM sales WHERE saleId = ${saleId};`
+            `SELECT sales.*, addresses.*, users.name as userName FROM sales 
+                LEFT JOIN addresses ON sales.addressId = addresses.addressId
+                LEFT JOIN users ON sales.userId = users.userId
+                WHERE sales.saleId = ${saleId};`
         );
 
         return results;
@@ -82,6 +85,15 @@ class sale {
             `SELECT * FROM sales 
                 LEFT JOIN addresses ON sales.addressId = addresses.addressId
                 WHERE sales.userId = ${userId};`
+        );
+
+        return results;
+    }
+
+    async deleteSaleByUserId(userId) {
+        const [results, metadata] = await db.query(
+            // delete the sale and all its books
+            `DELETE FROM sales WHERE userId = ${userId};`
         );
 
         return results;

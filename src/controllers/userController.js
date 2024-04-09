@@ -2,6 +2,8 @@ const Client = require('../models/UserModel');
 const Address = require('../models/AddressModel');
 const Phone = require('../models/PhoneModel');
 const Card = require('../models/CardModel');
+const Sale = require('../models/SaleModel');
+const saleBooks = require('../models/SaleBooksModel');
 
 const bcrypt = require('bcrypt');
 const moment = require('moment');
@@ -10,6 +12,8 @@ const aClient = new Client();
 const anAddress = new Address();
 const aPhone = new Phone();
 const aCard = new Card();
+const aSale = new Sale();
+const aSaleBooks = new saleBooks();
 
 // CLIENT CONTROLLERS
 
@@ -139,6 +143,15 @@ async function updateClient (req, res) {
     
 // delete a client and its dependencies
 async function deleteClient (req, res) {
+    // delete client's sales books
+    const sales = await aSale.getSaleByUserId(req.params.id);
+
+    sales.forEach(async sale => {
+        await aSaleBooks.deleteSaleBooksBySaleId(sale.saleId);
+    });
+
+    // delete client's sales
+    await aSale.deleteSaleByUserId(req.params.id);
 
     // delete client's addresses
     await anAddress.deleteAddressByUserId(req.params.id);

@@ -121,6 +121,10 @@
     color: var(--avocado);
 }
 
+.c-gray {
+    color: var(--dark-gray);
+}
+
 .mr-05 {
     margin-right: 0.5rem !important;
 }
@@ -847,6 +851,11 @@ a:hover {
 .flex-end {
     display: flex;
     justify-content: flex-end;
+}
+
+.input-checkbox {
+    width: 1rem;
+    height: 1rem;
 }
 
 

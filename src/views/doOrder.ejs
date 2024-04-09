@@ -1,4 +1,5 @@
 <%- include('header.ejs') %>
+<% console.log(pedido); %>
     <div id="body" class="body">
         <div class="center">
             <div class="data">
@@ -6,16 +7,16 @@
                 <div class="d-flex align-items-center">
                     <div class="card-item-sm d-block">
                             <div class="d-flex justify-content-between align-items-center">
-                                <div class="badge"><%= pedido.situacao %></div>
-                                <div class="slight-bold">#<%= pedido.id %></div>
+                                <div class="badge"><%= pedido.status %></div>
+                                <div class="slight-bold">#<%= pedido.code %></div>
                             </div>
                             <hr>
                             <div class="d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center">
                                     <div class="info-item">
-                                        <div class="title-item"><%= pedido.nomeCliente %></div>
-                                        <div class="price-item"><%= pedido.total %></div>
-                                        <div class="description-item">Compra feita em: <%= pedido.dataPedido %></div>
+                                        <div class="title-item"><%= pedido.userName %></div>
+                                        <div class="price-item">R$ <%= pedido.totalValue %></div>
+                                        <div class="description-item">Compra feita em: <%= pedido.purchaseDate %></div>
                                     </div>
                                 </div>
                             </div>
@@ -23,25 +24,29 @@
                     <div class="ml-4 d-flex justify-content-center align-items-center flex-column">
                         <div class="title-green">O que você gostaria de fazer com esse pedido?</div>
                         <div class="d-flex">
-                            <button onclick="toggleTrocaDevolucao('troca','devolucao','btnTroca','btnDevolucao')" type="button" class="btn btn-secondary">Trocar Produtos</button>
-                            <button onclick="toggleTrocaDevolucao('devolucao','troca','btnDevolucao','btnTroca')" type="button" class="btn btn-secondary ml-1">Devolver Produtos</button>
+                            <button onclick="toggleTrocaDevolucao('troca','devolucao', 'tituloDevolucao', 'tituloTroca', 'btnTroca','btnDevolucao')" type="button" class="btn btn-secondary">Trocar Produtos</button>
+                            <button onclick="toggleTrocaDevolucao('devolucao','troca', 'tituloTroca', 'tituloDevolucao', 'btnDevolucao','btnTroca')" type="button" class="btn btn-secondary ml-1">Devolver Produtos</button>
                         </div>
                         <a href="#" class="mt-4">Verifique nossa política de troca e devolução.</a>
                     </div>
                 </div>
 
-                <div class="title-green mt-5">
+                <div class="title-green mt-5" id="tituloTroca">
                     Escolha os produtos e a quantidade que gostaria de trocar
                 </div>
-                <% pedido.livros.forEach((livro) => {%>
+                <div class="title-green mt-5 hide" id="tituloDevolucao">
+                    Escolha os produtos e a quantidade que gostaria de devolver
+                </div>
+                <% pedido.books.forEach((livro) => {%>
                     <div class="card-item d-block w-100">
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="bookInfo">
-                                <img src="<%= livro.imagem %>" width="100rem">
+                                <input type="checkbox" class="input-checkbox mr-1">
+                                <img src="<%= livro.bookImage %>" width="100rem">
                                 <div class="d-block ml-05">
-                                    <div class="title-item"><%= livro.titulo %></div>
-                                    <div class="description-item"><%= livro.autor %></div>
-                                    <div class="description-item"><%= livro.editora %></div>
+                                    <div class="title-item"><%= livro.title %></div>
+                                    <div class="description-item"><%= livro.author %></div>
+                                    <div class="description-item"><%= livro.publisher %></div>
                                 </div>
                             </div>
                             <div class="input-group w-6">
@@ -90,16 +95,20 @@
 
 <script>
     
-    function toggleTrocaDevolucao(divToShow, divToHide, btnToShow, btnToHide) {
+    function toggleTrocaDevolucao(divToShow, divToHide, titleToHide, titleToShow, btnToShow, btnToHide) {
         var divToShow = document.getElementById(divToShow);
         var divToHide = document.getElementById(divToHide);
         var btnToShow = document.getElementById(btnToShow);
         var btnToHide = document.getElementById(btnToHide);
+        var titleToShow = document.getElementById(titleToShow);
+        var titleToHide = document.getElementById(titleToHide);
 
         divToShow.style.display = "block";
         divToHide.style.display = "none";
         btnToShow.style.display = "block";
         btnToHide.style.display = "none";
+        titleToShow.style.display = "block";
+        titleToHide.style.display = "none";
     }
 
 </script>

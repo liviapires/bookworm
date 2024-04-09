@@ -1,8 +1,8 @@
 const db = require("../../config/db");
 
 class Category {
-    constructor(name, createdAt, updatedAt) {
-        this.name = name;
+    constructor(categoryName, createdAt, updatedAt) {
+        this.categoryName = categoryName;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -19,9 +19,9 @@ class Category {
     // create category
     async createCategory(category) {
         const [results, metadata] = await db.query(
-            `INSERT INTO categories (name, createdAt, updatedAt) \
+            `INSERT INTO categories (categoryName, createdAt, updatedAt) \
             VALUES (
-                '${category.name}',
+                '${category.categoryName}',
                 '${category.createdAt}',
                 '${category.updatedAt}'
             );`
@@ -34,7 +34,7 @@ class Category {
     async updateCategory(category) {
         const [results, metadata] = await db.query(
             `UPDATE categories SET 
-                name = '${category.name}', 
+                name = '${category.categoryName}', 
                 updatedAt = '${category.updatedAt}'
             WHERE categoryId = ${category.categoryId};`
         );
@@ -55,6 +55,17 @@ class Category {
     async getCategoryById(categoryId) {
         const [results, metadata] = await db.query(
             `SELECT * FROM categories WHERE categoryId = ${categoryId};`
+        );
+
+        return results;
+    }
+
+    // get book categories
+    async getBookCategories(bookId) {
+        const [results, metadata] = await db.query(
+            `SELECT categories.categoryName FROM categories
+                JOIN bookCategories ON categories.categoryId = bookCategories.categoryId
+                WHERE bookCategories.bookId = ${bookId};`
         );
 
         return results;

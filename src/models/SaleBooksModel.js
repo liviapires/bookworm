@@ -44,7 +44,15 @@ class saleBooks {
 
     async getSaleBooksBySaleId(saleId) {
         const [results, metadata] = await db.query(
-            `SELECT * FROM saleBooks WHERE saleId = ${saleId};`
+            `SELECT bookId FROM saleBooks WHERE saleId = ${saleId};`
+        );
+
+        return results;
+    }
+
+    async deleteSaleBooksBySaleId(saleId) {
+        const [results, metadata] = await db.query(
+            `DELETE FROM saleBooks WHERE saleId = ${saleId};`
         );
 
         return results;

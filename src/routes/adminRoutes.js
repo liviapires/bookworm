@@ -8,7 +8,7 @@ router.get("/evaluateExchangeContinue", adminController.evaluateExchangeContinue
 router.get("/evaluateDevolution", adminController.evaluateDevoutionView);
 router.get("/evaluateDevolutionContinue", adminController.evaluateDevolutionContinueView);
 
-
 router.get("/admin", adminController.mainAdminView);
+router.get("/sales", adminController.salesView);
 
 module.exports = router;

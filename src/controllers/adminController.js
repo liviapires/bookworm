@@ -19,6 +19,10 @@ const pedido = [{
     descricaoMotivo: 'O livro veio com a capa rasgada.',
 }];
 
+const Sale = require('../models/SaleModel');
+
+const aSale = new Sale();
+
 // Renderiza a view evaluateExchange
 const evaluateExchangeView = (req, res) => {
     res.render('evaluateExchange', {
@@ -54,10 +58,31 @@ async function mainAdminView (req, res) {
     });
 }
 
+async function salesView (req, res) {
+
+    const sales = await aSale.getAllSales();
+
+    sales.forEach(sale => {
+        let date = new Date(sale.purchaseDate);
+        let day = date.getDate().toString().padStart(2, '0');
+        let month = (date.getMonth() + 1).toString().padStart(2, '0');
+        let year = date.getFullYear();
+        sale.purchaseDate = `${day}/${month}/${year}`;
+    });
+
+    console.log(sales);
+
+    res.render('sales', {
+        title: 'Vendas',
+        sales: sales
+    });
+}
+
 module.exports = {
     evaluateExchangeView,
     evaluateExchangeContinueView,
     evaluateDevoutionView,
     evaluateDevolutionContinueView,
-    mainAdminView
+    mainAdminView,
+    salesView
 }

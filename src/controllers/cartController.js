@@ -1,14 +1,12 @@
 const Book = require('../models/BookModel');
 const Sale = require('../models/SaleModel');
 const SaleBooks = require('../models/SaleBooksModel');
-const SaleCards = require('../models/SaleCardsModel');
 
 const moment = require('moment');
 
 const aBook = new Book();
 const aSale = new Sale();
 const aSaleBooks = new SaleBooks();
-const aSaleCards = new SaleCards();
 
 let total = 0;
 
@@ -97,15 +95,6 @@ async function finishPurchase(req, res) {
             cardId = card.cardId;
         }
     });
-
-    let saleCards = {
-        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
-        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
-        saleId: theSale[0].saleId,
-        cardId: cardId
-    }
-
-    await aSaleCards.createSaleCards(saleCards);
 
     cart.forEach(async livro => {
         console.log(livro);
