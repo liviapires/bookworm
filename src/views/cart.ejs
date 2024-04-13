@@ -44,25 +44,25 @@
                             <div class="col-md-2">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <button type="button" class="btn-plus-minus btn-outline-secondary btn-number btn-minus" disabled="disabled" data-type="minus" data-field="quant[1]">
+                                        <a href="/minus/<%= livro.bookId %>" class="btn-plus-minus btn-minus">
                                             -
-                                        </button>
+                                        </a>
                                     </div>
-                                    <input type="text" name="quant[1]" class="form-control input-number input-cart" value="<%= livro.quantity %>" min="1" max="10">
+                                    <input type="text" name="bookQuantity" class="form-control input-cart" value="<%= livro.quantity %>" min="1" max="10" disabled>
                                     <div class="input-group-append">
-                                        <button type="button" class="btn-plus-minus btn-outline-secondary btn-number btn-plus" data-type="Mais" data-field="quant[1]">
+                                        <a href="/plus/<%= livro.bookId %>" class="btn-plus-minus btn-plus">
                                             +
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 R$ <%= livro.bookSubtotal %>
                             </div>
-                            <div class="col-md-1">
+                            <a href="/removeFromCart/<%= livro.bookId %>" class="col-md-1">
                                 <img src="https://www.svgrepo.com/show/533017/trash-blank-alt.svg" alt="Remover item"
                                     class="icon">
-                            </div>
+                            </a>
                             <% }); %>
                     </div>
                 </div>

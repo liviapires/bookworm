@@ -611,12 +611,15 @@ a:hover {
 }
 
 .btn-plus-minus {
-    border-color: var(--veronica) !important;
     color: var(--eerie-black) !important;
     font-weight: 600 !important;
     background-color: var(--white) !important;
     width: 1.65rem;
     font-size: 1.15rem;
+    transition: 0.35s;
+    text-align: center;
+    padding-top: 0.15rem;
+    border: 0.1rem solid var(--dark-gray) !important;
 }
 
 .btn-plus-minus:hover {
@@ -627,6 +630,7 @@ a:hover {
     width: 1.65rem;
     font-size: 1.15rem;
     transition: 0.35s;
+    text-decoration: none;
 }
 
 .btn-plus-minus:disabled{
@@ -647,7 +651,7 @@ a:hover {
 }
 
 .input-cart {
-    width: 3rem;
+    width: 4rem;
     text-align: center;
     border: 0.1rem 0 0 0.1rem;
     outline: none;

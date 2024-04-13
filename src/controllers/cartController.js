@@ -134,6 +134,62 @@ async function frete(req, res) {
     res.redirect(req.get('referer'));
 }
 
+// set plus function to add 1 to the quantity of a book in the cart
+async function plus (req, res) {
+
+    let id = req.params.id;
+    let cart = req.session.cart || [];
+
+    // encontra o livro no carrinho
+    let livro = cart.find(book => book.bookId == id);
+
+    if (livro) {
+        if (livro.quantity <= 9) {
+            livro.quantity++;
+            livro.bookSubtotal = parseFloat((livro.quantity * livro.price).toFixed(2));
+            req.session.total = parseFloat((req.session.total + livro.price).toFixed(2));
+            if (req.session.frete) {
+                req.session.precoFinalComFrete = parseFloat((req.session.total + req.session.frete).toFixed(2));
+            }
+        }
+    }
+
+    req.session.cart = cart;
+
+
+    res.redirect(req.get('referer'));
+}
+
+// set minus function to subtract 1 from the quantity of a book in the cart
+async function minus (req, res) {
+
+    let id = req.params.id;
+    let cart = req.session.cart || [];
+
+    let livro = cart.find(item => item.bookId == id);
+
+    if (livro) {
+        if (livro.quantity > 1) {
+            livro.quantity--;
+            livro.bookSubtotal = parseFloat((livro.quantity * livro.price).toFixed(2));
+            req.session.total = parseFloat((req.session.total - livro.price).toFixed(2));
+            if (req.session.frete) {
+                req.session.precoFinalComFrete = parseFloat((req.session.total + req.session.frete).toFixed(2));
+            }
+        } else {
+            cart = cart.filter(item => item.bookId != id);
+            req.session.total = parseFloat((req.session.total - livro.price).toFixed(2));
+            if (req.session.frete) {
+                req.session.precoFinalComFrete = parseFloat((req.session.total + req.session.frete).toFixed(2));
+            }
+        }
+    }
+
+    req.session.cart = cart;
+
+    res.redirect(req.get('referer'));
+}
+
 // add book to cart function
 async function addToCart (req, res) {
     let id = req.body.id;
@@ -182,20 +238,21 @@ async function emptyCart (req, res) {
 // remove book from cart function
 async function removeFromCart (req, res) {
     let id = req.params.id;
-
     let cart = req.session.cart || [];
 
-    let livro = cart.find(item => item.bookId === id);
+    let livro = cart.find(item => item.bookId == id);
 
     if (livro) {
-        total -= livro.bookSubtotal;
-        req.session.total = total;
-        cart = cart.filter(item => item.bookId !== id);
+        cart = cart.filter(item => item.bookId != id);
+        req.session.total = parseFloat((req.session.total - livro.bookSubtotal).toFixed(2));
+        if (req.session.frete) {
+            req.session.precoFinalComFrete = parseFloat((req.session.total + req.session.frete).toFixed(2));
+        }
     }
 
     req.session.cart = cart;
 
-    res.redirect('/cart');
+    res.redirect(req.get('referer'));
 }
 
 // toggle preferred card
@@ -225,5 +282,7 @@ module.exports = {
     emptyCart,
     removeFromCart,
     frete,
+    plus,
+    minus,
     togglePreferredCard
 }

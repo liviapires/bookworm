@@ -12,6 +12,10 @@ router.get("/removeFromCart", cartController.removeFromCart);
 
 router.get("/togglePreferredCard/:id", cartController.togglePreferredCard);
 
+router.get("/plus/:id", cartController.plus);
+router.get("/minus/:id", cartController.minus);
+router.get("/removeFromCart/:id", cartController.removeFromCart);
+
 router.post("/addToCart", cartController.addToCart);
 router.post("/frete", cartController.frete);
 
