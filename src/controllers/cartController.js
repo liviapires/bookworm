@@ -1,12 +1,16 @@
 const Book = require('../models/BookModel');
 const Sale = require('../models/SaleModel');
 const SaleBooks = require('../models/SaleBooksModel');
+const Address = require('../models/AddressModel');
+const Card = require('../models/CardModel');
 
 const moment = require('moment');
 
 const aBook = new Book();
 const aSale = new Sale();
 const aSaleBooks = new SaleBooks();
+const anAddress = new Address();
+const aCard = new Card();
 
 let total = 0;
 
@@ -56,8 +60,7 @@ async function finishPurchase(req, res) {
     let cards = req.session.cards;
     let addresses = req.session.addresses;
     let totalQuantity = 0;
-    let cardId = 0;
-    let addressId = 0;
+    let saleAddressId;
 
     // generate a code for the sale considering the number of sales in the database with the length of the array + 1 and a bunch of zeros in front
     let sales = await aSale.getAllSales();
@@ -69,9 +72,28 @@ async function finishPurchase(req, res) {
 
     addresses.forEach(address => {
         if (address.preferred) {
-            addressId = address.addressId;
+            saleAddressId = address.addressId;
         }
     });
+
+    
+
+    // save the address on the saleAddresses table
+    let saleAddress = {
+        street: address[0].street,
+        number: address[0].number,
+        neighborhood: address[0].neighborhood,
+        zipCode: address[0].zipCode,
+        city: address[0].city,
+        state: address[0].state,
+        country: address[0].country,
+        complement: address[0].complement,
+        notes: address[0].notes,
+        preferred: address[0].preferred,
+        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+    }
+
     
     let sale = {
         status: 'processing',
@@ -83,7 +105,7 @@ async function finishPurchase(req, res) {
         createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
         updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
         userId: req.session.clientId,
-        addressId: addressId
+        addressId: saleAddressId
     }
     
     await aSale.createSale(sale);

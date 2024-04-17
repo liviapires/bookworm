@@ -126,6 +126,25 @@ CREATE TABLE `bookCategories` (
     CONSTRAINT `FK_2` FOREIGN KEY `FK_2` (`categoryId`) REFERENCES `categories` (`categoryId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
+-- ************************************** `saleAddresses`
+CREATE TABLE `saleAddresses` (
+    `saleAddressId` integer NOT NULL AUTO_INCREMENT,
+    `residenceType` varchar(255) NOT NULL,
+    `street` varchar(255) NOT NULL,
+    `number` varchar(255) NOT NULL,
+    `neighborhood` varchar(255) NOT NULL,
+    `zipCode` varchar(255) NOT NULL,
+    `city` varchar(255) NOT NULL,
+    `state` varchar(255) NOT NULL,
+    `country` varchar(255) NOT NULL,
+    `complement` text NOT NULL,
+    `notes` text NOT NULL,
+    `preferred` tinyint NOT NULL,
+    `createdAt` datetime NOT NULL,
+    `updatedAt` datetime NOT NULL,
+    PRIMARY KEY (`saleAddressId`)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
+
 -- ************************************** `sales`
 CREATE TABLE `sales` (
     `saleId` integer NOT NULL AUTO_INCREMENT,
@@ -138,12 +157,28 @@ CREATE TABLE `sales` (
     `createdAt` datetime NOT NULL,
     `updatedAt` datetime NOT NULL,
     `userId` integer NOT NULL,
-    `addressId` integer NOT NULL,
+    `saleAddressId` integer NOT NULL,
     PRIMARY KEY (`saleId`),
     KEY `FK_1` (`userId`),
     CONSTRAINT `FK_7` FOREIGN KEY `FK_1` (`userId`) REFERENCES `users` (`userId`),
-    KEY `FK_2` (`addressId`),
-    CONSTRAINT `FK_8` FOREIGN KEY `FK_2` (`addressId`) REFERENCES `addresses` (`addressId`)
+    KEY `FK_3` (`saleAddressId`),
+    CONSTRAINT `FK_10` FOREIGN KEY `FK_3` (`saleAddressId`) REFERENCES `saleAddresses` (`saleAddressId`)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
+
+-- ************************************** `saleCards`
+CREATE TABLE `saleCards` (
+    `saleCardId` integer NOT NULL AUTO_INCREMENT,
+    `cardNumber` varchar(255) NOT NULL,
+    `cardName` varchar(255) NOT NULL,
+    `cardFlag` varchar(255) NOT NULL,
+    `securityCode` varchar(255) NOT NULL,
+    `expirationDate` varchar(255) NOT NULL,
+    `createdAt` datetime NOT NULL,
+    `updatedAt` datetime NOT NULL,
+    `saleId` integer NOT NULL,
+    PRIMARY KEY (`saleCardId`),
+    KEY `FK_1` (`saleId`),
+    CONSTRAINT `FK_9` FOREIGN KEY `FK_1` (`saleId`) REFERENCES `sales` (`saleId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
 -- ************************************** `saleBooks`
@@ -196,7 +231,7 @@ CREATE TABLE `saleExchanges` (
     KEY `FK_2` (`exchangeId`),
     CONSTRAINT `FK_14` FOREIGN KEY `FK_2` (`exchangeId`) REFERENCES `exchanges` (`exchangeId`),
     KEY `FK_3` (`exchangeCuponId`),
-    CONSTRAINT `FK_15` FOREIGN KEY `FK_3` (`exchangeCuponId`) REFERENCES `exchangeCupons` (`exchangeCuponId`)
+    CONSTRAINT `FK_16` FOREIGN KEY `FK_3` (`exchangeCuponId`) REFERENCES `exchangeCupons` (`exchangeCuponId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
 

@@ -1,7 +1,7 @@
 const db = require(`../../config/db`);
 
 class sale {
-    constructor(status, code, purchaseDate, paymentMethod, totalQuantity, totalValue, createdAt, updatedAt, userId, addressId) {
+    constructor(status, code, purchaseDate, paymentMethod, totalQuantity, totalValue, createdAt, updatedAt, userId, saleAddressId) {
         this.status = status;
         this.code = code;
         this.purchaseDate = purchaseDate;
@@ -11,12 +11,12 @@ class sale {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.userId = userId;
-        this.addressId = addressId;
+        this.saleAddressId = saleAddressId;
     }
 
     async createSale(sale) {
         const [results, metadata] = await db.query(
-            `INSERT INTO sales (status, code, purchaseDate, paymentMethod, totalQuantity, totalValue, createdAt, updatedAt, userId, addressId)
+            `INSERT INTO sales (status, code, purchaseDate, paymentMethod, totalQuantity, totalValue, createdAt, updatedAt, userId, saleAddressId)
                 VALUES (
                     '${sale.status}',
                     '${sale.code}',
@@ -27,7 +27,7 @@ class sale {
                     '${sale.createdAt}',
                     '${sale.updatedAt}',
                     '${sale.userId}',
-                    '${sale.addressId}'
+                    '${sale.saleAddressId}'
                 );`
         );
 
@@ -63,8 +63,8 @@ class sale {
 
     async getSaleById(saleId) {
         const [results, metadata] = await db.query(
-            `SELECT sales.*, addresses.*, users.name as userName FROM sales 
-                LEFT JOIN addresses ON sales.addressId = addresses.addressId
+            `SELECT sales.*, saleCards.*, saleAddresses.*, users.name as userName FROM sales
+                LEFT JOIN saleAddresses ON sales.saleAddressId = saleAddresses.saleAddressId
                 LEFT JOIN users ON sales.userId = users.userId
                 WHERE sales.saleId = ${saleId};`
         );
@@ -83,7 +83,7 @@ class sale {
     async getSaleByUserId(userId) {
         const [results, metadata] = await db.query(
             `SELECT * FROM sales 
-                LEFT JOIN addresses ON sales.addressId = addresses.addressId
+                LEFT JOIN saleAddresses ON sales.saleAddressId = saleAddresses.saleAddressId
                 WHERE sales.userId = ${userId};`
         );
 
