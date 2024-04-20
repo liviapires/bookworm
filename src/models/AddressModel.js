@@ -109,6 +109,15 @@ class Address {
         return results;
     }
 
+    // get address id by zipcode and number
+    async getAddressIdByZipCodeAndNumber(zipCode, number) {
+        const [results, metadata] = await db.query(
+            `SELECT addressId FROM addresses WHERE zipCode = '${zipCode}' AND number = '${number}';`
+        );
+
+        return results;
+    }
+
 }
 
 module.exports = Address;

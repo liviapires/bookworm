@@ -93,6 +93,15 @@ class Card {
         return results;
     }
 
+    // get card id by cardNumber
+    async getCardIdByCardNumber(cardNumber) {
+        const [results, metadata] = await db.query(
+            `SELECT cardId FROM creditCards WHERE cardNumber = '${cardNumber}';`
+        );
+
+        return results;
+    }
+
 }
 
 module.exports = Card;

@@ -196,8 +196,15 @@ async function createAddress (req, res) {
     // create address
     await anAddress.createAddress(addressData);
 
-    // redirect to the client page
-    res.redirect(`/client/${req.body.userId}`);
+    let addressId = await anAddress.getAddressIdByZipCodeAndNumber(addressData.zipCode, addressData.number);
+
+    // put addressId in the addressData object
+    addressData.addressId = addressId[0].addressId;
+
+    // att the session addresses with the new address
+    req.session.addresses.push(addressData);
+
+    res.redirect(req.get('referer'));
 }
 
 // update a client's address
@@ -314,8 +321,15 @@ async function createCard (req, res) {
     // create card
     await aCard.createCard(cardData);
 
-    // redirect to the client page
-    res.redirect(`/client/${req.body.userId}`);
+    let cardId = await aCard.getCardIdByCardNumber(cardData.cardNumber);
+
+    // put cardId in the cardData object
+    cardData.cardId = cardId[0].cardId;
+
+    // att the session cards with the new card
+    req.session.cards.push(cardData);
+
+    res.redirect(req.get('referer'));
 }
 
 // delete a client's card

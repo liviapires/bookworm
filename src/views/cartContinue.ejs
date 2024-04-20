@@ -29,7 +29,65 @@
                     
                     <hr class="mt-5">
 
-                    <div class="page-title mt-5">Endereço</div>
+                    <div class="d-flex align-items-center justify-content-between mt-5">
+                        <div class="page-title">Endereço</div>
+                        <button class="btn btn-secondary w-30 mt-1" id="showAddAddress">Adicionar endereço</button>
+                    </div>
+                    <div id="addAddressCard" class="cards hidden">
+                        <form action="/addAddress" method="POST">
+                            <input class="w-100 form-control" placeholder="ID" type="text" name="userId" id="userId" value="<%= cliente[0].userId %>" hidden>
+                            <div class="d-flex justify-content-between align-items-center mt-05">
+                                <input class="w-79 form-control" placeholder="Endereço" type="text" name="street" id="street">
+                                <input class="w-20 form-control" placeholder="Número" type="number" name="addressNumber" id="addressNumber">
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-1">
+                                <input class="w-79 form-control" placeholder="Complemento" type="text" name="complement" id="complement">
+                                <select name="residenceType" id="residenceType" class="form-control w-20">
+                                    <option value="Apartamento">Apartamento</option>
+                                    <option value="Casa">Casa</option>
+                                </select>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-1">
+                                <input class="w-50 form-control" placeholder="Cidade" type="text" name="city" id="city">
+                                <input class="w-49 form-control" placeholder="Bairro" type="text" name="neighborhood" id="neighborhood">
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-1">
+                                <input class="w-59 form-control" placeholder="CEP" type="text" name="zipCode" id="zipCode">
+                                <select name="state" id="state" class="form-control w-20">
+                                    <option value="Acre" id="AC">AC</option>
+                                    <option value="Alagoas" id="AL">AL</option>
+                                    <option value="Amapá" id="AP">AP</option>
+                                    <option value="Amazonas" id="AM">AM</option>
+                                    <option value="Bahia" id="BA">BH</option>
+                                    <option value="Ceará" id="CE">CE</option>
+                                    <option value="Distrito Federal" id="DF">DF</option>
+                                    <option value="Espírito Santo" id="ES">ES</option>
+                                    <option value="Goiás" id="GO">GO</option>
+                                    <option value="Maranhão" id="MA">MA</option>
+                                    <option value="Mato Grosso" id="MT">MT</option>
+                                    <option value="Mato Grosso do Sul" id="MS">MS</option>
+                                    <option value="Minas Gerais" id="MG">MG</option>
+                                    <option value="Pará" id="PA">PA</option>
+                                    <option value="Paraíba" id="PB">PB</option>
+                                    <option value="Paraná" id="PR">PR</option>
+                                    <option value="Pernambuco" id="PE">PE</option>
+                                    <option value="Piauí" id="PI">PI</option>
+                                    <option value="Rio de Janeiro" id="RJ">RJ</option>
+                                    <option value="Rio Grande do Norte" id="RN">RN</option>
+                                    <option value="Rio Grande do Sul" id="RS">RS</option>
+                                    <option value="Rondônia" id="RO">RO</option>
+                                    <option value="Roraima" id="RR">RR</option>
+                                    <option value="Santa Catarina" id="SC">SC</option>
+                                    <option value="São Paulo" id="SP">SP</option>
+                                    <option value="Sergipe" id="SE">SE</option>
+                                    <option value="Tocantins" id="TO">TO</option>
+                                </select>
+                                <input class="w-20 form-control" placeholder="Brasil" value="Brasil" type="text" name="country" id="country" disabled>
+                            </div>
+                            <input class="w-100 mt-1 form-control" placeholder="Observações" type="text" name="observation" id="observation">
+                            <button type="submit" class="btn btn-primary w-30 mt-1">Salvar Endereço</button>
+                        </form>
+                    </div>
                     <div class="mt-05">
                         <% enderecos.forEach((endereco) => { %>
                             <div class="cards">
@@ -62,14 +120,29 @@
 
                     <div class="d-flex align-items-center justify-content-between mt-5">
                         <div class="page-title">Pagamento</div>
-                        <!-- <div id="addCard" data-toggle="tooltip" data-placement="left" title="O valor pago em cada cartão não pode ser menor que R$ 10,00. (Se o valor final da sua compra for menor que R$ 20,00, o uso de mais de um cartão será barrado.)">
-                            <div class="d-flex align-items-center">
-                                <img src="https://www.svgrepo.com/show/511031/info.svg" alt="Pesquisar" class="search-icon">
-                                <div class="ml-05">
-                                    Uso de mais de um cartão
-                                </div>
+                        <div id="addCard" data-toggle="tooltip" data-placement="left" title="O valor pago em cada cartão não pode ser menor que R$ 10,00. (Se o valor final da sua compra for menor que R$ 20,00, o uso de mais de um cartão será barrado.)">
+                            <button class="btn btn-secondary w-30 mt-1" id="showAddCard">Adicionar cartão</button>
+                        </div>
+                    </div>
+                    <div id="addCardsCard" class="cards hidden">
+                        <form action="/addCard" method="POST">
+                            <input class="w-100 form-control" placeholder="ID" type="text" name="userId" id="userId" value="<%= cliente[0].userId %>" hidden>
+                            <div class="d-flex justify-content-between align-items-center mt-05">
+                                <input class="w-50 form-control" placeholder="Número do Cartão" type="number" name="cardNumber" id="cardNumber">
+                                <input class="w-49 form-control" placeholder="Validade" type="text" name="expiration" id="expiration">
                             </div>
-                        </div> -->
+                            <input class="w-100 mt-1 form-control" placeholder="Nome Impresso no Cartão" type="text" name="cardName" id="cardName">
+                            <div class="d-flex justify-content-between align-items-center mt-1">
+                                <select name="cardFlag" id="cardFlag" class="form-control w-50">
+                                    <option value="Visa">Visa</option>
+                                    <option value="Mastercard">Mastercard</option>
+                                    <option value="Elo">Elo</option>
+                                    <option value="American Express">American Express</option>
+                                </select>
+                                <input class="w-49 form-control" placeholder="Código de Segurança" type="number" name="securityCode" id="securityCode">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-30 mt-1">Salvar Cartão</button>
+                        </form>
                     </div>
                     <% cartoes.forEach((cartao) => { %>
                         <div class="cards">
@@ -158,6 +231,14 @@
 <%- include('footer.ejs') %>
 
 <script>
+
+    document.getElementById('showAddAddress').addEventListener('click', () => {
+        document.getElementById('addAddressCard').style.display = 'block';
+    });
+
+    document.getElementById('showAddCard').addEventListener('click', () => {
+        document.getElementById('addCardsCard').style.display = 'block';
+    });
 
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
