@@ -1,6 +1,8 @@
 const Book = require('../models/BookModel');
 const Sale = require('../models/SaleModel');
 const SaleBooks = require('../models/SaleBooksModel');
+const SaleAddresses = require('../models/SaleAddressesModel');
+const SaleCards = require('../models/SaleCardsModel');
 const Address = require('../models/AddressModel');
 const Card = require('../models/CardModel');
 
@@ -9,6 +11,8 @@ const moment = require('moment');
 const aBook = new Book();
 const aSale = new Sale();
 const aSaleBooks = new SaleBooks();
+const aSaleAddresses = new SaleAddresses();
+const aSaleCards = new SaleCards();
 const anAddress = new Address();
 const aCard = new Card();
 
@@ -60,7 +64,9 @@ async function finishPurchase(req, res) {
     let cards = req.session.cards;
     let addresses = req.session.addresses;
     let totalQuantity = 0;
-    let saleAddressId;
+    let saleAddressInfo;
+    let cardId;
+    let saleCardInfo;
 
     // generate a code for the sale considering the number of sales in the database with the length of the array + 1 and a bunch of zeros in front
     let sales = await aSale.getAllSales();
@@ -72,29 +78,36 @@ async function finishPurchase(req, res) {
 
     addresses.forEach(address => {
         if (address.preferred) {
-            saleAddressId = address.addressId;
+            saleAddressInfo = address;
         }
     });
 
+    if (saleAddressInfo.preferred == true) {
+        saleAddressInfo.preferred = 1;
+    }
     
-
     // save the address on the saleAddresses table
     let saleAddress = {
-        street: address[0].street,
-        number: address[0].number,
-        neighborhood: address[0].neighborhood,
-        zipCode: address[0].zipCode,
-        city: address[0].city,
-        state: address[0].state,
-        country: address[0].country,
-        complement: address[0].complement,
-        notes: address[0].notes,
-        preferred: address[0].preferred,
+        residenceType: saleAddressInfo.residenceType,
+        street: saleAddressInfo.street,
+        number: saleAddressInfo.number,
+        neighborhood: saleAddressInfo.neighborhood,
+        zipCode: saleAddressInfo.zipCode,
+        city: saleAddressInfo.city,
+        state: saleAddressInfo.state,
+        country: saleAddressInfo.country,
+        complement: saleAddressInfo.complement,
+        notes: saleAddressInfo.notes,
+        preferred: saleAddressInfo.preferred,
         createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
-        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
     }
 
+    await aSaleAddresses.createSaleAddress(saleAddress);
     
+    // get saleAddressId from the saleAddress
+    let theSaleAddress = await aSaleAddresses.getSaleAddressIdByZipCode(saleAddress.zipCode);
+
     let sale = {
         status: 'processing',
         code: code,
@@ -105,7 +118,7 @@ async function finishPurchase(req, res) {
         createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
         updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
         userId: req.session.clientId,
-        addressId: saleAddressId
+        saleAddressId: theSaleAddress[0].saleAddressId
     }
     
     await aSale.createSale(sale);
@@ -114,9 +127,26 @@ async function finishPurchase(req, res) {
 
     cards.forEach(card => {
         if (card.preferred) {
-            cardId = card.cardId;
+            saleCardInfo = card;
         }
     });
+
+    if (saleCardInfo.preferred == true) {
+        saleCardInfo.preferred = 1;
+    }
+
+    let saleCard = {
+        cardNumber: saleCardInfo.cardNumber,
+        cardName: saleCardInfo.cardName,
+        cardFlag: saleCardInfo.cardFlag,
+        securityCode: saleCardInfo.securityCode,
+        expirationDate: saleCardInfo.expirationDate,
+        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        saleId: theSale[0].saleId
+    }
+
+    await aSaleCards.createSaleCard(saleCard);
 
     cart.forEach(async livro => {
         console.log(livro);
@@ -295,6 +325,24 @@ async function togglePreferredCard(req, res) {
     res.redirect(req.get('referer'));
 }
 
+// toggle preferred address
+async function togglePreferredAddress(req, res) {
+    let addressId = req.params.id;
+    let addresses = req.session.addresses || [];
+
+    addresses.forEach(address => {
+        if (address.addressId == addressId) {
+            address.preferred = true;
+        } else {
+            address.preferred = false;
+        }
+    });
+
+    req.session.addresses = addresses;
+
+    res.redirect(req.get('referer'));
+}
+
 module.exports = {
     cartView,
     cartContinueView,
@@ -306,5 +354,6 @@ module.exports = {
     frete,
     plus,
     minus,
-    togglePreferredCard
+    togglePreferredCard,
+    togglePreferredAddress
 }

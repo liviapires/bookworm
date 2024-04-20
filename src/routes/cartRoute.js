@@ -11,6 +11,7 @@ router.get("/emptyCart", cartController.emptyCart);
 router.get("/removeFromCart", cartController.removeFromCart);
 
 router.get("/togglePreferredCard/:id", cartController.togglePreferredCard);
+router.get("/togglePreferredAddress/:id", cartController.togglePreferredAddress);
 
 router.get("/plus/:id", cartController.plus);
 router.get("/minus/:id", cartController.minus);

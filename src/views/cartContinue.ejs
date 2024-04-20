@@ -31,9 +31,30 @@
 
                     <div class="page-title mt-5">Endereço</div>
                     <div class="mt-05">
-                        <% enderecos.forEach((end) => { %>
-                            <%= end.street %>, <%= end.number %> 
-                            <%= end.city %>, <%= end.state %> - <%= end.zipCode %>, <%= end.complement %> 
+                        <% enderecos.forEach((endereco) => { %>
+                            <div class="cards">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <%= endereco.street %>, <%= endereco.number %> 
+                                        <%= endereco.city %>, <%= endereco.state %> - <%= endereco.zipCode %>, <%= endereco.complement %> 
+                                    </div>
+                                
+                                    <div class="al-t-r">
+                                        <% if (endereco.preferred == 1){ %> 
+                                            <div data-toggle="tooltip" data-placement="left" title="Você está utilizando este endereço para recebimento da compra.">
+                                                <div class="d-flex align-items-center">
+                                                    <img src="https://www.svgrepo.com/show/511031/info.svg" alt="Pesquisar" class="search-icon">
+                                                    <div class="ml-05">
+                                                        Usando este endereço
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% } else { %>
+                                            <a href="/togglePreferredAddress/<%= endereco.addressId %>" class="btn btn-secondary" id="useAddress">Usar este endereço</a>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
                         <% }); %>
                     </div>
 

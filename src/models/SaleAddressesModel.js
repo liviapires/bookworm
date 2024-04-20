@@ -1,7 +1,7 @@
 const db = require(`../../config/db`);
 
 class saleAddress {
-    constructor(residenceType, street, number, neighborhood, zipCode, city, state, country, complement, notes, preffered, createdAt, updatedAt) {
+    constructor(residenceType, street, number, neighborhood, zipCode, city, state, country, complement, notes, preferred, createdAt, updatedAt) {
         this.residenceType = residenceType;
         this.street = street;
         this.number = number;
@@ -12,14 +12,14 @@ class saleAddress {
         this.country = country;
         this.complement = complement;
         this.notes = notes;
-        this.preffered = preffered;
+        this.preferred = preferred;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
     async createSaleAddress(saleAddress) {
         const [results, metadata] = await db.query(
-            `INSERT INTO saleAddresses (residenceType, street, number, neighborhood, zipCode, city, state, country, complement, notes, preffered, createdAt, updatedAt)
+            `INSERT INTO saleAddresses (residenceType, street, number, neighborhood, zipCode, city, state, country, complement, notes, preferred, createdAt, updatedAt)
                 VALUES (
                     '${saleAddress.residenceType}',
                     '${saleAddress.street}',
@@ -31,7 +31,7 @@ class saleAddress {
                     '${saleAddress.country}',
                     '${saleAddress.complement}',
                     '${saleAddress.notes}',
-                    '${saleAddress.preffered}',
+                    '${saleAddress.preferred}',
                     '${saleAddress.createdAt}',
                     '${saleAddress.updatedAt}'
                 );`
@@ -50,6 +50,7 @@ class saleAddress {
                 neighborhood = '${saleAddress.neighborhood}',
                 city = '${saleAddress.city}',
                 state = '${saleAddress.state}'
+                preferred = '${saleAddress.preferred}'
             WHERE userId = ${saleAddress.userId};`
         );
 
@@ -71,6 +72,14 @@ class saleAddress {
 
         return results;
     }
+
+    async getSaleAddressIdByZipCode(zipCode) {
+        const [results, metadata] = await db.query(
+            `SELECT saleAddresses.saleAddressId FROM saleAddresses WHERE zipCode = '${zipCode}';`
+        );
+
+        return results;
+    }
 }
 
-module.exports = new saleAddress();
+module.exports = saleAddress;

@@ -430,3 +430,24 @@ FROM
     users
 WHERE 
     userId BETWEEN 1 AND 10;
+
+INSERT INTO `addresses` (`residenceType`, `street`, `number`, `neighborhood`, `zipCode`, `city`, `state`, `country`, `complement`, `notes`, `preferred`, `createdAt`, `updatedAt`, `userId`)
+SELECT 
+    'Casa', 
+    'Rua ', 
+    FLOOR(RAND() * (9999 - 1000 + 1)) + 1000, 
+    'Bairro ', 
+    CONCAT(FLOOR(RAND() * (99999 - 10000 + 1)) + 10000, '-', FLOOR(RAND() * (999 - 100 + 1)) + 100),
+    'Cidade ', 
+    'Estado ', 
+    'País ', 
+    'Complemento ', 
+    'Observação ', 
+    0, 
+    NOW(), 
+    NOW(), 
+    userId
+FROM
+    users
+WHERE
+    userId BETWEEN 1 AND 10;

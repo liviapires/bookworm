@@ -63,4 +63,4 @@ class saleCard {
     }
 }
 
-module.exports = new saleCard();
+module.exports = saleCard;
