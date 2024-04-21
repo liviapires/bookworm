@@ -3,8 +3,6 @@ const Sale = require('../models/SaleModel');
 const SaleBooks = require('../models/SaleBooksModel');
 const SaleAddresses = require('../models/SaleAddressesModel');
 const SaleCards = require('../models/SaleCardsModel');
-const Address = require('../models/AddressModel');
-const Card = require('../models/CardModel');
 
 const moment = require('moment');
 
@@ -13,10 +11,6 @@ const aSale = new Sale();
 const aSaleBooks = new SaleBooks();
 const aSaleAddresses = new SaleAddresses();
 const aSaleCards = new SaleCards();
-const anAddress = new Address();
-const aCard = new Card();
-
-let total = 0;
 
 // Renderiza a view cart
 async function cartView(req, res) {
@@ -29,6 +23,15 @@ async function cartView(req, res) {
 }
 
 async function cartContinueView (req, res) {
+
+    // usa a função updateCardValue para atualizar o valor total de cada cartão
+
+    let cartoes = req.session.cards;
+    let quantidadeCartoes = cartoes.length;
+    let precoFinalComFrete = req.session.precoFinalComFrete;
+
+    updateCardValue(precoFinalComFrete, quantidadeCartoes, cartoes);
+
     res.render('cartContinue', {
         title: 'Carrinho',
         cliente: req.session.clientInfo || {},
@@ -38,7 +41,9 @@ async function cartContinueView (req, res) {
         cart: req.session.cart || [],
         total: req.session.total || 0,
         frete: req.session.frete || 0,
-        precoFinalComFrete: req.session.precoFinalComFrete || 0
+        precoFinalComFrete: req.session.precoFinalComFrete || 0,
+        useCards: req.session.useCards || 0,
+        useCardsInfo: req.session.useCardsInfo || ''
     });
 }
 
@@ -54,7 +59,9 @@ async function cartCheckoutView(req, res) {
         cart: req.session.cart || [],
         total: req.session.total || 0,
         frete: req.session.frete || 0,
-        precoFinalComFrete: req.session.precoFinalComFrete || 0
+        precoFinalComFrete: req.session.precoFinalComFrete || 0,
+        useCards: req.session.useCards || 0,
+        useCardsInfo: req.session.useCardsInfo || ''
     });
 }
 
@@ -341,6 +348,49 @@ async function togglePreferredAddress(req, res) {
     res.redirect(req.get('referer'));
 }
 
+// use cards
+async function useCards(req, res) {
+
+    // recebe o valor total da compra
+    let precoFinalComFrete = req.session.precoFinalComFrete;
+
+    // se o valor total da compra for menor que 20, não é possível usar mais de um cartão
+    if (precoFinalComFrete < 20) {
+        req.session.useCards = 0;
+        req.session.useCardsInfo = '❌ Você não pode usar mais de um cartão para pagar essa compra. O valor total da compra deve ser maior ou igual a R$ 20,00 para usar mais de um cartão.';
+        res.redirect(req.get('referer'));
+    } else {
+        req.session.useCards = 1;
+        req.session.useCardsInfo = '✅ Você pode usar mais de um cartão para pagar essa compra.';
+
+        // usa a função updateCardValue para atualizar o valor total de cada cartão
+
+        let cartoes = req.session.cards;
+        let quantidadeCartoes = cartoes.length;
+
+        updateCardValue(precoFinalComFrete, quantidadeCartoes, cartoes);
+
+        res.redirect(req.get('referer'));
+    }
+}
+
+async function confirmCardsValues (req, res) {
+
+    console.log(req.params);
+
+    // res.redirect(req.get('referer'));
+}
+
+function updateCardValue (precoFinalComFrete, quantidadeCartoes, cartoes) {
+    // divide o valor total da compra pelo número de cartões disponíveis para pagamento
+    let valorPorCartao = parseFloat((precoFinalComFrete / quantidadeCartoes).toFixed(2));
+
+    // atualiza o valor total do cartão para o valor por cartão
+    cartoes.forEach(card => {
+        card.cardTotal = valorPorCartao;
+    });
+}
+
 module.exports = {
     cartView,
     cartContinueView,
@@ -353,5 +403,7 @@ module.exports = {
     plus,
     minus,
     togglePreferredCard,
-    togglePreferredAddress
+    togglePreferredAddress,
+    useCards,
+    confirmCardsValues
 }
