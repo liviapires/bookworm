@@ -17,8 +17,6 @@ async function myAccountView (req, res) {
     const clientPhones = req.session.phones;
     const clientAddresses = req.session.addresses;
     const clientCards = req.session.cards;
-    
-    console.log(req.session);
 
     const clientSales = await aSale.getSaleByUserId(clientId);
 

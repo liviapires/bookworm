@@ -10,5 +10,8 @@ router.get("/evaluateDevolutionContinue", adminController.evaluateDevolutionCont
 
 router.get("/admin", adminController.mainAdminView);
 router.get("/sales", adminController.salesView);
+router.get("/sale/:id", adminController.saleView);
+
+router.post("/updateSaleStatus", adminController.updateSaleStatus);
 
 module.exports = router;

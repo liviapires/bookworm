@@ -34,12 +34,12 @@ class sale {
         return results;
     }
 
-    async updateSale(sale) {
+    async updateSaleStatus(sale) {
         const [results, metadata] = await db.query(
             `UPDATE sales SET 
                 status = '${sale.status}',
-                updatedAt = '${sale.updatedAt}',
-            WHERE code = ${sale.code};`
+                updatedAt = '${sale.updatedAt}'
+            WHERE saleId = ${sale.saleId};`
         );
 
         return results;
@@ -63,7 +63,7 @@ class sale {
 
     async getSaleById(saleId) {
         const [results, metadata] = await db.query(
-            `SELECT sales.*, saleCards.*, saleAddresses.*, users.name as userName FROM sales
+            `SELECT sales.*, saleAddresses.*, users.name as userName FROM sales
                 LEFT JOIN saleAddresses ON sales.saleAddressId = saleAddresses.saleAddressId
                 LEFT JOIN users ON sales.userId = users.userId
                 WHERE sales.saleId = ${saleId};`

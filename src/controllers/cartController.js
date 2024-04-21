@@ -65,7 +65,6 @@ async function finishPurchase(req, res) {
     let addresses = req.session.addresses;
     let totalQuantity = 0;
     let saleAddressInfo;
-    let cardId;
     let saleCardInfo;
 
     // generate a code for the sale considering the number of sales in the database with the length of the array + 1 and a bunch of zeros in front
@@ -109,7 +108,7 @@ async function finishPurchase(req, res) {
     let theSaleAddress = await aSaleAddresses.getSaleAddressIdByZipCode(saleAddress.zipCode);
 
     let sale = {
-        status: 'processing',
+        status: 'Em Processamento',
         code: code,
         purchaseDate: moment().format('YYYY-MM-DD HH:mm:ss'),
         paymentMethod: 'card',
@@ -149,7 +148,6 @@ async function finishPurchase(req, res) {
     await aSaleCards.createSaleCard(saleCard);
 
     cart.forEach(async livro => {
-        console.log(livro);
         let saleBooks = {
             quantity: livro.quantity,
             unitValue: livro.price,

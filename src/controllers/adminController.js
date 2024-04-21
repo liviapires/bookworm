@@ -20,8 +20,18 @@ const pedido = [{
 }];
 
 const Sale = require('../models/SaleModel');
+const SaleBooks = require('../models/SaleBooksModel');
+const Category = require('../models/CategoryModel');
+const Phone = require('../models/PhoneModel');
+const Book = require('../models/BookModel');
+
+const moment = require('moment');
 
 const aSale = new Sale();
+const theSaleBooks = new SaleBooks();
+const aCategory = new Category();
+const aPhone = new Phone();
+const aBook = new Book();
 
 // Renderiza a view evaluateExchange
 const evaluateExchangeView = (req, res) => {
@@ -58,6 +68,50 @@ async function mainAdminView (req, res) {
     });
 }
 
+async function saleView (req, res) {
+
+    const sale = await aSale.getSaleById(req.params.id);
+
+    sale.forEach(sale => {
+        let date = new Date(sale.purchaseDate);
+        let day = date.getDate().toString().padStart(2, '0');
+        let month = (date.getMonth() + 1).toString().padStart(2, '0');
+        let year = date.getFullYear();
+        sale.purchaseDate = `${day}/${month}/${year}`;
+    });
+
+    // get books from sale
+    const books = await theSaleBooks.getSaleBooksBySaleId(req.params.id);
+    // para cada livro da venda, busca o livro no banco e adiciona ao um novo array de livros
+    let livros = [];
+    for (const book of books) {
+        let livro = await aBook.getBookById(book.bookId);
+        let bookCategories = [];
+        const categories = await aCategory.getBookCategories(book.bookId);
+        categories.forEach(category => {
+            category = category.categoryName;
+            bookCategories.push(category);
+        });
+        livro[0].categories = bookCategories;
+        if (!livro[0].bookImage) {
+            livro[0].bookImage = '/img/default-book.png';
+        }
+        livros.push(livro[0]);
+    }
+
+    // procura o telefone do cliente e adiciona ao objeto de venda
+    const phones = await aPhone.getPhoneByUserId(sale[0].userId);
+    sale[0].phones = phones;
+
+    // put books in sale object
+    sale[0].books = livros;
+
+    res.render('sale', {
+        title: 'Venda',
+        sale: sale[0]
+    });
+}
+
 async function salesView (req, res) {
 
     const sales = await aSale.getAllSales();
@@ -70,12 +124,25 @@ async function salesView (req, res) {
         sale.purchaseDate = `${day}/${month}/${year}`;
     });
 
-    console.log(sales);
-
     res.render('sales', {
         title: 'Vendas',
         sales: sales
     });
+}
+
+async function updateSaleStatus (req, res) {
+
+    console.log(req.body);
+
+    let sale = {
+        saleId: req.body.saleId,
+        status: req.body.status,
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+    }
+
+    await aSale.updateSaleStatus(sale);
+
+    res.redirect(req.get('referer'));
 }
 
 module.exports = {
@@ -84,5 +151,7 @@ module.exports = {
     evaluateDevoutionView,
     evaluateDevolutionContinueView,
     mainAdminView,
-    salesView
+    salesView,
+    saleView,
+    updateSaleStatus
 }
