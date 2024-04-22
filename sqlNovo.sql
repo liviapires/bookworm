@@ -165,18 +165,15 @@ CREATE TABLE `sales` (
     CONSTRAINT `FK_10` FOREIGN KEY `FK_3` (`saleAddressId`) REFERENCES `saleAddresses` (`saleAddressId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
--- ************************************** `saleCards`
-CREATE TABLE `saleCards` (
-    `saleCardId` integer NOT NULL AUTO_INCREMENT,
-    `cardNumber` varchar(255) NOT NULL,
-    `cardName` varchar(255) NOT NULL,
-    `cardFlag` varchar(255) NOT NULL,
-    `securityCode` varchar(255) NOT NULL,
-    `expirationDate` varchar(255) NOT NULL,
+-- ************************************** `salePayment`
+CREATE TABLE `salePayment` (
+    `salePaymentId` integer NOT NULL AUTO_INCREMENT,
+    `paymentMethod` varchar(255) NOT NULL,
+    `paymentValue` float NOT NULL,
     `createdAt` datetime NOT NULL,
     `updatedAt` datetime NOT NULL,
     `saleId` integer NOT NULL,
-    PRIMARY KEY (`saleCardId`),
+    PRIMARY KEY (`salePaymentId`),
     KEY `FK_1` (`saleId`),
     CONSTRAINT `FK_9` FOREIGN KEY `FK_1` (`saleId`) REFERENCES `sales` (`saleId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;

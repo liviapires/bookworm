@@ -72,32 +72,49 @@
                             </div>
                         </div> -->
                     </div>
-                    <% cartoes.forEach((cartao) => { %>
-                        <% if (cartao.preferred == 1){ %> 
-                            <div class="cards">
-                                <div class="d-flex justify-content-between align-items-center">
+                    <% if (!useCards) { %>
+                        <% cartoes.forEach((cartao) => { %>
+                            <% if (cartao.preferred == 1){ %> 
+                                <div class="cards">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <div class="ml-1">
-                                            <input type="hidden" id="cardId" value="<%= cartao.cardId %>">
-                                            <div><%= cartao.cardNumber %></div>
-                                            <div><%= cartao.cardName %></div>
-                                            <div>Vence em: <%= cartao.expirationDate %></div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="ml-1">
+                                                <input type="hidden" id="cardId" value="<%= cartao.cardId %>">
+                                                <div><%= cartao.cardNumber %></div>
+                                                <div><%= cartao.cardName %></div>
+                                                <div>Vence em: <%= cartao.expirationDate %></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="al-t-r">
-                                        <div data-toggle="tooltip" data-placement="left" title="Você está utilizando este cartão para pagamento total da conta.">
-                                            <div class="d-flex align-items-center">
-                                                <img src="https://www.svgrepo.com/show/511031/info.svg" alt="Pesquisar" class="search-icon">
-                                                <div class="ml-05">
-                                                    Usando este cartão
-                                                </div>
+                                        <div class="al-t-r">
+                                            <div class="d-flex align-items-center justify-content-right">
+                                                <div class="">Pagando</div>
+                                                <div class="ml-05 bold"> R$ <%= cartao.cardTotal %></div>
+                                                <div class="ml-05">neste cartão.</div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            <% } %>
+                        <%}); %>
+                    <% } else { %>
+                        <% cartoes.forEach((cartao) => { %>
+                            <div class="cards">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="ml-1">
+                                        <input type="hidden" id="cardId" value="<%= cartao.cardId %>">
+                                        <div><%= cartao.cardNumber %></div>
+                                        <div><%= cartao.cardName %></div>
+                                        <div>Vence em: <%= cartao.expirationDate %></div>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-right">
+                                        <div class="">Pagando</div>
+                                        <div class="ml-05 bold"> R$ <%= cartao.cardTotal %></div>
+                                        <div class="ml-05">neste cartão.</div>
+                                    </div>
+                                </div>
                             </div>
-                        <% } %>
-                    <%}); %>
+                        <%}); %>
+                    <% } %>
                 </div>
             </div>
             <!-- RIGHT PART -->

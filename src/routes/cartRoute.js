@@ -13,6 +13,7 @@ router.get("/removeFromCart", cartController.removeFromCart);
 router.get("/togglePreferredCard/:id", cartController.togglePreferredCard);
 router.get("/togglePreferredAddress/:id", cartController.togglePreferredAddress);
 router.get("/useCards", cartController.useCards);
+router.get ("/removeCard/:id", cartController.removeCard);
 
 router.get("/plus/:id", cartController.plus);
 router.get("/minus/:id", cartController.minus);
@@ -20,6 +21,6 @@ router.get("/removeFromCart/:id", cartController.removeFromCart);
 
 router.post("/addToCart", cartController.addToCart);
 router.post("/frete", cartController.frete);
-router.post("/updateCardValue/:cardValue", cartController.confirmCardsValues);
+router.post("/confirmCardValue", cartController.confirmCardValue);
 
 module.exports = router;

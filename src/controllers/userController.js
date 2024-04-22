@@ -5,6 +5,8 @@ const Card = require('../models/CardModel');
 const Sale = require('../models/SaleModel');
 const saleBooks = require('../models/SaleBooksModel');
 
+const { updateCardValue } = require('./cartController');
+
 const bcrypt = require('bcrypt');
 const moment = require('moment');
 
@@ -328,6 +330,16 @@ async function createCard (req, res) {
 
     // att the session cards with the new card
     req.session.cards.push(cardData);
+    
+    if (req.session.useCards) {
+        let cards = req.session.cards;
+        let totalValue = req.session.precoFinalComFrete;
+        let quantidadeCartoes = cards.length;
+
+        updateCardValue(totalValue, quantidadeCartoes, cards);
+    }
+
+    console.log(req.session.cards);
 
     res.redirect(req.get('referer'));
 }

@@ -22,7 +22,7 @@
                         <% telefones.forEach((tel) => { %>
                             <%= tel.ddd %> <%= tel.phoneNumber %>
                             <% if (telefones.length > 1) { %>
-                                <div class="ml-05 mr-05">|</div>
+                                |
                             <% } %>
                         <% }); %>
                     </div>
@@ -157,9 +157,6 @@
                             <div>
                                 ⚠️ O valor pago em cada cartão não pode ser menor que R$ 10,00.
                             </div>
-                            <div class="ml-15">
-                                (Para não usar um cartão, defina seu valor como 0)
-                            </div>
                         </div>
                         <div id="useCardsCard">
                             <% cartoes.forEach((cartao) => { %>
@@ -170,14 +167,25 @@
                                             <div><%= cartao.cardName %></div>
                                             <div>Vence em: <%= cartao.expirationDate %></div>
                                         </div>
-                                        <div class="d-flex align-items-center justify-content-right">
-                                            <div class="">Valor: R$</div>
-                                            <input id="card<%= cartao.cardId %>Value" class="form-control w-50 ml-05" value="<%= cartao.cardTotal %>">
-                                            <button type="button" class="btn btn-secondary w-30 ml-05 update-card-button" 
-                                                    data-card-id="<%= cartao.cardId %>"
-                                                    data-card-value-id="card<%= cartao.cardId %>Value">
-                                                <img src="https://www.svgrepo.com/show/524417/check-square.svg" alt="Check" class="icon">
-                                            </button>
+                                        <div class="d-block justify-content-center align-items-center">
+                                            <form action="/confirmCardValue" method="POST" class="d-flex align-items-center justify-content-right">
+                                                <div class="">Valor: R$</div>
+                                                <input type="hidden" name="cardId" id="cardId" value="<%= cartao.cardId %>">
+                                                <input name="cardValue" id="cardValue" class="form-control w-50 ml-05" value="<%= cartao.cardTotal %>" <% if (cartoes.length == 1) { %> disabled <% } %>>
+                                                <% if (cartoes.length > 1) {%>
+                                                    <button type="submit" class="btn btn-primary w-30 ml-05">
+                                                        <img src="https://www.svgrepo.com/show/524417/check-square.svg" alt="Check" class="icon">
+                                                    </button>
+                                                <% } %>
+                                            </form>
+                                            <% if (cartoes.length > 1) {%>
+                                                <div class="d-flex justify-content-right">
+                                                    <a href="/removeCard/<%= cartao.cardId%>" class="mt-05 btn btn-secondary w-30 ml-05">
+                                                        <img src="https://www.svgrepo.com/show/514098/cross-round.svg" alt="Remover Cartão" class="icon-min">
+                                                        Não usar este cartão
+                                                    </a>
+                                                </div>
+                                            <% } %>
                                         </div>
                                     </div>
                                 </div>
