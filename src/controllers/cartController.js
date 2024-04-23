@@ -3,6 +3,7 @@ const Sale = require('../models/SaleModel');
 const SaleBooks = require('../models/SaleBooksModel');
 const SaleAddresses = require('../models/SaleAddressesModel');
 const SalePayment = require('../models/SalePaymentModel');
+const Cards = require('../models/CardModel');
 
 const moment = require('moment');
 
@@ -11,6 +12,7 @@ const aSale = new Sale();
 const aSaleBooks = new SaleBooks();
 const aSaleAddresses = new SaleAddresses();
 const aSalePayment = new SalePayment();
+const aCard = new Cards();
 
 // Renderiza a view cart
 async function cartView(req, res) {
@@ -34,53 +36,43 @@ async function cartContinueView (req, res) {
         frete: req.session.frete || 0,
         precoFinalComFrete: req.session.precoFinalComFrete || 0,
         useCards: req.session.useCards || 0,
-        useCardsInfo: req.session.useCardsInfo || ''
+        useCardsInfo: req.session.useCardsInfo || '',
+        useCoupon: req.session.useCoupon || 0,
+        coupons: req.session.coupons || [],
+        couponInfo: req.session.couponInfo || '',
+        coupon: req.session.coupon || '',
+        precoComCupom: req.session.precoComCupom || 0,
+        valorExcedente: req.session.valorExcedente || 0
     });
 }
 
 // cartCheckoutView
 
 async function cartCheckoutView(req, res) {
-
-    let useCards = req.session.useCards || 0;
-    let cards = req.session.cards || [];
-
-    if (useCards != 1) {
-        cards.forEach(card => {
-            if (card.preferred) {
-                card.cardTotal = req.session.precoFinalComFrete.toFixed(2);
-            }
-        });
-        // remove os cartões que não são preferidos
-        cards = cards.filter(card => card.preferred == true);
-    }
-
-    console.log(cards);
-
     res.render('cartCheckout', {
         title: 'Carrinho',
         cliente: req.session.clientInfo || {},
         enderecos: req.session.addresses || [],
         telefones: req.session.phones || [],
-        cartoes: cards || [],
+        cartoes: req.session.cards || [],
         cart: req.session.cart || [],
         total: req.session.total || 0,
         frete: req.session.frete || 0,
         precoFinalComFrete: req.session.precoFinalComFrete || 0,
-        useCards: useCards || 0,
-        useCardsInfo: req.session.useCardsInfo || ''
+        useCards: req.session.useCards || 0,
+        useCoupon: req.session.useCoupon || 0,
+        coupon: req.session.coupon || '',
+        precoComCupom: req.session.precoComCupom || 0,
+        valorExcedente: req.session.valorExcedente || 0
     });
 }
 
 // finishPurchase
 async function finishPurchase(req, res) {
     let cart = req.session.cart;
-    let cards = req.session.cards;
-    let cupons = req.session.cupons;
     let addresses = req.session.addresses;
     let totalQuantity = 0;
     let saleAddressInfo;
-    let salePaymentInfo;
 
     // generate a code for the sale considering the number of sales in the database with the length of the array + 1 and a bunch of zeros in front
     let sales = await aSale.getAllSales();
@@ -117,73 +109,125 @@ async function finishPurchase(req, res) {
         updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
     }
 
-    // await aSaleAddresses.createSaleAddress(saleAddress);
+    await aSaleAddresses.createSaleAddress(saleAddress);
     
     // get saleAddressId from the saleAddress
-    // let theSaleAddress = await aSaleAddresses.getSaleAddressIdByZipCode(saleAddress.zipCode);
+    let theSaleAddress = await aSaleAddresses.getSaleAddressIdByZipCode(saleAddress.zipCode);
 
     let sale = {
-        status: 'Em Processamento',
         code: code,
+        status: 'Em Processamento',
         purchaseDate: moment().format('YYYY-MM-DD HH:mm:ss'),
-        paymentMethod: 'card',
         totalQuantity: totalQuantity,
         totalValue: req.session.precoFinalComFrete,
+        shipping: req.session.frete,
+        withoutShipping: req.session.total,
         createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
         updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
         userId: req.session.clientId,
-        // saleAddressId: theSaleAddress[0].saleAddressId
+        saleAddressId: theSaleAddress[0].saleAddressId
     }
-    
-    // await aSale.createSale(sale);
 
-    // let theSale = await aSale.getSaleByCode(code);
+    await aSale.createSale(sale);
 
-    console.log(cards);
+    let cards = req.session.cards;
+    let coupon = req.session.coupon;
+    let useCoupon = req.session.useCoupon;
+    let useCards = req.session.useCards;
+    let precoFinalComFrete = req.session.precoFinalComFrete;
+    let precoComCupom = req.session.precoComCupom;
 
-    // cards.forEach(card => {
-    //     if (card.preferred) {
-    //         salePaymentInfo = card;
-    //     }
-    // });
+    let paymentMethod = [];
 
-    // if (salePaymentInfo.preferred == true) {
-    //     salePaymentInfo.preferred = 1;
-    // }
+    if (useCoupon == 1) {
 
-    // let salePayment = {
-    //     paymentMethod: salePaymentInfo.paymentMethod,
-    //     paymentValue: salePaymentInfo.cardTotal,
-    //     createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
-    //     updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
-    //     saleId: theSale[0].saleId
-    // }
+        coupon.paymentMethod = 'Cupom';
+        paymentMethod.push(coupon);
 
-    // await aSalePayment.createSalePayment(salePayment);
+        if (useCards == 1) {
+            cards.forEach(card => {
+                card.paymentMethod = 'Cartão de Crédito';
+                paymentMethod.push(card);
+            });
+        } else {
+            cards.forEach(card => {
+                if (card.preferred) {
+                    card.paymentMethod = 'Cartão de Crédito';
+                    card.cardTotal = precoComCupom;
+                    paymentMethod.push(card);
+                }
+            });
+        }
+    } else {
+        if (useCards == 1) {
+            cards.forEach(card => {
+                card.paymentMethod = 'Cartão de Crédito';
+                paymentMethod.push(card);
+            });
+        } else {
+            cards.forEach(card => {
+                if (card.preferred) {
+                    card.paymentMethod = 'Cartão de Crédito';
+                    card.cardTotal = precoFinalComFrete;
+                    paymentMethod.push(card);
+                }
+            });
+        }
+    }
 
-    // cart.forEach(async livro => {
-    //     let saleBooks = {
-    //         quantity: livro.quantity,
-    //         unitValue: livro.price,
-    //         createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
-    //         updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
-    //         saleId: theSale[0].saleId,
-    //         bookId: livro.bookId
-    //     }
+    let theSale = await aSale.getSaleByCode(code);
 
-    //     await aSaleBooks.createSaleBooks(saleBooks);
-    // });
+    paymentMethod.forEach(async payment => {
+        if (payment.paymentMethod == 'Cupom') {
+            paymentValue = coupon.couponValue;
+        } else {
+            paymentValue = payment.cardTotal;
+        }
 
-    // // limpar o carrinho
-    // req.session.cart = [];
-    // req.session.total = 0;
-    // req.session.frete = 0;
-    // req.session.precoFinalComFrete = 0;
+        let salePayment = {
+            paymentMethod: payment.paymentMethod,
+            paymentValue: paymentValue,
+            createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+            updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+            saleId: theSale[0].saleId
+        }
 
-    // res.render('finishPurchase', {
-    //     title: 'Compra Realizada',
-    //     code: code
-    // });
+        console.log(salePayment);
+
+        await aSalePayment.createSalePayment(salePayment);
+    });
+
+    cart.forEach(async livro => {
+        let saleBooks = {
+            quantity: livro.quantity,
+            unitValue: livro.price,
+            createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+            updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+            saleId: theSale[0].saleId,
+            bookId: livro.bookId
+        }
+
+        await aSaleBooks.createSaleBooks(saleBooks);
+    });
+
+    // limpar o carrinho
+    req.session.cart = [];
+    req.session.total = 0;
+    req.session.frete = 0;
+    req.session.precoFinalComFrete = 0;
+    req.session.useCoupon = 0;
+    req.session.coupon = '';
+    req.session.couponInfo = '';
+    req.session.precoComCupom = 0;
+    req.session.valorExcedente = 0;
+    req.session.useCards = 0;
+    req.session.useCardsInfo = '';
+    req.session.cards = await aCard.getCardByUserId(req.session.clientId);
+
+    res.render('finishPurchase', {
+        title: 'Compra Realizada',
+        code: code
+    });
 }
 
 // set frete
@@ -359,23 +403,28 @@ async function togglePreferredAddress(req, res) {
 async function useCards(req, res) {
 
     // recebe o valor total da compra
-    let precoFinalComFrete = req.session.precoFinalComFrete;
+    let preco;
 
-    // se o valor total da compra for menor que 20, não é possível usar mais de um cartão
-    if (precoFinalComFrete < 20) {
+    if (req.session.useCoupon == 1) {
+        preco = req.session.precoComCupom;
+    } else {
+        preco = req.session.precoFinalComFrete;
+    }
+
+    let cartoes = req.session.cards || [];
+    let quantidadeCartoes = cartoes.length;
+
+    let precoMinimo = 10 * quantidadeCartoes;
+    
+    if (preco < precoMinimo) {
         req.session.useCards = 0;
-        req.session.useCardsInfo = '❌ Você não pode usar mais de um cartão para pagar essa compra. O valor total da compra deve ser maior ou igual a R$ 20,00 para usar mais de um cartão.';
+        req.session.useCardsInfo = '❌ Você não pode usar mais de um cartão para pagar essa compra.';
         res.redirect(req.get('referer'));
     } else {
         req.session.useCards = 1;
         req.session.useCardsInfo = '✅ Você pode usar mais de um cartão para pagar essa compra.';
 
-        // usa a função updateCardValue para atualizar o valor total de cada cartão
-
-        let cartoes = req.session.cards;
-        let quantidadeCartoes = cartoes.length;
-
-        updateCardValue(precoFinalComFrete, quantidadeCartoes, cartoes);
+        updateCardValue(preco, quantidadeCartoes, cartoes);
 
         res.redirect(req.get('referer'));
     }
@@ -390,9 +439,15 @@ async function removeCard (req, res) {
     // usa a função updateCardValue para atualizar o valor total de cada cartão
 
     let quantidadeCartoes = cards.length;
-    let precoRestante = req.session.precoFinalComFrete;
+    let preco;
 
-    updateCardValue(precoRestante, quantidadeCartoes, cards);
+    if (req.session.useCoupon == 1) {
+        preco = req.session.precoComCupom;
+    } else {
+        preco = req.session.precoFinalComFrete;
+    }
+
+    updateCardValue(preco, quantidadeCartoes, cards);
 
     req.session.cards = cards;
 
@@ -400,6 +455,14 @@ async function removeCard (req, res) {
 }
 
 async function confirmCardValue (req, res) {
+
+    let preco;
+
+    if (req.session.useCoupon == 1) {
+        preco = req.session.precoComCupom;
+    } else {
+        preco = req.session.precoFinalComFrete;
+    }
 
     let cardId = req.body.cardId;
 
@@ -412,10 +475,10 @@ async function confirmCardValue (req, res) {
     if (cardValue < 10) {
         req.session.useCardsInfo = '❌ O valor do cartão deve ser maior ou igual a R$ 10,00.';
         res.redirect(req.get('referer'));
-    } else if (cardValue > req.session.precoFinalComFrete) {
+    } else if (cardValue > preco) {
         req.session.useCardsInfo = '❌ O valor do cartão não pode ser maior que o valor total da compra.';
         res.redirect(req.get('referer'));
-    } else if (cardValue == req.session.precoFinalComFrete) {
+    } else if (cardValue == preco) {
         cartoes.forEach(card => {
             if (card.cardId == cardId) {
                 card.cardTotal = cardValue.toFixed(2);
@@ -425,7 +488,7 @@ async function confirmCardValue (req, res) {
         // atualiza o valor total dos cartões restantes para a divisão do valor total que resta da compra pelo número de cartões restantes
         let cartoesRestantes = cartoes.filter(card => card.cardId != cardId);
         let quantidadeCartoesRestantes = cartoesRestantes.length;
-        let precoRestante = req.session.precoFinalComFrete - cardValue;
+        let precoRestante = preco - cardValue;
 
         updateCardValue(precoRestante, quantidadeCartoesRestantes, cartoesRestantes);
 
@@ -442,7 +505,7 @@ async function confirmCardValue (req, res) {
         // atualiza o valor total dos cartões restantes para a divisão do valor total que resta da compra pelo número de cartões restantes
         let cartoesRestantes = cartoes.filter(card => card.cardId != cardId);
         let quantidadeCartoesRestantes = cartoesRestantes.length;
-        let precoRestante = req.session.precoFinalComFrete - cardValue;
+        let precoRestante = preco - cardValue;
 
         updateCardValue(precoRestante, quantidadeCartoesRestantes, cartoesRestantes);
 
@@ -451,7 +514,7 @@ async function confirmCardValue (req, res) {
             let cards = req.session.cards;
             let quantidadeCartoes = cards.length;
 
-            updateCardValue(req.session.precoFinalComFrete, quantidadeCartoes, cards);
+            updateCardValue(preco, quantidadeCartoes, cards);
 
             req.session.useCardsInfo = '❌ O valor dos cartões restantes deve ser maior ou igual a R$ 10,00.';
             res.redirect(req.get('referer'));
@@ -472,6 +535,90 @@ function updateCardValue(preco, quantidadeCartoes, cartoes) {
     });
 }
 
+async function searchCouponByCode(req, res) {
+    const couponCode = req.body.couponCode;
+    const coupons = req.session.coupons || [];
+
+    let coupon = coupons.find(coupon => coupon.couponCode == couponCode);
+
+    if (coupon) {
+
+        if (coupon.active == 0) {
+            req.session.couponInfo = '❌ O cupom informado está inativo.';
+            res.redirect(req.get('referer'));
+        }
+
+        if (moment().isAfter(coupon.expirationDate)) {
+            req.session.couponInfo = '❌ O cupom informado está expirado.';
+            res.redirect(req.get('referer'));
+        }
+
+        if (coupon.couponValue > req.session.precoFinalComFrete) {
+            req.session.couponInfo = '⚠️ O valor do cupom informado é maior que o valor total da compra. Valor excedente não será reembolsado.';
+
+            coupon.couponValue = parseFloat((coupon.couponValue)).toFixed(2);
+
+            let precoFinalComFrete = req.session.precoFinalComFrete;
+            let valorExcedente = coupon.couponValue - precoFinalComFrete;
+            let precoComCupom = 0;
+
+            req.session.valorExcedente = parseFloat((valorExcedente)).toFixed(2);
+            req.session.precoComCupom = parseFloat((precoComCupom)).toFixed(2);
+
+            if (req.session.useCards == 1) {
+                req.session.useCards = 0;
+            }
+
+            req.session.coupon = coupon;
+            req.session.useCoupon = 1;
+
+            res.redirect(req.get('referer'));
+        } else {
+            let precoFinalComFrete = req.session.precoFinalComFrete;
+            let precoComCupom = precoFinalComFrete - coupon.couponValue;
+
+            req.session.precoComCupom = parseFloat((precoComCupom)).toFixed(2);
+            req.session.couponInfo = '✅ Cupom aplicado com sucesso.';
+
+            coupon.couponValue = parseFloat((coupon.couponValue)).toFixed(2);
+
+            if (req.session.useCards == 1) {
+                let cartoes = req.session.cards;
+                let quantidadeCartoes = cartoes.length;
+
+                updateCardValue(precoComCupom, quantidadeCartoes, cartoes);
+            }
+
+            req.session.coupon = coupon;
+            req.session.useCoupon = 1;
+            req.session.valorExcedente = 0;
+
+            res.redirect(req.get('referer'));
+        }
+    } else {
+        req.session.couponInfo = '❌ O cupom informado não foi encontrado.';
+        res.redirect(req.get('referer'));
+    }
+}
+
+async function removeCoupon(req, res) {
+    req.session.useCoupon = 0;
+    req.session.coupon = '';
+    req.session.couponInfo = '❌ Cupom removido com sucesso.';
+    req.session.precoComCupom = 0;
+
+    if(req.session.useCards == 1) {
+        // atualiza o valor total dos cartões restantes para a divisão do valor total que resta da compra pelo número de cartões restantes
+        let cartoes = req.session.cards;
+        let quantidadeCartoes = cartoes.length;
+        let preco = req.session.precoFinalComFrete;
+
+        updateCardValue(preco, quantidadeCartoes, cartoes);
+    }
+
+    res.redirect(req.get('referer'));
+}
+
 module.exports = {
     cartView,
     cartContinueView,
@@ -488,5 +635,7 @@ module.exports = {
     useCards,
     removeCard,
     confirmCardValue,
-    updateCardValue
+    updateCardValue,
+    searchCouponByCode,
+    removeCoupon
 }

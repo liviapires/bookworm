@@ -22,6 +22,7 @@
             </div>
         </div>
     </div>
+    <% console.log(pedido); %>
 
     <div class="d-flex">
         <div class="mr-1 big-card">
@@ -46,9 +47,23 @@
                     <div class="mt-05">
                         Data: <%= pedido.purchaseDate %>
                     </div>
-                    <div class="mt-05">
-                        Forma de Pagamento: <%= pedido.paymentMethod %>                        
-                    </div>
+                    <% if(pedido.payments.length > 1) { %>
+                        <div class="mt-05">
+                            Formas de Pagamento: 
+                            <div class="ml-1">
+                                <% pedido.payments.forEach(pagamento => { %>
+                                    <div>
+                                        <%= pagamento.paymentMethod %>
+                                        R$ <%= pagamento.paymentValue %>
+                                    </div>
+                                <% }) %>   
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <div class="mt-05">
+                            Forma de Pagamento: <%= pedido.paymentMethod %>                        
+                        </div>
+                    <% } %>
                 </div>                
             </div>
         </div>

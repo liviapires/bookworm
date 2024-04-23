@@ -6,6 +6,7 @@
     --light-veronica: #cb4fed;
     --veronica: #AF32D1;
     --white: #fff;
+    --red: #eb1717d7;
     --gray: #EDF1EA;
     --dark-gray: #b3b6b1;
     --eerie-black: #16201F;
@@ -15,6 +16,10 @@
 
 .veronica {
     color: var(--veronica);
+}
+
+.red {
+    color: var(--red);
 }
 
 .body {
@@ -881,6 +886,17 @@ a:hover {
 .input-checkbox {
     width: 1rem;
     height: 1rem;
+}
+
+.coupon {
+    height: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--white);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    box-shadow: 2px 6px 8px 0 var(--shadow);
 }
 
 @media (min-width: 768px) {

@@ -1,13 +1,14 @@
 const db = require(`../../config/db`);
 
 class sale {
-    constructor(status, code, purchaseDate, paymentMethod, totalQuantity, totalValue, createdAt, updatedAt, userId, saleAddressId) {
-        this.status = status;
+    constructor(code, status, purchaseDate, totalQuantity, totalValue, shipping, withoutShipping, createdAt, updatedAt, userId, saleAddressId) {
         this.code = code;
+        this.status = status;
         this.purchaseDate = purchaseDate;
-        this.paymentMethod = paymentMethod;
         this.totalQuantity = totalQuantity;
         this.totalValue = totalValue;
+        this.shipping = shipping;
+        this.withoutShipping = withoutShipping;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.userId = userId;
@@ -16,18 +17,19 @@ class sale {
 
     async createSale(sale) {
         const [results, metadata] = await db.query(
-            `INSERT INTO sales (status, code, purchaseDate, paymentMethod, totalQuantity, totalValue, createdAt, updatedAt, userId, saleAddressId)
+            `INSERT INTO sales (code, status, purchaseDate, totalQuantity, totalValue, shipping, withoutShipping, createdAt, updatedAt, userId, saleAddressId)
                 VALUES (
-                    '${sale.status}',
-                    '${sale.code}',
-                    '${sale.purchaseDate}',
-                    '${sale.paymentMethod}',
-                    '${sale.totalQuantity}',
-                    '${sale.totalValue}',
-                    '${sale.createdAt}',
-                    '${sale.updatedAt}',
-                    '${sale.userId}',
-                    '${sale.saleAddressId}'
+                    "${sale.code}",
+                    "${sale.status}",
+                    "${sale.purchaseDate}",
+                    "${sale.totalQuantity}",
+                    "${sale.totalValue}",
+                    "${sale.shipping}",
+                    "${sale.withoutShipping}",
+                    "${sale.createdAt}",
+                    "${sale.updatedAt}",
+                    "${sale.userId}",
+                    "${sale.saleAddressId}"
                 );`
         );
 

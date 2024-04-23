@@ -151,9 +151,10 @@ CREATE TABLE `sales` (
     `code` varchar(255) NOT NULL,
     `status` varchar(255) NOT NULL,
     `purchaseDate` datetime NOT NULL,
-    `paymentMethod` varchar(255) NOT NULL,
     `totalQuantity` integer NOT NULL,
     `totalValue` float NOT NULL,
+    `shipping` float NOT NULL,
+    `withoutShipping` float NOT NULL,
     `createdAt` datetime NOT NULL,
     `updatedAt` datetime NOT NULL,
     `userId` integer NOT NULL,
@@ -205,14 +206,18 @@ CREATE TABLE `exchanges` (
     PRIMARY KEY (`exchangeId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
--- ************************************** `exchangeCupons`
-CREATE TABLE `exchangeCupons` (
-    `exchangeCuponId` integer NOT NULL AUTO_INCREMENT,
-    `value` float NOT NULL,
+-- ************************************** `coupons`
+CREATE TABLE `coupons` (
+    `couponId` integer NOT NULL AUTO_INCREMENT,
+    `couponCode` varchar(255) NOT NULL,
+    `couponValue` float NOT NULL,
+    `couponType` varchar(255) NOT NULL,
     `generationDate` datetime NOT NULL,
+    `expirationDate` datetime NOT NULL,
+    `active` tinyint NOT NULL,
     `createdAt` datetime NOT NULL,
     `updatedAt` datetime NOT NULL,
-    PRIMARY KEY (`exchangeCuponId`)
+    PRIMARY KEY (`couponId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
 -- ************************************** `saleExchanges`
@@ -220,19 +225,20 @@ CREATE TABLE `saleExchanges` (
     `saleExchangesId` integer NOT NULL AUTO_INCREMENT,
     `quantityToExchange` integer NOT NULL,
     `exchangeId` integer NOT NULL,
-    `exchangeCuponId` integer NOT NULL,
+    `couponId` integer NOT NULL,
     `saleId` integer NOT NULL,
     PRIMARY KEY (`saleExchangesId`),
     KEY `FK_1` (`saleId`),
     CONSTRAINT `FK_13` FOREIGN KEY `FK_1` (`saleId`) REFERENCES `sales` (`saleId`),
     KEY `FK_2` (`exchangeId`),
     CONSTRAINT `FK_14` FOREIGN KEY `FK_2` (`exchangeId`) REFERENCES `exchanges` (`exchangeId`),
-    KEY `FK_3` (`exchangeCuponId`),
-    CONSTRAINT `FK_16` FOREIGN KEY `FK_3` (`exchangeCuponId`) REFERENCES `exchangeCupons` (`exchangeCuponId`)
+    KEY `FK_3` (`couponId`),
+    CONSTRAINT `FK_16` FOREIGN KEY `FK_3` (`couponId`) REFERENCES `coupons` (`couponId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
 
 -------------------------------------------------------------------------------------------------------------------------
+
 
 
 -- Inserção de 10 registros na tabela `pricingGroups`
@@ -448,3 +454,17 @@ FROM
     users
 WHERE
     userId BETWEEN 1 AND 10;
+    
+-- Gere 10 cupons diferentes com códigos aleatórios
+INSERT INTO `coupons` (`couponCode`, `couponValue`, `couponType`, `generationDate`, `expirationDate`, `active`, `createdAt`, `updatedAt`)
+VALUES
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 10.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 15.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 20.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 25.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 30.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 35.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 40.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 45.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 50.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 55.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW());

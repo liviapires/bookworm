@@ -132,8 +132,6 @@ async function salesView (req, res) {
 
 async function updateSaleStatus (req, res) {
 
-    console.log(req.body);
-
     let sale = {
         saleId: req.body.saleId,
         status: req.body.status,

@@ -92,8 +92,23 @@ async function createClient (req, res) {
         userId: clientId
     }
 
-    let preferred = 1;
+    // verifica se o cliente já tem um cartão preferido
+    let preferred = 0;
+    
+    let cards = await aCard.getCardByUserId(clientId);
 
+    if (cards.length == 0) {
+        preferred = 1;
+    } else {
+        cards.forEach(card => {
+            if (card.preferred == 1) {
+                preferred = 0;
+            } else {
+                preferred = 1;
+            }
+        });
+    }
+    
     let creditCard = {
         cardNumber: req.body.cardNumber,
         cardName: req.body.cardName,
@@ -333,13 +348,18 @@ async function createCard (req, res) {
     
     if (req.session.useCards) {
         let cards = req.session.cards;
-        let totalValue = req.session.precoFinalComFrete;
+        let totalValue;
+
+        if (req.session.useCoupon == 1) {
+            totalValue = req.session.precoComCupom;
+        } else {
+            totalValue = req.session.precoFinalComFrete;
+        }
+
         let quantidadeCartoes = cards.length;
 
         updateCardValue(totalValue, quantidadeCartoes, cards);
     }
-
-    console.log(req.session.cards);
 
     res.redirect(req.get('referer'));
 }

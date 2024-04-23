@@ -243,16 +243,34 @@
                 <% }); %>
                 <div class="bg-gray mt-4">
                     <div class="slight-bold">Cupom</div>
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Pesquisar..." aria-label="Pesquisar..."
+                    <form action="/searchCoupon" method="POST" class="input-group">
+                        <input type="text" name="couponCode" id="couponCode" class="form-control" placeholder="Pesquisar..." aria-label="Pesquisar..."
                             aria-describedby="basic-addon1">
                         <div class="input-group-prepend">
-                            <button class="btn btn-outline-secondary" type="button">
+                            <button class="btn btn-outline-secondary" type="submit">
                                 <img src="https://www.svgrepo.com/show/532555/search.svg" alt="Pesquisar"
                                     class="search-icon">
                             </button>
                         </div>
+                    </form>
+                    <div class="mt-1">
+                        <%= couponInfo %>
                     </div>
+                    <% if (useCoupon) { %>
+                        <% if (valorExcedente > 0) { %>
+                            <div class="mt-1 d-flex justify-content-center align-items-center bold">
+                                <div>Valor excedente</div>
+                                <div class="ml-05 red">R$ <%= valorExcedente %></div>
+                            </div>
+                        <% } %>
+                        <div class="coupon mt-1">
+                            <a href="/removeCoupon">
+                                <img src="https://www.svgrepo.com/show/514098/cross-round.svg" alt="Remover Cupom" class="icon-min" data-toggle="tooltip" data-placement="left" title="Não usar este cupom.">
+                            </a>
+                            <div>Cupom: <%= coupon.couponCode %></div>
+                            <div>Valor: R$ <%= coupon.couponValue %></div>
+                        </div>
+                    <% } %>
                 </div>
                 <div class="mt-3 slight-bold">Total Carrinho</div>
                 <div class="bg-gray mt-3">
@@ -271,6 +289,18 @@
                         <div class="ml-auto">R$ <%= precoFinalComFrete %></div>
                     </div>
                     <hr>
+                    <% if(useCoupon){ %>
+                        <div class="d-flex">
+                            <div class="slight-bold">Cupom</div>
+                            <div class="ml-auto">R$ <%= coupon.couponValue %></div>
+                        </div>
+                        <hr>
+                        <div class="d-flex">
+                            <div class="slight-bold">Total com Cupom</div>
+                            <div class="ml-auto">R$ <%= precoComCupom %></div>
+                        </div>
+                        <hr>
+                    <% } %>
                     <a href="/cartCheckout" class="btn btn-primary w-100 mt-1">Verificar Compra</a>
                 </div>
             </div>
@@ -280,26 +310,6 @@
 <%- include('footer.ejs') %>
 
 <script>
-
-    document.querySelectorAll('.update-card-button').forEach(button => {
-        button.addEventListener('click', function() {
-            
-            console.log('Entrou no evento');
-
-            // // Obter o cardId do atributo de dados do botão
-            // const cardId = this.getAttribute('data-card-id');
-            
-            // // Obter o ID do input do valor do cartão usando o cardId
-            // const cardValueId = this.getAttribute('data-card-value-id');
-            // const cardValue = document.getElementById(cardValueId).value;
-            
-            // // Construir a URL com o valor do input e o cardId
-            // const url = `/updateCardValue?cardId=${cardId}&cardValue=${cardValue}`;
-
-            // // Redirecionar para a URL construída
-            // window.location.href = url;
-        });
-    });
 
     document.getElementById('showAddAddress').addEventListener('click', () => {
         document.getElementById('addAddressCard').style.display = 'block';

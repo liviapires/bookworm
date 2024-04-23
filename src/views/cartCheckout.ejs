@@ -61,31 +61,56 @@
 
                     <hr class="mt-5">
 
-                    <div class="d-flex align-items-center justify-content-between mt-5">
-                        <div class="page-title">Pagamento</div>
-                        <!-- <div id="addCard" data-toggle="tooltip" data-placement="left" title="O valor pago em cada cartão não pode ser menor que R$ 10,00. (Se o valor final da sua compra for menor que R$ 20,00, o uso de mais de um cartão será barrado.)">
-                            <div class="d-flex align-items-center">
-                                <img src="https://www.svgrepo.com/show/511031/info.svg" alt="Pesquisar" class="search-icon">
+                    <div class="page-title">Pagamento</div>
+                    <% if(useCoupon) { %>
+                        <div class="cards mt-1">
+                            <div class="d-flex justify-content-between align-items-center">
                                 <div class="ml-05">
-                                    Uso de mais de um cartão
+                                    <div>Cupom: <%= coupon.couponCode %></div>
+                                </div>
+                                <div>
+                                    <div>Valor: R$ <%= coupon.couponValue %></div>
+                                    <% if (valorExcedente > 0) { %>
+                                        <div class=" d-flex justify-content-center align-items-center bold">
+                                            <div>Valor excedente</div>
+                                            <div class="ml-05 red">R$ <%= valorExcedente %></div>
+                                        </div>
+                                    <% } %>
                                 </div>
                             </div>
-                        </div> -->
-                    </div>
-                    <% if (!useCards) { %>
-                        <% cartoes.forEach((cartao) => { %>
-                            <% if (cartao.preferred == 1){ %> 
-                                <div class="cards">
-                                    <div class="d-flex justify-content-between align-items-center">
+                        </div>
+                        <% if (precoComCupom != 0) { %>
+                            <% if (!useCards) { %>
+                                <% cartoes.forEach((cartao) => { %>
+                                    <% if (cartao.preferred == 1){ %> 
+                                        <div class="cards">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="ml-05">
+                                                    <div><%= cartao.cardNumber %></div>
+                                                    <div><%= cartao.cardName %></div>
+                                                    <div>Vence em: <%= cartao.expirationDate %></div>
+                                                </div>
+                                                <div>
+                                                    <div class="d-flex align-items-center justify-content-right">
+                                                        <div class="">Pagando</div>
+                                                        <div class="ml-05 bold"> R$ <%= precoComCupom %></div>
+                                                        <div class="ml-05">neste cartão.</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <% } %>
+                                <%}); %>
+                            <% } else { %>
+                                <% cartoes.forEach((cartao) => { %>
+                                    <div class="cards">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <div class="ml-1">
+                                            <div class="ml-05">
                                                 <input type="hidden" id="cardId" value="<%= cartao.cardId %>">
                                                 <div><%= cartao.cardNumber %></div>
                                                 <div><%= cartao.cardName %></div>
                                                 <div>Vence em: <%= cartao.expirationDate %></div>
                                             </div>
-                                        </div>
-                                        <div class="al-t-r">
                                             <div class="d-flex align-items-center justify-content-right">
                                                 <div class="">Pagando</div>
                                                 <div class="ml-05 bold"> R$ <%= cartao.cardTotal %></div>
@@ -93,27 +118,49 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                <%}); %>
                             <% } %>
-                        <%}); %>
+                        <% } %>
                     <% } else { %>
-                        <% cartoes.forEach((cartao) => { %>
-                            <div class="cards">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="ml-1">
-                                        <input type="hidden" id="cardId" value="<%= cartao.cardId %>">
-                                        <div><%= cartao.cardNumber %></div>
-                                        <div><%= cartao.cardName %></div>
-                                        <div>Vence em: <%= cartao.expirationDate %></div>
+                        <% if (!useCards) { %>
+                            <% cartoes.forEach((cartao) => { %>
+                                <% if (cartao.preferred == 1){ %> 
+                                    <div class="cards">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="ml-05">
+                                                <div><%= cartao.cardNumber %></div>
+                                                <div><%= cartao.cardName %></div>
+                                                <div>Vence em: <%= cartao.expirationDate %></div>
+                                            </div>
+                                            <div>
+                                                <div class="d-flex align-items-center justify-content-right">
+                                                    <div class="">Pagando</div>
+                                                    <div class="ml-05 bold"> R$ <%= precoFinalComFrete %></div>
+                                                    <div class="ml-05">neste cartão.</div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="d-flex align-items-center justify-content-right">
-                                        <div class="">Pagando</div>
-                                        <div class="ml-05 bold"> R$ <%= cartao.cardTotal %></div>
-                                        <div class="ml-05">neste cartão.</div>
+                                <% } %>
+                            <%}); %>
+                        <% } else { %>
+                            <% cartoes.forEach((cartao) => { %>
+                                <div class="cards">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="ml-05">
+                                            <div><%= cartao.cardNumber %></div>
+                                            <div><%= cartao.cardName %></div>
+                                            <div>Vence em: <%= cartao.expirationDate %></div>
+                                        </div>
+                                        <div class="d-flex align-items-center justify-content-right">
+                                            <div class="">Pagando</div>
+                                            <div class="ml-05 bold"> R$ <%= cartao.cardTotal %></div>
+                                            <div class="ml-05">neste cartão.</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        <%}); %>
+                            <%}); %>
+                        <% } %>
                     <% } %>
                 </div>
             </div>
@@ -152,6 +199,18 @@
                         <div class="ml-auto">R$ <%= precoFinalComFrete %></div>
                     </div>
                     <hr>
+                    <% if(useCoupon){ %>
+                        <div class="d-flex">
+                            <div class="slight-bold">Cupom</div>
+                            <div class="ml-auto">R$ <%= coupon.couponValue %></div>
+                        </div>
+                        <hr>
+                        <div class="d-flex">
+                            <div class="slight-bold">Total com Cupom</div>
+                            <div class="ml-auto">R$ <%= precoComCupom %></div>
+                        </div>
+                        <hr>
+                    <% } %>
                     <a href="/finishPurchase" class="btn btn-primary w-100 mt-1">Finalizar Compra</a>
                 </div>
             </div>

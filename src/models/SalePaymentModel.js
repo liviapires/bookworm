@@ -9,15 +9,15 @@ class salePayment {
         this.saleId = saleId;
     }
 
-    async createSalePayment(saleCard) {
+    async createSalePayment(paymentMethod) {
         const [results, metadata] = await db.query(
             `INSERT INTO salePayment (paymentMethod, paymentValue, createdAt, updatedAt, saleId)
                 VALUES (
-                    "${this.paymentMethod}",
-                    "${this.paymentValue}",
-                    "${this.createdAt}",
-                    "${this.updatedAt}",
-                    "${this.saleId}"
+                    '${paymentMethod.paymentMethod}',
+                    '${paymentMethod.paymentValue}',
+                    '${paymentMethod.createdAt}',
+                    '${paymentMethod.updatedAt}',
+                    '${paymentMethod.saleId}'
                 );`
         );
 

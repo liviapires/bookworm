@@ -3,12 +3,14 @@ const Sales = require('../models/SaleModel');
 const SalesBooks = require('../models/SaleBooksModel');
 const Categories = require('../models/CategoryModel');
 const Phones = require('../models/PhoneModel');
+const SalePayments = require('../models/SalePaymentModel');
 
 const aBook = new Books();
 const aSale = new Sales();
 const theSaleBooks = new SalesBooks();
 const aCategory = new Categories();
 const aPhone = new Phones();
+const aSalePayment = new SalePayments();
 
 async function orderView (req, res) {
 
@@ -24,6 +26,10 @@ async function orderView (req, res) {
 
     // get books from sale
     const books = await theSaleBooks.getSaleBooksBySaleId(req.params.id);
+
+    // get payment methods from sale
+    const payments = await aSalePayment.getSalePaymentBySaleId(req.params.id);
+
     // para cada livro da venda, busca o livro no banco e adiciona ao um novo array de livros
     let livros = [];
     for (const book of books) {
@@ -47,6 +53,9 @@ async function orderView (req, res) {
 
     // put books in sale object
     sale[0].books = livros;
+
+    // put payment methods in sale object
+    sale[0].payments = payments;
 
     res.render('order', {
         title: 'Meus Pedidos',
