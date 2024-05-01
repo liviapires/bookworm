@@ -6,4 +6,6 @@ const ordersController = require("../controllers/ordersController");
 router.get("/order/:id", ordersController.orderView);
 router.get("/doOrder/:id", ordersController.doOrderView);
 
+router.get("/toggleAction/:action/:pedido", ordersController.toggleAction);
+
 module.exports = router;

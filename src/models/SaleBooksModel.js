@@ -44,7 +44,7 @@ class saleBooks {
 
     async getSaleBooksBySaleId(saleId) {
         const [results, metadata] = await db.query(
-            `SELECT bookId FROM saleBooks WHERE saleId = ${saleId};`
+            `SELECT bookId, quantity FROM saleBooks WHERE saleId = ${saleId};`
         );
 
         return results;

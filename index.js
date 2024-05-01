@@ -8,7 +8,7 @@ app.use(session({
     secret: '2C44-4D44-WppQ38S',
     resave: true,
     saveUninitialized: true,
-    cookie: { maxAge: 600000 }
+    cookie: { maxAge: 6000000 }
 }));
 
 // The following line tells Express that we are using views as our view directory.

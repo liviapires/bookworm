@@ -198,7 +198,7 @@ CREATE TABLE `saleBooks` (
 -- ************************************** `exchanges`
 CREATE TABLE `exchanges` (
     `exchangeId` integer NOT NULL AUTO_INCREMENT,
-    `status` enum('(in exchange, exchange authorized, exchanged') NOT NULL,
+    `status` varchar(255) NOT NULL,
     `requestDate` datetime NOT NULL,
     `reason` text NOT NULL,
     `createdAt` datetime NOT NULL,
@@ -227,6 +227,8 @@ CREATE TABLE `saleExchanges` (
     `exchangeId` integer NOT NULL,
     `couponId` integer NOT NULL,
     `saleId` integer NOT NULL,
+    `createdAt` datetime NOT NULL,
+    `updatedAt` datetime NOT NULL,
     PRIMARY KEY (`saleExchangesId`),
     KEY `FK_1` (`saleId`),
     CONSTRAINT `FK_13` FOREIGN KEY `FK_1` (`saleId`) REFERENCES `sales` (`saleId`),
@@ -235,6 +237,7 @@ CREATE TABLE `saleExchanges` (
     KEY `FK_3` (`couponId`),
     CONSTRAINT `FK_16` FOREIGN KEY `FK_3` (`couponId`) REFERENCES `coupons` (`couponId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
+
 
 
 -------------------------------------------------------------------------------------------------------------------------

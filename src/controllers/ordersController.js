@@ -77,6 +77,7 @@ async function doOrderView (req, res) {
 
     // get books from sale
     const books = await theSaleBooks.getSaleBooksBySaleId(req.params.id);
+
     // para cada livro da venda, busca o livro no banco e adiciona ao um novo array de livros
     let livros = [];
     for (const book of books) {
@@ -91,6 +92,8 @@ async function doOrderView (req, res) {
         if (!livro[0].bookImage) {
             livro[0].bookImage = '/img/default-book.png';
         }
+        livro[0].quantity = book.quantity;
+        
         livros.push(livro[0]);
     }
 
@@ -101,13 +104,29 @@ async function doOrderView (req, res) {
     // put books in sale object
     sale[0].books = livros;
 
+    sale[0].action = 'troca';
+
     res.render('doOrder', {
         title: 'Solicitação de Troca/Devolução',
         pedido: sale[0]
     });
 }
 
+async function toggleAction (req, res) {
+    let action = req.params.action;
+
+    if (action == 'troca') {
+        action = 'devolucao';
+    } else {
+        action = 'troca';
+    }
+
+
+
+}
+
 module.exports = {
     orderView,
-    doOrderView
+    doOrderView,
+    toggleAction
 }

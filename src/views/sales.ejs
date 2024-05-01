@@ -9,7 +9,6 @@
                 <th class="veronica">Código</th>
                 <th class="veronica">Situação</th>
                 <th class="veronica">Data de Compra</th>
-                <th class="veronica">Valor Total</th>
                 <th class="veronica">Ver mais</th>
             </tr>
         </thead>
@@ -34,9 +33,6 @@
                         <%= sale.purchaseDate %>
                     </td>
                     <td>
-                        R$ <%= sale.totalValue %>
-                    </td>
-                    <td>
                         <a href="/sale/<%= sale.saleId %>">
                             <img src="https://www.svgrepo.com/show/522719/zoom-plus.svg" alt="Ver mais" class="icon">
                         </a>
@@ -46,8 +42,6 @@
 
         </tbody>
     </table>
-    
-    <a href="/signin" class="btn btn-primary">Novo Cliente</a>
 
 </div>
 

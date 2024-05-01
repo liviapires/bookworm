@@ -52,10 +52,12 @@
                             Formas de Pagamento: 
                             <div class="ml-1">
                                 <% pedido.payments.forEach(pagamento => { %>
-                                    <div>
-                                        <%= pagamento.paymentMethod %>
-                                        R$ <%= pagamento.paymentValue %>
-                                    </div>
+                                    <% if (pagamento.paymentValue > 0) { %>
+                                        <li>
+                                            <%= pagamento.paymentMethod %>
+                                            R$ <%= pagamento.paymentValue %>
+                                        </li>
+                                    <% } %>
                                 <% }) %>   
                             </div>
                         </div>
@@ -105,10 +107,18 @@
                 </div>
             <% }); %>
             <div class="flex-end mt-05">
-                <img src="https://www.svgrepo.com/show/491278/money-dollars.svg" class="icon op-75">
                 <div class="d-block ml-05">
-                    <div>
-                        Total: <%= pedido.totalValue %>
+                    <div class="d-flex">
+                        <img src="https://www.svgrepo.com/show/491052/money.svg" class="icon op-75">
+                        <div class="ml-05">Subtotal: R$ <%= pedido.withoutShipping %></div>
+                    </div>
+                    <div class="d-flex mt-05">
+                        <img src="https://www.svgrepo.com/show/445701/delivery-fast.svg" class="icon op-75">
+                        <div class="ml-05">Frete: R$ <%= pedido.shipping %></div>
+                    </div>
+                    <div class="d-flex mt-05">
+                        <img src="https://www.svgrepo.com/show/491278/money-dollars.svg" class="icon op-75">
+                        <div class="ml-05">Total: R$ <%= pedido.totalValue %></div>
                     </div>
                 </div>
             </div>
