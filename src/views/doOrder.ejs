@@ -23,92 +23,14 @@
                     <div class="ml-4 d-flex justify-content-center align-items-center flex-column">
                         <div class="title-green">O que você gostaria de fazer com esse pedido?</div>
                         <div class="d-flex">
-                            <a href="/toggleAction/troca/<%= pedido %>" class="btn btn-secondary white">Trocar Produtos</a>
-                            <a href="/toggleAction/devolucao/<%= pedido %>" class="btn btn-secondary ml-1 white">Devolver Produtos</a>
+                            <a href="/exchange/<%= pedido.saleId %>" class="btn btn-secondary white">Trocar Produtos</a>
+                            <a href="/return/<%= pedido.saleId %>" class="btn btn-secondary ml-1 white">Devolver Produtos</a>
                         </div>
                         <a href="#" class="mt-4">Verifique nossa política de troca e devolução.</a>
                     </div>
-                </div>
-
-                <div class="title-green mt-5" id="tituloTroca">
-                    Escolha os produtos e a quantidade que gostaria de 
-                    <% if (pedido.action == "troca") { %>
-                        trocar
-                    <% } else { %>
-                        devolver
-                    <% } %>
-                </div>
-                <% pedido.books.forEach((livro) => {%>
-                    <div class="card-item d-block w-100">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="bookInfo">
-                                <img src="<%= livro.bookImage %>" width="100rem">
-                                <div class="d-block ml-05">
-                                    <div class="d-flex align-items-baseline">
-                                        <div class="title-item"><%= livro.title %></div>
-                                        <div class="description-item ml-05">x <%= livro.quantity %></div>
-                                    </div>
-                                    <div class="description-item"><%= livro.author %></div>
-                                    <div class="description-item"><%= livro.publisher %></div>
-                                    <div class="description-item">R$ <%= livro.price %></div>
-                                </div>
-                            </div>
-                            <div>
-                                <button type="button" class="btn btn-secondary">
-                                    <% if (pedido.action == "Troca") { %>
-                                        Trocar <%= livro.title %>
-                                    <% } else { %>
-                                        Devolver <%= livro.title %>
-                                    <% } %>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                <% }) %>
-                <% console.log(pedido); %>
-                <div class="title-green mt-5" id="troca">
-                    Motivo da 
-                    <% if (pedido.action == "troca") { %>
-                        troca
-                    <% } else { %>
-                        devolução
-                    <% } %>
-                </div>
-                <input class="w-49 form-control" placeholder="Selecione o motivo" name="reason" id="reason">
-                <textarea class="w-100 form-control mt-1" placeholder="Explique o motivo" name="reasonExplanation" id="reasonExplanation"></textarea>
-                <div class="bg-gray mt-1 c-green">
-                    Assim que recebermos sua solicitação, ela entrará em período de análise.
-                    <br>
-                    Quando concluirmos a análise, enviaremos um e-mail com as instruções.
-                </div>
-                <div id="btnTroca">
-                    <button type="button" class="btn btn-secondary mt-1">Solicitar Troca</button>
-                </div>
-                <div class="hide" id="btnDevolucao">
-                    <button type="button" class="btn btn-secondary mt-1">Solicitar Devolução</button>
                 </div>
             </div>
         </div>
     </div>
 
     <%- include('footer.ejs') %>
-
-<script>
-    
-    function toggleTrocaDevolucao(divToShow, divToHide, titleToHide, titleToShow, btnToShow, btnToHide) {
-        var divToShow = document.getElementById(divToShow);
-        var divToHide = document.getElementById(divToHide);
-        var btnToShow = document.getElementById(btnToShow);
-        var btnToHide = document.getElementById(btnToHide);
-        var titleToShow = document.getElementById(titleToShow);
-        var titleToHide = document.getElementById(titleToHide);
-
-        divToShow.style.display = "block";
-        divToHide.style.display = "none";
-        btnToShow.style.display = "block";
-        btnToHide.style.display = "none";
-        titleToShow.style.display = "block";
-        titleToHide.style.display = "none";
-    }
-
-</script>

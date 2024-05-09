@@ -1,0 +1,52 @@
+<%- include('header.ejs') %>
+
+    <div id="body" class="body">
+        <div class="center">
+            <div class="data">
+                <div class="title center">Devolução - Venda #<%= pedido.code %></div>
+
+                <div class="title-green mt-5" id="tituloDevolucao">
+                    Escolha os produtos e a quantidade que gostaria de devolver
+                </div>
+                <% pedido.books.forEach((livro) => {%>
+                    <div class="card-item d-block w-100">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="bookInfo">
+                                <img src="<%= livro.bookImage %>" width="100rem">
+                                <div class="d-block ml-05">
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="title-item"><%= livro.title %></div>
+                                        <div class="description-item ml-05">x <%= livro.quantity %></div>
+                                    </div>
+                                    <div class="description-item"><%= livro.author %></div>
+                                    <div class="description-item"><%= livro.publisher %></div>
+                                    <div class="description-item">R$ <%= livro.price %></div>
+                                </div>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-secondary">
+                                    Devolver <%= livro.title %>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+                <% console.log(pedido); %>
+                <div class="title-green mt-5" id="devolucao">
+                    Motivo da Devolução
+                </div>
+                <input class="w-49 form-control" placeholder="Selecione o motivo" name="reason" id="reason">
+                <textarea class="w-100 form-control mt-1" placeholder="Explique o motivo" name="reasonExplanation" id="reasonExplanation"></textarea>
+                <div class="bg-gray mt-1 c-green">
+                    Assim que recebermos sua solicitação, ela entrará em período de análise.
+                    <br>
+                    Quando concluirmos a análise, enviaremos um e-mail com as instruções.
+                </div>
+                <div id="btnDevolucao">
+                    <button type="button" class="btn btn-secondary mt-1">Solicitar Devolução</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<%- include('footer.ejs') %>

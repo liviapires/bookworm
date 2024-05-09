@@ -1,0 +1,67 @@
+<%- include('header.ejs') %>
+
+    <div id="body" class="body">
+        <div class="center">
+            <div class="data">
+                <div class="title center">Troca - Venda #<%= pedido.code %></div>
+
+                <div class="title-green mt-5" id="tituloTroca">
+                    Escolha os produtos e a quantidade que gostaria de trocar
+                </div>
+                <% pedido.books.forEach((livro) => {%>
+                    <div class="card-item d-block w-100">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="bookInfo">
+                                <img src="<%= livro.bookImage %>" width="100rem">
+                                <div class="d-block ml-05">
+                                    <div class="d-flex align-items-baseline">
+                                        <div class="title-item"><%= livro.title %></div>
+                                        <div class="description-item ml-05">x <%= livro.quantity %></div>
+                                    </div>
+                                    <div class="description-item"><%= livro.author %></div>
+                                    <div class="description-item"><%= livro.publisher %></div>
+                                    <div class="description-item">R$ <%= livro.price %></div>
+                                </div>
+                            </div>
+                            <form action="/setTransaction/exchange/<%= livro.bookId %>" method="POST">
+                                <% if(livro.quantity > 1) { %>
+                                    <div class="d-flex">
+                                        <div class="mt-05">Quantidade: </div>
+                                        <select class="form-control ml-05" name="quantity" id="quantity">
+                                            <% for(let i = 1; i <= livro.quantity; i++) { %>
+                                                <option value="<%= i %>"><%= i %></option>
+                                            <% } %>
+                                        </select>
+                                    </div>
+                                <% } else { %>
+                                    <input type="hidden" name="quantity" value="1">
+                                <% } %>
+                                <button type="submit" class="btn btn-secondary mt-05 w-100">
+                                    Trocar <%= livro.title %>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                <% }) %>
+                <div class="title-green mt-5" id="troca">
+                    Motivo da Troca
+                </div>
+                <form action="/exchange" method="POST">
+                    <select class="w-20 form-control" name="reason" id="reason">
+                        <option value="defeito">Produto com defeito</option>
+                        <option value="errado">Produto errado</option>
+                        <option value="avaria">Produto com avaria</option>
+                    </select>
+                    <textarea class="w-100 form-control mt-05" placeholder="Explique o motivo" name="reasonExplanation" id="reasonExplanation"></textarea>
+                    <div class="bg-gray mt-1 c-green">
+                        Assim que recebermos sua solicitação, ela entrará em período de análise.
+                        <br>
+                        Quando concluirmos a análise, enviaremos um e-mail com as instruções.
+                    </div>
+                    <button type="submit" class="btn btn-secondary mt-1">Solicitar Troca</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <%- include('footer.ejs') %>

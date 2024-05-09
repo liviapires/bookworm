@@ -195,17 +195,6 @@ CREATE TABLE `saleBooks` (
     CONSTRAINT `FK_12` FOREIGN KEY `FK_2` (`bookId`) REFERENCES `books` (`bookId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
--- ************************************** `exchanges`
-CREATE TABLE `exchanges` (
-    `exchangeId` integer NOT NULL AUTO_INCREMENT,
-    `status` varchar(255) NOT NULL,
-    `requestDate` datetime NOT NULL,
-    `reason` text NOT NULL,
-    `createdAt` datetime NOT NULL,
-    `updatedAt` datetime NOT NULL,
-    PRIMARY KEY (`exchangeId`)
-) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
-
 -- ************************************** `coupons`
 CREATE TABLE `coupons` (
     `couponId` integer NOT NULL AUTO_INCREMENT,
@@ -220,24 +209,37 @@ CREATE TABLE `coupons` (
     PRIMARY KEY (`couponId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
--- ************************************** `saleExchanges`
-CREATE TABLE `saleExchanges` (
-    `saleExchangesId` integer NOT NULL AUTO_INCREMENT,
-    `quantityToExchange` integer NOT NULL,
-    `exchangeId` integer NOT NULL,
-    `couponId` integer NOT NULL,
-    `saleId` integer NOT NULL,
+-- ************************************** `transactions`
+CREATE TABLE `transactions` (
+    `transactionId` integer NOT NULL AUTO_INCREMENT,
+    `status` varchar(255) NOT NULL,
+    `requestDate` datetime NOT NULL,
+    `reason` text NOT NULL,
     `createdAt` datetime NOT NULL,
     `updatedAt` datetime NOT NULL,
-    PRIMARY KEY (`saleExchangesId`),
+    `saleId` integer NOT NULL,
+    `couponId` integer NOT NULL,
+    PRIMARY KEY (`transactionId`),
     KEY `FK_1` (`saleId`),
     CONSTRAINT `FK_13` FOREIGN KEY `FK_1` (`saleId`) REFERENCES `sales` (`saleId`),
-    KEY `FK_2` (`exchangeId`),
-    CONSTRAINT `FK_14` FOREIGN KEY `FK_2` (`exchangeId`) REFERENCES `exchanges` (`exchangeId`),
-    KEY `FK_3` (`couponId`),
-    CONSTRAINT `FK_16` FOREIGN KEY `FK_3` (`couponId`) REFERENCES `coupons` (`couponId`)
+    KEY `FK_2` (`couponId`),
+    CONSTRAINT `FK_14` FOREIGN KEY `FK_2` (`couponId`) REFERENCES `coupons` (`couponId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
+-- ************************************** `saleTransactionBooks`
+CREATE TABLE `saleTransactionBooks` (
+    `saleTransactionBooksId` integer NOT NULL AUTO_INCREMENT,
+    `bookId` integer NOT NULL,
+    `transactingQuantity` integer NOT NULL,
+    `createdAt` datetime NOT NULL,
+    `updatedAt` datetime NOT NULL,
+    `transactionId` integer NOT NULL,
+    PRIMARY KEY (`saleTransactionBooksId`),
+    KEY `FK_1` (`bookId`),
+    CONSTRAINT `FK_15` FOREIGN KEY `FK_1` (`bookId`) REFERENCES `books` (`bookId`),
+    KEY `FK_2` (`transactionId`),
+    CONSTRAINT `FK_16` FOREIGN KEY `FK_2` (`transactionId`) REFERENCES `transactions` (`transactionId`)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
 
 -------------------------------------------------------------------------------------------------------------------------
