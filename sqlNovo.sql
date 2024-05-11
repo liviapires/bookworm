@@ -212,18 +212,31 @@ CREATE TABLE `coupons` (
 -- ************************************** `transactions`
 CREATE TABLE `transactions` (
     `transactionId` integer NOT NULL AUTO_INCREMENT,
+    `transactionCode` varchar(255) NOT NULL,
+    `transactionType` varchar(255) NOT NULL,
     `status` varchar(255) NOT NULL,
     `requestDate` datetime NOT NULL,
     `reason` text NOT NULL,
+    `explanation` text NOT NULL,
+    `transactionValue` float NOT NULL,
     `createdAt` datetime NOT NULL,
     `updatedAt` datetime NOT NULL,
     `saleId` integer NOT NULL,
-    `couponId` integer NOT NULL,
     PRIMARY KEY (`transactionId`),
     KEY `FK_1` (`saleId`),
-    CONSTRAINT `FK_13` FOREIGN KEY `FK_1` (`saleId`) REFERENCES `sales` (`saleId`),
-    KEY `FK_2` (`couponId`),
-    CONSTRAINT `FK_14` FOREIGN KEY `FK_2` (`couponId`) REFERENCES `coupons` (`couponId`)
+    CONSTRAINT `FK_13` FOREIGN KEY `FK_1` (`saleId`) REFERENCES `sales` (`saleId`)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
+
+-- ************************************** `couponTransactions`
+CREATE TABLE `couponTransactions` (
+    `couponTransactionId` integer NOT NULL AUTO_INCREMENT,
+    `couponId` integer NOT NULL,
+    `transactionId` integer NOT NULL,
+    PRIMARY KEY (`couponTransactionId`),
+    KEY `FK_1` (`couponId`),
+    CONSTRAINT `FK_14` FOREIGN KEY `FK_1` (`couponId`) REFERENCES `coupons` (`couponId`),
+    KEY `FK_2` (`transactionId`),
+    CONSTRAINT `FK_15` FOREIGN KEY `FK_2` (`transactionId`) REFERENCES `transactions` (`transactionId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
 -- ************************************** `saleTransactionBooks`
@@ -231,14 +244,15 @@ CREATE TABLE `saleTransactionBooks` (
     `saleTransactionBooksId` integer NOT NULL AUTO_INCREMENT,
     `bookId` integer NOT NULL,
     `transactingQuantity` integer NOT NULL,
+    `value` float NOT NULL,
     `createdAt` datetime NOT NULL,
     `updatedAt` datetime NOT NULL,
     `transactionId` integer NOT NULL,
     PRIMARY KEY (`saleTransactionBooksId`),
     KEY `FK_1` (`bookId`),
-    CONSTRAINT `FK_15` FOREIGN KEY `FK_1` (`bookId`) REFERENCES `books` (`bookId`),
+    CONSTRAINT `FK_16` FOREIGN KEY `FK_1` (`bookId`) REFERENCES `books` (`bookId`),
     KEY `FK_2` (`transactionId`),
-    CONSTRAINT `FK_16` FOREIGN KEY `FK_2` (`transactionId`) REFERENCES `transactions` (`transactionId`)
+    CONSTRAINT `FK_17` FOREIGN KEY `FK_2` (`transactionId`) REFERENCES `transactions` (`transactionId`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
 
 

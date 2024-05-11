@@ -1,9 +1,10 @@
 const db = require("../../config/db");
 
 class Coupon {
-    constructor(couponCode, couponValue, generationDate, expirationDate, active, createdAt, updatedAt) {
+    constructor(couponCode, couponValue, couponType, generationDate, expirationDate, active, createdAt, updatedAt) {
         this.couponCode = couponCode;
         this.couponValue = couponValue;
+        this.couponType = couponType;
         this.generationDate = generationDate;
         this.expirationDate = expirationDate;
         this.active = active;
@@ -23,10 +24,11 @@ class Coupon {
     // create coupon
     async createCoupon(coupon) {
         const [results, metadata] = await db.query(
-            `INSERT INTO coupons (couponCode, couponValue, generationDate, expirationDate, active, createdAt, updatedAt) \
+            `INSERT INTO coupons (couponCode, couponValue, couponType, generationDate, expirationDate, active, createdAt, updatedAt) \
             VALUES (
                 '${coupon.couponCode}',
                 '${coupon.couponValue}',
+                '${coupon.couponType}',
                 '${coupon.generationDate}',
                 '${coupon.expirationDate}',
                 '${coupon.active}',
@@ -44,6 +46,7 @@ class Coupon {
             `UPDATE coupons SET 
                 couponCode = '${coupon.couponCode}', 
                 couponValue = '${coupon.couponValue}', 
+                couponType = '${coupon.couponType}',
                 generationDate = '${coupon.generationDate}', 
                 expirationDate = '${coupon.expirationDate}', 
                 active = '${coupon.active}', 

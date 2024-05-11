@@ -1,0 +1,17 @@
+<%- include('header.ejs') %>
+
+<div id="body" class="body">
+    <div class="finishPurchase">
+        <img src="https://www.svgrepo.com/show/496871/box-time.svg" alt="Carrinho" class="finishIcon">
+        <div class="title-home">
+            <% if(type == 'exchange') { %>
+                Troca
+            <% } else { %>
+                Devolução
+            <% } %>
+            Solicitada!</div>
+        <a href="/home" class="btn btn-primary">Voltar para a página inicial</a>
+    </div>
+</div>
+
+<%- include('footer.ejs') %>

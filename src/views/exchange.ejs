@@ -47,12 +47,13 @@
                     Motivo da Troca
                 </div>
                 <form action="/exchange" method="POST">
+                    <input type="hidden" name="saleId" id="saleId" value="<%= pedido.saleId %>">
                     <select class="w-20 form-control" name="reason" id="reason">
                         <option value="defeito">Produto com defeito</option>
                         <option value="errado">Produto errado</option>
                         <option value="avaria">Produto com avaria</option>
                     </select>
-                    <textarea class="w-100 form-control mt-05" placeholder="Explique o motivo" name="reasonExplanation" id="reasonExplanation"></textarea>
+                    <textarea class="w-100 form-control mt-05" placeholder="Explique o motivo" name="explanation" id="explanation"></textarea>
                     <div class="bg-gray mt-1 c-green">
                         Assim que recebermos sua solicitação, ela entrará em período de análise.
                         <br>

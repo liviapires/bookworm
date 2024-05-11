@@ -12,6 +12,7 @@
                 <div class="d-flex align-items-center">
                     <input name="saleId" value="<%= sale.saleId %>" hidden>
                     Alterar Situação:
+                    <% console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", sale); %>
                     <% if (sale.status == "Em Processamento") { %>
                         <select class="form-control ml-05" id="status" name="status">
                             <option value="Pagamento Realizado">Pagamento Realizado</option>
@@ -21,9 +22,13 @@
                     <% } else if (sale.status == "Pagamento Realizado") { %>
                         <select class="form-control ml-05" id="status" name="status">
                             <option value="Em trânsito">Em Trânsito</option>
+                        </select>
+                    <% } else if (sale.status == "Em trânsito") { %>
+                        <select class="form-control ml-05" id="status" name="status">
                             <option value="Entregue">Entregue</option>
                         </select>
                     <% } %>
+
                     <button type="submit" class="btn btn-primary ml-05">Salvar</button>
                 </div>
             </form>

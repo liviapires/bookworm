@@ -4,6 +4,12 @@ const SalesBooks = require('../models/SaleBooksModel');
 const Categories = require('../models/CategoryModel');
 const Phones = require('../models/PhoneModel');
 const SalePayments = require('../models/SalePaymentModel');
+const Transactions = require('../models/TransactionModel');
+const SaleTransactionBooks = require('../models/SaleTransactionBooksModel');
+const Coupons = require('../models/CouponModel');
+
+const moment = require('moment');
+const { format } = require('mysql2');
 
 const aBook = new Books();
 const aSale = new Sales();
@@ -11,6 +17,9 @@ const theSaleBooks = new SalesBooks();
 const aCategory = new Categories();
 const aPhone = new Phones();
 const aSalePayment = new SalePayments();
+const aTransaction = new Transactions();
+const aSaleTransactionBooks = new SaleTransactionBooks();
+const aCoupon = new Coupons();
 
 async function orderView (req, res) {
 
@@ -203,10 +212,77 @@ async function returnView (req, res) {
 }
 
 async function exchange (req, res) {
-    console.log(req.body);
-    console.log(req.session.transaction);
+    let transactionInfo = {...req.body, ...req.session.transaction};
 
-    res.redirect(req.get('referer'));
+    let books = [];
+    for (const book of transactionInfo.books) {
+        let bookInfo = await theSaleBooks.getSaleBooksBySaleId(transactionInfo.saleId);
+
+        books.push({
+            bookId: book.bookId,
+            quantity: book.quantity,
+            value: bookInfo[0].unitValue
+        });
+    }
+
+    // o valor total da transação é a soma dos valores dos livros vezes a quantidade
+    let totalTransaction = 0;
+    books.forEach(book => {
+        totalTransaction += book.value * book.quantity;
+    });
+
+    // gera um código transação aleatório
+    let transactionCode = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 10; i++) {
+        transactionCode += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    // cria a transação
+    let transaction = {
+        transactionCode: transactionCode,
+        transactionType: transactionInfo.transactionType,
+        status: 'Em avaliação',
+        requestDate: moment().format('YYYY-MM-DD HH:mm:ss'),
+        reason: transactionInfo.reason,
+        explanation: transactionInfo.explanation,
+        transactionValue: totalTransaction,
+        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        saleId: req.body.saleId
+    }
+
+    await aTransaction.createTransaction(transaction);
+
+    // pega o id da transação criada pelo código
+    const transactionId = await aTransaction.getTransactionByCode(transactionCode);
+
+    // cria os livros da transação
+    books.forEach(async book => {
+        let saleTransactionBook = {
+            bookId: book.bookId,
+            transactingQuantity: book.quantity,
+            value: book.value,
+            createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+            updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+            transactionId: transactionId[0].transactionId
+        }
+
+        await aSaleTransactionBooks.createSaleTransactionBooks(saleTransactionBook);
+    });
+
+    // muda o status da venda para 'Em troca'
+    let sale = {
+        status: 'Em troca',
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+    }
+
+    await aSale.updateSaleStatus(sale);
+
+    res.render('finishTransaction', {
+        title: 'Troca',
+        type: 'exchange',
+    });
 }
 
 async function setTransaction (req, res) {
@@ -242,6 +318,34 @@ async function setTransaction (req, res) {
     }
 
     res.redirect(req.get('referer'));
+}
+
+async function createCoupon (value, type) {
+    let code = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 6; i++) {
+        code += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    let couponType = '';
+    if (type == 'exchange') {
+        couponType = 'Troca';
+    } else if (type == 'return') {
+        couponType = 'Devolução';
+    }
+
+    let coupon = {
+        couponCode: code,
+        couponValue: value,
+        couponType: couponType,
+        generationDate: moment().format('YYYY-MM-DD HH:mm:ss'),
+        expirationDate: moment().add(30, 'days').format('YYYY-MM-DD HH:mm:ss'),
+        active: 1,
+        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+    }
+
+    await aCoupon.createCoupon(coupon);
 }
 
 
