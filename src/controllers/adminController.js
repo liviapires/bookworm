@@ -24,6 +24,7 @@ const SaleBooks = require('../models/SaleBooksModel');
 const Category = require('../models/CategoryModel');
 const Phone = require('../models/PhoneModel');
 const Book = require('../models/BookModel');
+const Transaction = require('../models/TransactionModel');
 
 const moment = require('moment');
 
@@ -32,12 +33,18 @@ const theSaleBooks = new SaleBooks();
 const aCategory = new Category();
 const aPhone = new Phone();
 const aBook = new Book();
+const aTransaction = new Transaction();
 
 // Renderiza a view evaluateExchange
-const evaluateExchangeView = (req, res) => {
+async function evaluateExchangeView (req, res) {
+
+    let exchanges = await aTransaction.getTransactionByType('exchange');
+
+    console.log(exchanges);
+
     res.render('evaluateExchange', {
         title: 'Avaliar Troca',
-        pedido: pedido
+        exchanges: exchanges
     });
 }
 
