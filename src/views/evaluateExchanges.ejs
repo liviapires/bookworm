@@ -1,0 +1,57 @@
+<%- include('header.ejs') %>
+<div class="center container">
+
+    <h1 class="title center mt-5">Trocas</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="veronica">Código</th>
+                <th class="veronica">Situação</th>
+                <th class="veronica">Valor</th>
+                <th class="veronica">Ver mais</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <% if (exchanges.length==0) { %>
+                <tr>
+                    <td colspan="8" class="text-center">Solicitações de troca aparecerão aqui.</td>
+                </tr>
+            <% } %>
+
+            <% console.log(exchanges); %>
+            <% exchanges.forEach(function(exchange) { %>
+                <tr>
+                    <td class="bold">
+                        <%= exchange.transactionCode %>
+                    </td>
+                    <td>
+                        <div class="<% if (exchange.status == "Troca Aprovada") { %> 
+                                badge g-badge 
+                            <% } else if (exchange.status == "Troca Rejeitada") { %> 
+                                badge r-badge 
+                            <% } else { %>
+                                badge v-badge
+                            <% } %>
+                        ">
+                            <%= exchange.status %>
+                        </div>
+                    </td>
+                    <td>
+                        R$ <%= exchange.transactionValue %>
+                    </td>
+                    <td>
+                        <a href="/evaluateExchange/<%= exchange.transactionId %>">
+                            <img src="https://www.svgrepo.com/show/522719/zoom-plus.svg" alt="Ver mais" class="icon">
+                        </a>
+                    </td>
+                </tr>
+            <% }); %>
+
+        </tbody>
+    </table>
+
+</div>
+
+<%- include('footer.ejs') %>

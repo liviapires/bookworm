@@ -3,8 +3,11 @@ const router = express.Router();
 
 const adminController = require("../controllers/adminController");
 
-router.get("/evaluateExchange", adminController.evaluateExchangeView);
-router.get("/evaluateExchangeContinue", adminController.evaluateExchangeContinueView);
+router.get("/evaluateExchanges", adminController.evaluateExchangesView);
+router.get("/evaluateExchange/:id", adminController.evaluateExchangeView);
+
+router.get("/:do/:type/:id", adminController.updateTransaction);
+
 router.get("/evaluateDevolution", adminController.evaluateDevoutionView);
 router.get("/evaluateDevolutionContinue", adminController.evaluateDevolutionContinueView);
 

@@ -49,9 +49,8 @@ class Transaction {
         const [results, metadata] = await db.query(
             `UPDATE transactions SET 
                 status = '${transaction.status}',
-                updatedAt = '${transaction.updatedAt}',
-                couponId = '${transaction.couponId}'
-            WHERE id = ${transaction.id};`
+                updatedAt = '${transaction.updatedAt}'
+            WHERE transactionId = ${transaction.transactionId};`
         );
 
         return results;
@@ -60,7 +59,7 @@ class Transaction {
     // delete transaction by id
     async deleteTransaction(id) {
         const [results, metadata] = await db.query(
-            `DELETE FROM transactions WHERE id = ${id};`
+            `DELETE FROM transactions WHERE transactionId = ${id};`
         );
 
         return results;
@@ -69,7 +68,7 @@ class Transaction {
     // get transaction by id
     async getTransactionById(id) {
         const [results, metadata] = await db.query(
-            `SELECT * FROM transactions WHERE id = ${id};`
+            `SELECT * FROM transactions WHERE transactionId = ${id};`
         );
 
         return results;

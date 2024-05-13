@@ -8,18 +8,12 @@
             Se o item que você recebeu estiver com defeito ou não estiver conforme descrito, você pode abrir uma solicitação de troca/devolução dentro de 15 dias do recebimento.
         </div>
         <div class="d-flex">
-            <div>
-                <button class="btn btn-secondary mt-05">Adicionar ao Carrinho</button>
-            </div>
-            <div class="ml-05">
-                <button class="btn btn-primary mt-05">Acompanhar Pedido</button>
-            </div>
-            <div class="ml-05">
-                <button class="btn btn-primary mt-05">Recibo</button>
-            </div>
-            <div class="ml-05">
+            <% console.log(pedido); %>
+            <% if (pedido.status == "Aguardando Objetos") { %>
+                <a href="/sendObjects/<%= pedido.saleId %>" class="btn btn-danger mt-05">Confirmar envio de objetos</a>
+            <% } else if (pedido.status != "Em Troca") { %>
                 <a href="/doOrder/<%= pedido.saleId %>" class="btn btn-danger mt-05">Solicitar Troca/Devolução</a>
-            </div>
+            <% } %>
         </div>
     </div>
 
@@ -62,7 +56,7 @@
                         </div>
                     <% } else { %>
                         <div class="mt-05">
-                            Forma de Pagamento: <%= pedido.paymentMethod %>                        
+                            Forma de Pagamento: <%= pedido.payments[0].paymentMethod %>                        
                         </div>
                     <% } %>
                 </div>                

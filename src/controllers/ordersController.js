@@ -160,9 +160,44 @@ async function exchangeView (req, res) {
     // put books in sale object
     sale[0].books = livros;
 
+    let troca = req.session.transaction || [];
+
+    if (troca.books) {
+        // para cada livro da troca, busca o livro no banco e adiciona ao um novo array de livros
+        let livrosTroca = [];
+
+        for (const book of troca.books) {
+            let livro = await aBook.getBookById(book.bookId);
+            let bookCategories = [];
+            const categories = await aCategory.getBookCategories(book.bookId);
+            categories.forEach(category => {
+                category = category.categoryName;
+                bookCategories.push(category);
+            });
+            livro[0].categories = bookCategories;
+            if (!livro[0].bookImage) {
+                livro[0].bookImage = '/img/default-book.png';
+            }
+            livro[0].quantity = book.quantity;
+            livrosTroca.push(livro[0]);
+        }
+        
+        // put books in sale object
+        troca.books = livrosTroca;
+
+        // o valor total da transação é a soma dos valores dos livros vezes a quantidade
+        let totalTransaction = 0;
+        troca.books.forEach(book => {
+            totalTransaction += book.price * book.quantity;
+        });
+
+        troca.totalTransaction = totalTransaction.toFixed(2);
+    }
+
     res.render('exchange', {
         title: 'Troca',
-        pedido: sale[0]
+        pedido: sale[0],
+        troca: troca
     });
 }
 
@@ -242,7 +277,7 @@ async function exchange (req, res) {
     let transaction = {
         transactionCode: transactionCode,
         transactionType: transactionInfo.transactionType,
-        status: 'Em avaliação',
+        status: 'Em Avaliação',
         requestDate: moment().format('YYYY-MM-DD HH:mm:ss'),
         reason: transactionInfo.reason,
         explanation: transactionInfo.explanation,
@@ -273,8 +308,9 @@ async function exchange (req, res) {
 
     // muda o status da venda para 'Em troca'
     let sale = {
-        status: 'Em troca',
-        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+        status: 'Em Troca',
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        saleId: req.body.saleId
     }
 
     await aSale.updateSaleStatus(sale);
@@ -320,34 +356,20 @@ async function setTransaction (req, res) {
     res.redirect(req.get('referer'));
 }
 
-async function createCoupon (value, type) {
-    let code = '';
-    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 6; i++) {
-        code += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
+async function sendObjects (req, res) {
 
-    let couponType = '';
-    if (type == 'exchange') {
-        couponType = 'Troca';
-    } else if (type == 'return') {
-        couponType = 'Devolução';
-    }
-
-    let coupon = {
-        couponCode: code,
-        couponValue: value,
-        couponType: couponType,
-        generationDate: moment().format('YYYY-MM-DD HH:mm:ss'),
-        expirationDate: moment().add(30, 'days').format('YYYY-MM-DD HH:mm:ss'),
-        active: 1,
-        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+    console.log(req.params);
+    
+    let sale = {
+        saleId: req.params.saleId,
+        status: "Objetos Enviados",
         updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
     }
 
-    await aCoupon.createCoupon(coupon);
-}
+    await aSale.updateSaleStatus(sale);
 
+    res.redirect(req.get('referer'));
+}
 
 module.exports = {
     orderView,
@@ -355,5 +377,6 @@ module.exports = {
     exchangeView,
     returnView,
     exchange,
-    setTransaction
+    setTransaction,
+    sendObjects
 }
