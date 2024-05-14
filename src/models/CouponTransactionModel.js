@@ -27,6 +27,14 @@ class CouponTransaction {
 
         return results;
     }
+
+    async getCouponIdByTransactionId(transactionId) {
+        const [results, metadata] = await db.query(
+            `SELECT couponId FROM couponTransactions WHERE transactionId = '${transactionId}';`
+        );
+
+        return results;
+    }
 }
 
 module.exports = CouponTransaction;

@@ -5,48 +5,105 @@
             <div class="data">
                 <div class="title center">Devolução - Venda #<%= pedido.code %></div>
 
-                <div class="title-green mt-5" id="tituloDevolucao">
-                    Escolha os produtos e a quantidade que gostaria de devolver
+                <div class="title-green mt-5" id="tituloTroca">
+                    Escolha os produtos e a quantidade que gostaria de trocar
                 </div>
-                <% pedido.books.forEach((livro) => {%>
-                    <div class="card-item d-block w-100">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="bookInfo">
-                                <img src="<%= livro.bookImage %>" width="100rem">
-                                <div class="d-block ml-05">
-                                    <div class="d-flex align-items-baseline">
-                                        <div class="title-item"><%= livro.title %></div>
-                                        <div class="description-item ml-05">x <%= livro.quantity %></div>
+                <div class="d-flex justify-content-between">
+                    <div class="d-block w-49">
+                        <% pedido.books.forEach((livro) => {%>
+                            <div class="card-item d-block w-100">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="bookInfo">
+                                        <img src="<%= livro.bookImage %>" width="100rem">
+                                        <div class="d-block ml-05">
+                                            <div class="d-flex align-items-baseline">
+                                                <div class="title-item"><%= livro.title %></div>
+                                                <div class="description-item ml-05">x <%= livro.quantity %></div>
+                                            </div>
+                                            <div class="description-item"><%= livro.author %></div>
+                                            <div class="description-item"><%= livro.publisher %></div>
+                                            <div class="description-item">R$ <%= livro.price %></div>
+                                        </div>
                                     </div>
-                                    <div class="description-item"><%= livro.author %></div>
-                                    <div class="description-item"><%= livro.publisher %></div>
-                                    <div class="description-item">R$ <%= livro.price %></div>
+                                    <form action="/setTransaction/return/<%= livro.bookId %>" method="POST">
+                                        <% if(livro.quantity > 1) { %>
+                                            <div class="d-flex">
+                                                <div class="mt-05">Quantidade: </div>
+                                                <select class="form-control ml-05" name="quantity" id="quantity">
+                                                    <% for(let i = 1; i <= livro.quantity; i++) { %>
+                                                        <option value="<%= i %>"><%= i %></option>
+                                                    <% } %>
+                                                </select>
+                                            </div>
+                                        <% } else { %>
+                                            <input type="hidden" name="quantity" value="1">
+                                        <% } %>
+                                        <button type="submit" class="btn btn-secondary mt-05 w-100">
+                                            Trocar <%= livro.title %>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
-                            <div>
-                                <button type="button" class="btn btn-secondary">
-                                    Devolver <%= livro.title %>
-                                </button>
-                            </div>
+                        <% }) %>
+                    </div>
+                    <div class="big-card w-49 align-items-baseline justify-content-center d-block">
+                        <div class="title-green center">
+                            Livros selecionados para devolução
+                        </div>
+                        <% console.log(devolucao); %>
+                        <div>
+                            <% if (devolucao.books) {%>
+                                <% devolucao.books.forEach(bookInfo => { %>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex ">
+                                            <div class="mr-1">
+                                                <img src="<%= bookInfo.bookImage %>" alt="Livro" width="50">
+                                            </div>
+                                            <div class="ml-1 t-left">
+                                                <div class=""><%= bookInfo.title %> x<%= bookInfo.quantity %></div>
+                                                <div><%= bookInfo.author %></div>
+                                                <div><%= bookInfo.publisher %></div>
+                                            </div>
+                                        </div>
+                                        <div class="d-block justify-content-right">
+                                            <div> </div>
+                                            <div>R$ <%= bookInfo.price %></div>
+                                        </div>
+                                    </div>
+                                    <% if (devolucao.books.indexOf(bookInfo) < devolucao.books.length - 1) { %>
+                                        <hr/>
+                                    <% } %>
+                                <% }); %>
+                                <hr/>
+                                <div class="d-flex justify-content-right">
+                                    <div class="d-flex">
+                                        Total da devolução: R$ <%= devolucao.totalTransaction %>
+                                    </div>
+                                </div>
+                            <% } %>
                         </div>
                     </div>
-                <% }) %>
-                <% console.log(pedido); %>
-                <div class="title-green mt-5" id="devolucao">
+                </div>
+                <div class="title-green mt-5" id="devolução">
                     Motivo da Devolução
                 </div>
-                <input class="w-49 form-control" placeholder="Selecione o motivo" name="reason" id="reason">
-                <textarea class="w-100 form-control mt-1" placeholder="Explique o motivo" name="reasonExplanation" id="reasonExplanation"></textarea>
-                <div class="bg-gray mt-1 c-green">
-                    Assim que recebermos sua solicitação, ela entrará em período de análise.
-                    <br>
-                    Quando concluirmos a análise, enviaremos um e-mail com as instruções.
-                </div>
-                <div id="btnDevolucao">
-                    <button type="button" class="btn btn-secondary mt-1">Solicitar Devolução</button>
-                </div>
+                <form action="/return" method="POST">
+                    <input type="hidden" name="saleId" id="saleId" value="<%= pedido.saleId %>">
+                    <select class="w-20 form-control" name="reason" id="reason">
+                        <option value="defeito">Produtos com defeito</option>
+                        <option value="errado">Produtos errados</option>
+                        <option value="avaria">Produtos com avaria</option>
+                    </select>
+                    <textarea class="w-100 form-control mt-05" placeholder="Explique o motivo" name="explanation" id="explanation"></textarea>
+                    <div class="bg-gray mt-1 c-green">
+                        Assim que recebermos sua solicitação, ela entrará em período de análise.
+                        <br>
+                        Quando concluirmos a análise, enviaremos um e-mail com as instruções.
+                    </div>
+                    <button type="submit" class="btn btn-secondary mt-1">Solicitar Devolução</button>
+                </form>
             </div>
         </div>
     </div>
 
-<%- include('footer.ejs') %>
+    <%- include('footer.ejs') %>

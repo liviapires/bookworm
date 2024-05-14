@@ -5,8 +5,11 @@
     --light-yellow-green: #BFF879;
     --light-veronica: #cb4fed;
     --veronica: #AF32D1;
+    --yellow: #ffd900;
+    --blue: #2a7fd4;
     --white: #fff;
     --red: #eb1717d7;
+    --light-red: #f9d7d7;
     --gray: #EDF1EA;
     --dark-gray: #b3b6b1;
     --eerie-black: #16201F;
@@ -543,6 +546,11 @@
     padding: 1.5rem;
 }
 
+.bg-l-red {
+    background-color: var(--light-red);
+    padding: 0.5rem;
+}
+
 .cart {
     width: 80%;
     margin-left: 10rem;
@@ -609,6 +617,33 @@ a:hover {
 
 .r-badge {
     background-color: var(--red);
+    color: var(--white);
+    font-size: 0.9rem;
+    padding: 0.35rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+}
+
+.b-badge {
+    background-color: var(--blue);
+    color: var(--white);
+    font-size: 0.9rem;
+    padding: 0.35rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+}
+
+.y-badge{
+    background-color: var(--yellow);
+    color: var(--white);
+    font-size: 0.9rem;
+    padding: 0.35rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+}
+
+.gray-badge {
+    background-color: var(--dark-gray);
     color: var(--white);
     font-size: 0.9rem;
     padding: 0.35rem;

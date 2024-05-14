@@ -4,6 +4,7 @@ const SaleBooks = require('../models/SaleBooksModel');
 const SaleAddresses = require('../models/SaleAddressesModel');
 const SalePayment = require('../models/SalePaymentModel');
 const Cards = require('../models/CardModel');
+const Coupon = require('../models/CouponModel');
 
 const moment = require('moment');
 
@@ -13,9 +14,11 @@ const aSaleBooks = new SaleBooks();
 const aSaleAddresses = new SaleAddresses();
 const aSalePayment = new SalePayment();
 const aCard = new Cards();
+const aCoupon = new Coupon();
 
 // Renderiza a view cart
 async function cartView(req, res) {
+    console.log(req.session.coupons);
     res.render('cart', {
         title: 'Carrinho',
         cart: req.session.cart || [],
@@ -537,12 +540,12 @@ function updateCardValue(preco, quantidadeCartoes, cartoes) {
 
 async function searchCouponByCode(req, res) {
     const couponCode = req.body.couponCode;
-    const coupons = req.session.coupons || [];
 
-    let coupon = coupons.find(coupon => coupon.couponCode == couponCode);
+    let coupon = await aCoupon.getCouponByCode(couponCode);
+
+    coupon = coupon[0];
 
     if (coupon) {
-
         if (coupon.active == 0) {
             req.session.couponInfo = '❌ O cupom informado está inativo.';
             res.redirect(req.get('referer'));

@@ -1,24 +1,3 @@
-const pedido = [{
-    id: '1',
-    titulo: 'O Senhor dos Anéis',
-    autor: 'J. R. R. Tolkien',
-    preco: '39.99',
-    imagem: 'https://m.media-amazon.com/images/I/51yxqpcD9iL._SX327_BO1,204,203,200_.jpg',
-    descricao: 'O Senhor dos Anéis é um romance de fantasia criado pelo escritor, professor e filólogo britânico J. R. R. Tolkien. A história começa como sequência de um pedido anterior de Tolkien, O Hobbit, e logo se desenvolve numa história muito maior.',
-    disponibilidade: '10',
-    paginas: '576',
-    editora: 'HarperCollins',
-    idioma: 'Português',
-    anoEdicao: '2019',
-    isbn: '9788595085601',
-    categorias: ['Fantasia', 'Aventura', 'Ficção'],
-    situacao: 'Finalizado',
-    dataPedido: '10/10/2020',
-    cliente: 'João da Silva',
-    motivo: 'Avaria',
-    descricaoMotivo: 'O livro veio com a capa rasgada.',
-}];
-
 const Sale = require('../models/SaleModel');
 const SaleBooks = require('../models/SaleBooksModel');
 const Category = require('../models/CategoryModel');
@@ -117,19 +96,81 @@ async function evaluateExchangeView (req, res) {
     });
 }
 
-const evaluateDevoutionView = (req, res) => {
-    res.render('evaluateDevolution', {
-        title: 'Avaliar Devolução',
-        pedido: pedido
+async function evaluateDevolutions (req, res) {
+
+    let devolutions = await aTransaction.getTransactionByType('return');
+
+    res.render('evaluateDevolutions', {
+        title: 'Avaliar Devoluções',
+        devolutions: devolutions
     });
 }
 
-const evaluateDevolutionContinueView = (req, res) => {
-    res.render('evaluateDevolutionContinue', {
+async function evaluateDevoutionView (req, res) {
+
+    let devolution = await aTransaction.getTransactionById(req.params.id);
+
+    let sale = await aSale.getSaleById(devolution[0].saleId);
+
+    if (devolution[0].reason == 'defeito') {
+        devolution[0].reason = 'Produto com defeito';
+    } else if (devolution[0].reason == 'errado') {
+        devolution[0].reason = 'Produto errado';
+    } else if (devolution[0].reason == 'avaria') {
+        devolution[0].reason = 'Produto com avaria';
+    }
+
+    devolution.forEach(devolution => {
+        let date = new Date(devolution.requestDate);
+        let day = date.getDate().toString().padStart(2, '0');
+        let month = (date.getMonth() + 1).toString().padStart(2, '0');
+        let year = date.getFullYear();
+        devolution.requestDate = `${day}/${month}/${year}`;
+    });
+
+    sale.forEach(sale => {
+        let date = new Date(sale.purchaseDate);
+        let day = date.getDate().toString().padStart(2, '0');
+        let month = (date.getMonth() + 1).toString().padStart(2, '0');
+        let year = date.getFullYear();
+        sale.purchaseDate = `${day}/${month}/${year}`;
+    });
+
+    devolution[0].salePurchaseDate = sale[0].purchaseDate;
+
+    // get books from devolution
+    const books = await aSaleTransactionBook.getSaleTransactionBooksByTransactionId(req.params.id);
+
+    for (const book of books) {
+        let livro = await aBook.getBookById(book.bookId);
+        let bookCategories = [];
+        const categories = await aCategory.getBookCategories(book.bookId);
+        categories.forEach(category => {
+            category = category.categoryName;
+            bookCategories.push(category);
+        });
+        livro[0].categories = bookCategories;
+        if (!livro[0].bookImage) {
+            livro[0].bookImage = '/img/default-book.png';
+        }
+        // romove todas as informações do book menos o value e substitui pelo livro
+        delete book.bookId;
+        delete book.createdAt;
+        delete book.updatedAt;
+        delete book.transactionId;
+        
+        book.infos = livro[0];
+    }
+
+    // put books in devolution object
+    devolution[0].books = books;
+
+    res.render('evaluateDevolution', {
         title: 'Avaliar Devolução',
-        pedido: pedido
+        devolution: devolution[0]
     });
 }
+
 
 async function mainAdminView (req, res) {
     res.render('mainAdmin', {
@@ -221,29 +262,6 @@ async function updateTransaction (req, res) {
         // gera um cupom de desconto para a troca aprovada
         if (type == 'exchange') {
             let transaction = await aTransaction.getTransactionById(transactionId);
-            
-            let coupon = {
-                couponCode: Math.random().toString(36).substr(2, 6).toUpperCase(),
-                couponValue: transaction[0].transactionValue,
-                couponType: 'exchange',
-                generationDate: moment().format('YYYY-MM-DD HH:mm:ss'),
-                expirationDate: moment().add(30, 'days').format('YYYY-MM-DD HH:mm:ss'),
-                active: 1,
-                createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
-                updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
-            }
-
-            await aCoupon.createCoupon(coupon);
-
-            let couponId = await aCoupon.getCouponByCode(coupon.couponCode);
-
-            // cria um registro de transação do cupom
-            let couponTransaction = {
-                couponId: couponId[0].couponId,
-                transactionId: transactionId
-            }
-
-            await aCouponTransaction.createCouponTransaction(couponTransaction);
 
             exchange = {
                 transactionId: transactionId,
@@ -262,28 +280,161 @@ async function updateTransaction (req, res) {
             await aSale.updateSaleStatus(sale);
 
             res.redirect(req.get('referer'));
+        } else if (type == 'devolution') {
+            let transaction = await aTransaction.getTransactionById(transactionId);
+
+            devolution = {
+                transactionId: transactionId,
+                status: 'Devolução Aprovada',
+                updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+            }
+
+            await aTransaction.updateTransaction(devolution);
+
+            let sale = {
+                saleId: transaction[0].saleId,
+                status: 'Aguardando Objetos',
+                updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+            }
+
+            await aSale.updateSaleStatus(sale);
+
+            res.redirect(req.get('referer'));
         }
     } else if (what == 'reject') {
 
-        let transaction = await aTransaction.getTransactionById(transactionId);
+        if (type == 'exchange') {
+            let transaction = await aTransaction.getTransactionById(transactionId);
 
-        exchange = {
-            transactionId: transactionId,
-            status: 'Troca Rejeitada',
-            updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+            exchange = {
+                transactionId: transactionId,
+                status: 'Troca Rejeitada',
+                updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+            }
+
+            await aTransaction.updateTransaction(exchange);
+            
+            let sale = {
+                saleId: transaction[0].saleId,
+                status: 'Troca Rejeitada',
+                updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+            }
+
+            await aSale.updateSaleStatus(sale);
+
+            res.redirect(req.get('referer'));
+        } else if (type == 'devolution') {
+            let transaction = await aTransaction.getTransactionById(transactionId);
+
+            devolution = {
+                transactionId: transactionId,
+                status: 'Devolução Rejeitada',
+                updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+            }
+
+            await aTransaction.updateTransaction(devolution);
+
+            let sale = {
+                saleId: transaction[0].saleId,
+                status: 'Devolução Rejeitada',
+                updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+            }
+
+            await aSale.updateSaleStatus(sale);
+
+            res.redirect(req.get('referer'));
         }
+    } else if (what == 'confirm') {
+        if (type == 'reception') {
+            let transaction = await aTransaction.getTransactionById(transactionId);
 
-        await aTransaction.updateTransaction(exchange);
-        
-        let sale = {
-            saleId: transaction[0].saleId,
-            status: 'Troca Rejeitada',
-            updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+            console.log(transaction[0]);
+
+            if (transaction[0].transactionType == 'exchange') {
+                console.log("aaaaaaaa");
+                let coupon = {
+                    couponCode: Math.random().toString(36).substr(2, 6).toUpperCase(),
+                    couponValue: transaction[0].transactionValue,
+                    couponType: 'exchange',
+                    generationDate: moment().format('YYYY-MM-DD HH:mm:ss'),
+                    expirationDate: moment().add(30, 'days').format('YYYY-MM-DD HH:mm:ss'),
+                    active: 1,
+                    createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+                    updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+                }
+
+                await aCoupon.createCoupon(coupon);
+
+                let couponId = await aCoupon.getCouponByCode(coupon.couponCode);
+
+                // cria um registro de transação do cupom
+                let couponTransaction = {
+                    couponId: couponId[0].couponId,
+                    transactionId: transactionId
+                }
+
+                await aCouponTransaction.createCouponTransaction(couponTransaction);
+
+                exchange = {
+                    transactionId: transactionId,
+                    status: 'Troca Finalizada',
+                    updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+                }
+
+                await aTransaction.updateTransaction(exchange);
+
+                let sale = {
+                    saleId: transaction[0].saleId,
+                    status: 'Troca Finalizada',
+                    updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+                }
+
+                await aSale.updateSaleStatus(sale);
+
+                res.redirect(req.get('referer'));
+            } else if (transaction[0].transactionType == 'return') {
+                let coupon = {
+                    couponCode: Math.random().toString(36).substr(2, 6).toUpperCase(),
+                    couponValue: transaction[0].transactionValue,
+                    couponType: 'devolution',
+                    generationDate: moment().format('YYYY-MM-DD HH:mm:ss'),
+                    expirationDate: moment().add(30, 'days').format('YYYY-MM-DD HH:mm:ss'),
+                    active: 1,
+                    createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+                    updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+                }
+
+                await aCoupon.createCoupon(coupon);
+
+                let couponId = await aCoupon.getCouponByCode(coupon.couponCode);
+
+                // cria um registro de transação do cupom
+                let couponTransaction = {
+                    couponId: couponId[0].couponId,
+                    transactionId: transactionId
+                }
+
+                await aCouponTransaction.createCouponTransaction(couponTransaction);
+
+                devolution = {
+                    transactionId: transactionId,
+                    status: 'Devolução Finalizada',
+                    updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+                }
+
+                await aTransaction.updateTransaction(devolution);
+
+                let sale = {
+                    saleId: transaction[0].saleId,
+                    status: 'Devolução Finalizada',
+                    updatedAt: moment().format('YYYY-MM-DD HH:mm:ss')
+                }
+
+                await aSale.updateSaleStatus(sale);
+
+                res.redirect(req.get('referer'));
+            }
         }
-
-        await aSale.updateSaleStatus(sale);
-
-        res.redirect(req.get('referer'));
     }
     
 }
@@ -292,7 +443,7 @@ module.exports = {
     evaluateExchangesView,
     evaluateExchangeView,
     evaluateDevoutionView,
-    evaluateDevolutionContinueView,
+    evaluateDevolutions,
     mainAdminView,
     salesView,
     saleView,

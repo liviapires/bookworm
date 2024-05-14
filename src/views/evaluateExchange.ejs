@@ -71,6 +71,10 @@
                                     <a href="/reject/exchange/<%= exchange.transactionId %>" class="btn btn-danger">Recusar</a>
                                     <a href="/approve/exchange/<%= exchange.transactionId %>" class="btn btn-primary ml-1">Aprovar</a>
                                 </div>
+                            <% } if (exchange.status == "Objetos Enviados") { %>
+                                <div class="d-flex">
+                                    <a href="/confirm/reception/<%= exchange.transactionId %>" class="btn btn-primary">Confirmar Recebimento</a>
+                                </div>
                             <% } %>
                         </div>
                     </div>

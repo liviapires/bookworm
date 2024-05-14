@@ -5,6 +5,7 @@ const ordersController = require("../controllers/ordersController");
 
 router.get("/order/:id", ordersController.orderView);
 router.get("/doOrder/:id", ordersController.doOrderView);
+router.get("/confirmDelivery/:saleId", ordersController.confirmDelivery);
 
 router.get("/exchange/:id", ordersController.exchangeView);
 router.get("/return/:id", ordersController.returnView);
@@ -12,6 +13,7 @@ router.get("/return/:id", ordersController.returnView);
 router.get("/sendObjects/:saleId", ordersController.sendObjects);
 
 router.post("/exchange", ordersController.exchange);
+router.post("/return", ordersController.devolution);
 
 router.post("/setTransaction/:transactionType/:id", ordersController.setTransaction);
 

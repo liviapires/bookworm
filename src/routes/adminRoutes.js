@@ -8,8 +8,8 @@ router.get("/evaluateExchange/:id", adminController.evaluateExchangeView);
 
 router.get("/:do/:type/:id", adminController.updateTransaction);
 
-router.get("/evaluateDevolution", adminController.evaluateDevoutionView);
-router.get("/evaluateDevolutionContinue", adminController.evaluateDevolutionContinueView);
+router.get("/evaluateDevolutions", adminController.evaluateDevolutions);
+router.get("/evaluateDevolution/:id", adminController.evaluateDevoutionView);
 
 router.get("/admin", adminController.mainAdminView);
 router.get("/sales", adminController.salesView);

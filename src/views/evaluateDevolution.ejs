@@ -2,40 +2,81 @@
 
     <div id="body" class="body">
         <div class="center">
-            <img src="https://www.svgrepo.com/show/520561/box-open.svg" alt="Caixa" width="200">
-            <div class="title">Avaliar Devolução</div>
-
+            <div class="title mt-1">Avaliar Devolução</div>
             <div class="items">
-                <% pedido.forEach((pd)=> { %>
                     <div class="card-item d-block">
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex">
-                                <div class="slight-bold d-flex">
-                                    <%= pd.situacao %>
-                                </div>
-                                <div class="ml-1 slight-bold d-flex">
-                                    <%= pd.cliente %>
-                                </div>
+                            <div class="d-flex badge">
+                                <%= devolution.status %>
                             </div>
-                            <div class="slight-bold">#0001</div>
+                            <div class=""><%= devolution.transactionCode %></div>
                         </div>
                         <hr>
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center">
-                                <img src="<%= pd.imagem %>" width="100rem">
                                 <div class="info-item">
                                     <div class="title-item">
-                                        <%= pd.titulo %>
+                                        <%= devolution.titulo %>
                                     </div>
-                                    <div class="price-item">R$ <%= pd.preco %>
+                                    <div class="d-flex">
+                                        Total da devolução: 
+                                        <div class="price-item ml-05">
+                                            R$ <%= devolution.transactionValue %>
+                                        </div>
                                     </div>
-                                    <div class="description-item">Compra feita em: <%= pd.dataPedido %>
+                                    <div class="description-item">
+                                        Compra feita em: <%= devolution.salePurchaseDate %>
+                                    </div>
+                                    <div class="description-item">
+                                        Solicitação de devolução feita em: <%= devolution.salePurchaseDate %>
                                     </div>
                                 </div>
                             </div>
-                            <a href="/evaluateDevolutionContinue" class="btn btn-secondary">Avaliar Devolução</a>
+                            <div class="w-49">
+                                <% devolution.books.forEach(bookInfo => { %>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex ">
+                                            <div class="mr-1">
+                                                <img src="<%= bookInfo.infos.bookImage %>" alt="Livro" width="50">
+                                            </div>
+                                            <div class="ml-1 t-left">
+                                                <div class=""><%= bookInfo.infos.title %> x<%= bookInfo.transactingQuantity %></div>
+                                                <div><%= bookInfo.infos.author %></div>
+                                                <div><%= bookInfo.infos.publisher %></div>
+                                            </div>
+                                        </div>
+                                        <div class="d-block justify-content-right">
+                                            <div> </div>
+                                            <div>R$ <%= bookInfo.value %></div>
+                                        </div>
+                                    </div>
+                                    <% if (devolution.books.indexOf(bookInfo) < devolution.books.length - 1) { %>
+                                        <hr/>
+                                    <% } %>
+                                <% }); %>
+                            </div>
                         </div>
-                        <% }); %>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-block">
+                                <div>
+                                    Motivo: <%= devolution.reason %>
+                                </div>
+                                <div>
+                                    Explicação do Motivo: <%= devolution.explanation %>
+                                </div>
+                            </div>
+                            <% if (devolution.status == "Em Avaliação") {%>
+                                <div class="d-flex">
+                                    <a href="/reject/devolution/<%= devolution.transactionId %>" class="btn btn-danger">Recusar</a>
+                                    <a href="/approve/devolution/<%= devolution.transactionId %>" class="btn btn-primary ml-1">Aprovar</a>
+                                </div>
+                            <% } if (devolution.status == "Objetos Enviados") { %>
+                                <div class="d-flex">
+                                    <a href="/confirm/reception/<%= devolution.transactionId %>" class="btn btn-primary">Confirmar Recebimento</a>
+                                </div>
+                            <% } %>
+                        </div>
                     </div>
             </div>
         </div>

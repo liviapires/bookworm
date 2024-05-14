@@ -1,18 +1,73 @@
 <%- include('header.ejs') %>
+
+<% console.log(pedido); %>
+
 <div class="container">
+    <% if (pedido.transaction) {%>
+        <div class="bg-l-red mt-1 c-red">
+            Pedido em processo de <% if (pedido.transaction.transactionType == "exchange") { %> troca <% } else { %> devolução <% } %>
+        </div>
+    <% } %>
     <div class="big-card d-block">
         <div class="badge">
             <%= pedido.status %>
         </div>
-        <div class="mt-05">
-            Se o item que você recebeu estiver com defeito ou não estiver conforme descrito, você pode abrir uma solicitação de troca/devolução dentro de 15 dias do recebimento.
-        </div>
         <div class="d-flex">
-            <% console.log(pedido); %>
-            <% if (pedido.status == "Aguardando Objetos") { %>
-                <a href="/sendObjects/<%= pedido.saleId %>" class="btn btn-danger mt-05">Confirmar envio de objetos</a>
-            <% } else if (pedido.status != "Em Troca") { %>
-                <a href="/doOrder/<%= pedido.saleId %>" class="btn btn-danger mt-05">Solicitar Troca/Devolução</a>
+            <% if (pedido.status == "Em Processamento") {%>
+                <div class="mt-05">
+                    Seu pagamento está sendo processado. Aguarde a confirmação.
+                </div>
+            <% } else if (pedido.status == "Pagamento Realizado") { %>
+                <div class="mt-05">
+                    Seu pagamento foi confirmado. Aguarde a confirmação do pedido.
+                </div>
+            <% } else if (pedido.status == "Em Trânsito") { %>
+                <div class="mt-05">
+                    Seu pedido está a caminho. Acompanhe o status de entrega.
+                </div>
+            <% } else if (pedido.status == "Entregue") { %>
+                <div class="d-block">
+                    <div class="mt-05">
+                        Seu pedido foi entregue. Confirme o recebimento.
+                    </div>
+                    <a href="/confirmDelivery/<%= pedido.saleId %>" class="btn btn-secondary mt-05">Confirmar Entrega</a>
+                </div>
+            <% } else if (pedido.status == "Entrega Confirmada") { %>
+                <div class="d-block">
+                    <div class="mt-05">
+                        Se o item que você recebeu estiver com defeito ou não estiver conforme descrito, você pode abrir uma solicitação de troca/devolução dentro de 15 dias do recebimento.
+                    </div>
+                    <a href="/doOrder/<%= pedido.saleId %>" class="btn btn-danger mt-05 ">Solicitar Troca/Devolução</a>
+                </div>
+            <% } else if (pedido.status == "Em Troca") { %>
+                <div class="mt-05">
+                    Seu pedido está em processo de troca. Aguarde a confirmação.
+                </div>
+            <% } else if (pedido.status == "Em Devolução") { %>
+                <div class="mt-05">
+                    Seu pedido está em processo de devolução. Aguarde a confirmação.
+                </div>
+            <% } else if (pedido.status == "Aguardando Objetos") { %>
+                <div class="d-block">
+                    <div class="mt-05">
+                        Seu pedido está aguardando o envio dos objetos para troca. Envie os objetos para prosseguir.
+                    </div>
+                    <a href="/sendObjects/<%= pedido.saleId %>" class="btn btn-secondary mt-05">Confirmar Envio de Objetos</a>
+                </div>
+            <% } else if (pedido.status == "Objetos Enviados") { %>
+                <div class="mt-05">
+                    Seu pedido está aguardando a confirmação do recebimento dos objetos para troca. Aguarde a confirmação.
+                </div>
+            <% } else if (pedido.status == "Troca Finalizada") {%>
+                <div class="mt-05">
+                    <div class="d-flex">
+                        Sua troca foi finalizada. Segue o código do cupom de desconto gerado: 
+                        <div class="bold ml-05"><%= pedido.transaction.coupon.couponCode %></div>.
+                    </div>
+                    Utilize o código para realizar uma nova compra com o desconto gerado (R$ <%= pedido.transaction.coupon.couponValue %>).
+                    <br>
+                    O código é válido por 30 dias.
+                </div>
             <% } %>
         </div>
     </div>
@@ -69,36 +124,76 @@
             <img src="https://www.svgrepo.com/show/533043/cart-shopping.svg" class="icon op-75">
             <div class="ml-1 bold">Itens</div>
         </div>
-            <% pedido.books.forEach((livro) => {%>
-                <div class="orderData ml-05 mt-05 b-line p-2">
-                    <div class="bookInfo">
-                        <img src="<%= livro.bookImage %>" alt="Livro" width="100">
-                        <div class="ml-05 d-block">
-                            <div class="mt-05">
-                                <%= livro.title %>
-                            </div>
-                            <div class="mt-05">
-                                <%= livro.author %>, <%= livro.publisher %> - <%= livro.year %>
-                            </div>
-                            <div class="mt-05">
-                                <%= livro.isbn %>
-                            </div>
-                            <div>
-                                <% livro.categories.forEach((categoria) => { %>
-                                    <span class="mini-badge mt-05"><%= categoria %></span>
-                                <% }); %>
-                            </div>
-
-                            <div class="mt-05">
-                                R$ <%= livro.price %>
+            <% 
+                if (pedido.transaction) {
+                    pedido.transaction.books.forEach((livroTransacao) => {
+                        pedido.books.forEach((livro) => {
+            %>
+                <div class="orderData ml-05 mt-05 b-line p-2 d-block">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="bookInfo">
+                            <img src="<%= livro.bookImage %>" alt="Livro" width="100">
+                            <div class="ml-05 d-block">
+                                <div class="mt-05">
+                                    <%= livro.title %>
+                                </div>
+                                <div class="mt-05">
+                                    <%= livro.author %>, <%= livro.publisher %> - <%= livro.year %>
+                                </div>
+                                <div class="mt-05">
+                                    <%= livro.isbn %>
+                                </div>
+                                <div>
+                                    <% livro.categories.forEach((categoria) => { %>
+                                        <span class="mini-badge mt-05"><%= categoria %></span>
+                                    <% }); %>
+                                </div>
+                                <div class="mt-05">
+                                    R$ <%= livro.price %>
+                                </div>
                             </div>
                         </div>
+                        <div>
+                            <button class="btn btn-primary mt-05">Adicionar ao Carrinho</button>
+                        </div>
                     </div>
-                    <div>
-                        <button class="btn btn-primary mt-05">Adicionar ao Carrinho</button>
+                    <% if (livroTransacao.bookId == livro.bookId) { %>
+                        <div class="bg-l-red c-red w-100">
+                            Livro em <% if (pedido.transaction.transactionType == "exchange") { %> troca<% } else if (pedido.transaction.transactionType == "return") { %> devolução<% } %>, quantidade: <%= livroTransacao.transactingQuantity %>
+                        </div>
+                    <% } %>
+                </div>
+            <% })})} else { pedido.books.forEach((livro) => { %>
+                <div class="orderData ml-05 mt-05 b-line p-2 d-block">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="bookInfo">
+                            <img src="<%= livro.bookImage %>" alt="Livro" width="100">
+                            <div class="ml-05 d-block">
+                                <div class="mt-05">
+                                    <%= livro.title %>
+                                </div>
+                                <div class="mt-05">
+                                    <%= livro.author %>, <%= livro.publisher %> - <%= livro.year %>
+                                </div>
+                                <div class="mt-05">
+                                    <%= livro.isbn %>
+                                </div>
+                                <div>
+                                    <% livro.categories.forEach((categoria) => { %>
+                                        <span class="mini-badge mt-05"><%= categoria %></span>
+                                    <% }); %>
+                                </div>
+                                <div class="mt-05">
+                                    R$ <%= livro.price %>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary mt-05">Adicionar ao Carrinho</button>
+                        </div>
                     </div>
                 </div>
-            <% }); %>
+            <% })} %>
             <div class="flex-end mt-05">
                 <div class="d-block ml-05">
                     <div class="d-flex">
