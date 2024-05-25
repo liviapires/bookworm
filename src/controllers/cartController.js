@@ -255,13 +255,11 @@ async function plus (req, res) {
     let livro = cart.find(book => book.bookId == id);
 
     if (livro) {
-        if (livro.quantity <= 9) {
-            livro.quantity++;
-            livro.bookSubtotal = parseFloat((livro.quantity * livro.price).toFixed(2));
-            req.session.total = parseFloat((req.session.total + livro.price).toFixed(2));
-            if (req.session.frete) {
-                req.session.precoFinalComFrete = parseFloat((req.session.total + req.session.frete).toFixed(2));
-            }
+        livro.quantity++;
+        livro.bookSubtotal = parseFloat((livro.quantity * livro.price).toFixed(2));
+        req.session.total = parseFloat((req.session.total + livro.price).toFixed(2));
+        if (req.session.frete) {
+            req.session.precoFinalComFrete = parseFloat((req.session.total + req.session.frete).toFixed(2));
         }
     }
 
@@ -398,6 +396,13 @@ async function togglePreferredAddress(req, res) {
     });
 
     req.session.addresses = addresses;
+
+    // randomiza o valor do frete
+    let frete = Math.random() * (50 - 10) + 10;
+    req.session.frete = parseFloat((frete).toFixed(2));
+
+    let precoFinalComFrete = parseFloat(req.session.total) + req.session.frete;
+    req.session.precoFinalComFrete = parseFloat((precoFinalComFrete).toFixed(2));
 
     res.redirect(req.get('referer'));
 }
