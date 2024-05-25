@@ -512,8 +512,6 @@ async function setTransaction (req, res) {
 
 async function sendObjects (req, res) {
 
-    console.log(req.params.saleId);
-
     let transaction = await aTransaction.getTransactionBySaleId(req.params.saleId);
 
     let transactionId = transaction[0].transactionId;

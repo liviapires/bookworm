@@ -63,22 +63,24 @@
 
                     <div class="page-title">Pagamento</div>
                     <% if(useCoupon) { %>
-                        <div class="cards mt-1">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="ml-05">
-                                    <div>Cupom: <%= coupon.couponCode %></div>
-                                </div>
-                                <div>
-                                    <div>Valor: R$ <%= coupon.couponValue %></div>
-                                    <% if (valorExcedente > 0) { %>
-                                        <div class=" d-flex justify-content-center align-items-center bold">
-                                            <div>Valor excedente</div>
-                                            <div class="ml-05 red">R$ <%= valorExcedente %></div>
-                                        </div>
-                                    <% } %>
+                        <% coupons.forEach((coupon) => {  %>
+                            <div class="cards mt-1">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="ml-05">
+                                        <div>Cupom: <%= coupon.couponCode %></div>
+                                    </div>
+                                    <div>
+                                        <div>Valor: R$ <%= coupon.couponValue %></div>
+                                        <% if (valorExcedente > 0) { %>
+                                            <div class=" d-flex justify-content-center align-items-center bold">
+                                                <div>Valor excedente</div>
+                                                <div class="ml-05 red">R$ <%= valorExcedente %></div>
+                                            </div>
+                                        <% } %>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        <% }); %>
                         <% if (precoComCupom != 0) { %>
                             <% if (!useCards) { %>
                                 <% cartoes.forEach((cartao) => { %>
@@ -202,7 +204,7 @@
                     <% if(useCoupon){ %>
                         <div class="d-flex">
                             <div class="slight-bold">Cupom</div>
-                            <div class="ml-auto">R$ <%= coupon.couponValue %></div>
+                            <div class="ml-auto">R$ <%= totalCouponValue %></div>
                         </div>
                         <hr>
                         <div class="d-flex">

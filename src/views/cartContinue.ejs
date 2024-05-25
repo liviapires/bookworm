@@ -263,15 +263,15 @@
                                 <div class="ml-05 red">R$ <%= valorExcedente %></div>
                             </div>
                         <% } %>
-                        <% console.log(coupons); %>
-
-                        <div class="coupon mt-1">
-                            <a href="/removeCoupon">
-                                <img src="https://www.svgrepo.com/show/514098/cross-round.svg" alt="Remover Cupom" class="icon-min" data-toggle="tooltip" data-placement="left" title="Não usar este cupom.">
-                            </a>
-                            <div>Cupom: <%= coupon.couponCode %></div>
-                            <div>Valor: R$ <%= coupon.couponValue %></div>
-                        </div>
+                        <% coupons.forEach((c) => { %>
+                            <div class="coupon mt-1">
+                                <a href="/removeCoupon/<%= c.couponId %>">
+                                    <img src="https://www.svgrepo.com/show/514098/cross-round.svg" alt="Remover Cupom" class="icon-min" data-toggle="tooltip" data-placement="left" title="Não usar este cupom.">
+                                </a>
+                                <div>Cupom: <%= c.couponCode %></div>
+                                <div>Valor: R$ <%= c.couponValue %></div>
+                            </div>
+                        <% }); %>
                     <% } %>
                 </div>
                 <div class="mt-3 slight-bold">Total Carrinho</div>
@@ -294,7 +294,7 @@
                     <% if(useCoupon){ %>
                         <div class="d-flex">
                             <div class="slight-bold">Cupom</div>
-                            <div class="ml-auto">R$ <%= coupon.couponValue %></div>
+                            <div class="ml-auto">R$ <%= totalCouponValue %></div>
                         </div>
                         <hr>
                         <div class="d-flex">

@@ -97,7 +97,6 @@ async function homeView (req, res) {
         req.session.addresses = await anAddress.getAddressByUserId(req.session.clientId);
         req.session.phones = await aPhone.getPhoneByUserId(req.session.clientId);
         req.session.cards = await aCard.getCardByUserId(req.session.clientId);
-        req.session.coupons = await aCoupon.getAllCoupons();
     };
     
 

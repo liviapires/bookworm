@@ -18,7 +18,6 @@ const aCoupon = new Coupon();
 
 // Renderiza a view cart
 async function cartView(req, res) {
-    console.log(req.session.coupons);
     res.render('cart', {
         title: 'Carrinho',
         cart: req.session.cart || [],
@@ -43,8 +42,8 @@ async function cartContinueView (req, res) {
         useCoupon: req.session.useCoupon || 0,
         coupons: req.session.coupons || [],
         couponInfo: req.session.couponInfo || '',
-        coupon: req.session.coupon || '',
         precoComCupom: req.session.precoComCupom || 0,
+        totalCouponValue: req.session.totalCouponValue || 0,
         valorExcedente: req.session.valorExcedente || 0
     });
 }
@@ -64,8 +63,9 @@ async function cartCheckoutView(req, res) {
         precoFinalComFrete: req.session.precoFinalComFrete || 0,
         useCards: req.session.useCards || 0,
         useCoupon: req.session.useCoupon || 0,
-        coupon: req.session.coupon || '',
+        coupons: req.session.coupons || [],
         precoComCupom: req.session.precoComCupom || 0,
+        totalCouponValue: req.session.totalCouponValue || 0,
         valorExcedente: req.session.valorExcedente || 0
     });
 }
@@ -134,7 +134,8 @@ async function finishPurchase(req, res) {
     await aSale.createSale(sale);
 
     let cards = req.session.cards;
-    let coupon = req.session.coupon;
+    let coupons = req.session.coupons;
+    let totalCouponValue = req.session.totalCouponValue;
     let useCoupon = req.session.useCoupon;
     let useCards = req.session.useCards;
     let precoFinalComFrete = req.session.precoFinalComFrete;
@@ -144,8 +145,10 @@ async function finishPurchase(req, res) {
 
     if (useCoupon == 1) {
 
-        coupon.paymentMethod = 'Cupom';
-        paymentMethod.push(coupon);
+        coupons.forEach(coupon => {
+            coupon.paymentMethod = 'Cupom';
+            paymentMethod.push(coupon);
+        });
 
         if (useCards == 1) {
             cards.forEach(card => {
@@ -182,7 +185,7 @@ async function finishPurchase(req, res) {
 
     paymentMethod.forEach(async payment => {
         if (payment.paymentMethod == 'Cupom') {
-            paymentValue = coupon.couponValue;
+            paymentValue = payment.couponValue;
         } else {
             paymentValue = payment.cardTotal;
         }
@@ -194,8 +197,6 @@ async function finishPurchase(req, res) {
             updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
             saleId: theSale[0].saleId
         }
-
-        console.log(salePayment);
 
         await aSalePayment.createSalePayment(salePayment);
     });
@@ -219,7 +220,8 @@ async function finishPurchase(req, res) {
     req.session.frete = 0;
     req.session.precoFinalComFrete = 0;
     req.session.useCoupon = 0;
-    req.session.coupon = '';
+    req.session.coupons = [];
+    req.session.totalCouponValue = 0;
     req.session.couponInfo = '';
     req.session.precoComCupom = 0;
     req.session.valorExcedente = 0;
@@ -404,6 +406,24 @@ async function togglePreferredAddress(req, res) {
     let precoFinalComFrete = parseFloat(req.session.total) + req.session.frete;
     req.session.precoFinalComFrete = parseFloat((precoFinalComFrete).toFixed(2));
 
+    if (req.session.useCoupon == 1) {
+        // atualiza o valor total da compra com o valor do cupom
+        let precoComCupom = precoFinalComFrete - req.session.totalCouponValue;
+        req.session.precoComCupom = parseFloat(precoComCupom).toFixed(2);
+
+        if (req.session.useCards == 1) {
+            let cartoes = req.session.cards;
+            let quantidadeCartoes = cartoes.length;
+
+            updateCardValue(precoComCupom, quantidadeCartoes, cartoes);
+        }
+    } else if (req.session.useCards == 1) {
+        let cartoes = req.session.cards;
+        let quantidadeCartoes = cartoes.length;
+
+        updateCardValue(precoFinalComFrete, quantidadeCartoes, cartoes);
+    }
+
     res.redirect(req.get('referer'));
 }
 
@@ -548,47 +568,36 @@ async function searchCouponByCode(req, res) {
 
     let coupon = await aCoupon.getCouponByCode(couponCode);
 
-    coupon = coupon[0];
+    if (coupon && coupon.length > 0) {
+        coupon = coupon[0];
 
-    if (coupon) {
         if (coupon.active == 0) {
             req.session.couponInfo = '❌ O cupom informado está inativo.';
             res.redirect(req.get('referer'));
+            return;
         }
 
         if (moment().isAfter(coupon.expirationDate)) {
             req.session.couponInfo = '❌ O cupom informado está expirado.';
             res.redirect(req.get('referer'));
+            return;
         }
 
-        if (coupon.couponValue > req.session.precoFinalComFrete) {
-            req.session.couponInfo = '⚠️ O valor do cupom informado é maior que o valor total da compra. Valor excedente não será reembolsado.';
+        // Retrieve existing coupons from session
+        let existingCoupons = req.session.coupons || [];
+        let totalCouponValue = existingCoupons.reduce((acc, c) => acc + parseFloat(c.couponValue), 0);
+        totalCouponValue += parseFloat(coupon.couponValue);
 
-            coupon.couponValue = parseFloat((coupon.couponValue)).toFixed(2);
+        if (totalCouponValue > req.session.precoFinalComFrete) {
+            req.session.couponInfo = '⚠️ O valor total dos cupons é maior que o valor total da compra. Valor excedente não será reembolsado.';
 
-            let precoFinalComFrete = req.session.precoFinalComFrete;
-            let valorExcedente = coupon.couponValue - precoFinalComFrete;
-            let precoComCupom = 0;
-
-            req.session.valorExcedente = parseFloat((valorExcedente)).toFixed(2);
-            req.session.precoComCupom = parseFloat((precoComCupom)).toFixed(2);
-
-            if (req.session.useCards == 1) {
-                req.session.useCards = 0;
-            }
-
-            req.session.coupon = coupon;
-            req.session.useCoupon = 1;
-
-            res.redirect(req.get('referer'));
+            let valorExcedente = totalCouponValue - req.session.precoFinalComFrete;
+            req.session.valorExcedente = parseFloat(valorExcedente).toFixed(2);
+            req.session.precoComCupom = '0.00';
         } else {
-            let precoFinalComFrete = req.session.precoFinalComFrete;
-            let precoComCupom = precoFinalComFrete - coupon.couponValue;
-
-            req.session.precoComCupom = parseFloat((precoComCupom)).toFixed(2);
+            let precoComCupom = req.session.precoFinalComFrete - totalCouponValue;
+            req.session.precoComCupom = parseFloat(precoComCupom).toFixed(2);
             req.session.couponInfo = '✅ Cupom aplicado com sucesso.';
-
-            coupon.couponValue = parseFloat((coupon.couponValue)).toFixed(2);
 
             if (req.session.useCards == 1) {
                 let cartoes = req.session.cards;
@@ -597,31 +606,79 @@ async function searchCouponByCode(req, res) {
                 updateCardValue(precoComCupom, quantidadeCartoes, cartoes);
             }
 
-            req.session.coupon = coupon;
-            req.session.useCoupon = 1;
-            req.session.valorExcedente = 0;
-
-            res.redirect(req.get('referer'));
+            req.session.valorExcedente = '0.00';
         }
+
+        // Add the new coupon to the session
+        existingCoupons.push({
+            ...coupon,
+            couponValue: parseFloat(coupon.couponValue).toFixed(2)
+        });
+
+        req.session.coupons = existingCoupons;
+        req.session.useCoupon = 1;
+        req.session.totalCouponValue = (totalCouponValue).toFixed(2);
+
     } else {
         req.session.couponInfo = '❌ O cupom informado não foi encontrado.';
-        res.redirect(req.get('referer'));
     }
+
+    res.redirect(req.get('referer'));
+
 }
 
 async function removeCoupon(req, res) {
-    req.session.useCoupon = 0;
-    req.session.coupon = '';
-    req.session.couponInfo = '❌ Cupom removido com sucesso.';
-    req.session.precoComCupom = 0;
+    
+    let coupon = req.session.coupons.find(c => c.couponId == req.params.id);
 
-    if(req.session.useCards == 1) {
-        // atualiza o valor total dos cartões restantes para a divisão do valor total que resta da compra pelo número de cartões restantes
-        let cartoes = req.session.cards;
-        let quantidadeCartoes = cartoes.length;
-        let preco = req.session.precoFinalComFrete;
+    // remove the coupon from the session coupons array
+    req.session.coupons = req.session.coupons.filter(c => c.couponId != req.params.id);
 
-        updateCardValue(preco, quantidadeCartoes, cartoes);
+    if (req.session.coupons.length == 0) {
+        req.session.couponInfo = '✅ O cupom foi removido com sucesso. O carrinho voltou ao valor original, visto que não há mais cupons aplicados.';
+        req.session.useCoupon = 0;
+        req.session.precoComCupom = 0;
+        req.session.valorExcedente = 0;
+        req.session.totalCouponValue = 0;
+
+        if (req.session.useCards == 1) {
+            let cartoes = req.session.cards;
+            let quantidadeCartoes = cartoes.length;
+
+            updateCardValue(req.session.precoFinalComFrete, quantidadeCartoes, cartoes);
+        }
+    } else {
+        let totalCouponValue = req.session.coupons.reduce((acc, c) => acc + parseFloat(c.couponValue), 0);
+        let precoComCupom = req.session.precoFinalComFrete - totalCouponValue;
+
+        if (precoComCupom == req.session.precoFinalComFrete) {
+            req.session.couponInfo = '⚠️ O valor total dos cupons é maior que o valor total da compra. Valor excedente não será reembolsado.';
+
+            let valorExcedente = precoComCupom - req.session.precoFinalComFrete;
+            req.session.valorExcedente = parseFloat(valorExcedente).toFixed(2);
+            req.session.precoComCupom = '0.00';
+            req.session.totalCouponValue = (totalCouponValue).toFixed(2);
+
+            if (req.session.useCards == 1) {
+                let cartoes = req.session.cards;
+                let quantidadeCartoes = cartoes.length;
+
+                updateCardValue(precoComCupom, quantidadeCartoes, cartoes);
+            }
+
+        } else {
+            req.session.valorExcedente = '0.00';
+            req.session.couponInfo = '✅ Cupom removido com sucesso.';
+            req.session.precoComCupom = parseFloat(precoComCupom).toFixed(2);
+            req.session.totalCouponValue = (totalCouponValue).toFixed(2);
+
+            if (req.session.useCards == 1) {
+                let cartoes = req.session.cards;
+                let quantidadeCartoes = cartoes.length;
+
+                updateCardValue(precoComCupom, quantidadeCartoes, cartoes);
+            }
+        }
     }
 
     res.redirect(req.get('referer'));

@@ -348,10 +348,7 @@ async function updateTransaction (req, res) {
         if (type == 'reception') {
             let transaction = await aTransaction.getTransactionById(transactionId);
 
-            console.log(transaction[0]);
-
             if (transaction[0].transactionType == 'exchange') {
-                console.log("aaaaaaaa");
                 let coupon = {
                     couponCode: Math.random().toString(36).substr(2, 6).toUpperCase(),
                     couponValue: transaction[0].transactionValue,

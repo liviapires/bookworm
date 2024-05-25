@@ -15,7 +15,7 @@ router.get("/togglePreferredAddress/:id", cartController.togglePreferredAddress)
 router.get("/useCards", cartController.useCards);
 router.get ("/removeCard/:id", cartController.removeCard);
 
-router.get("/removeCoupon", cartController.removeCoupon);
+router.get("/removeCoupon/:id", cartController.removeCoupon);
 router.post("/searchCoupon", cartController.searchCouponByCode);
 
 router.get("/plus/:id", cartController.plus);
