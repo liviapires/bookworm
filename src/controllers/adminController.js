@@ -216,6 +216,12 @@ async function saleView (req, res) {
     // put books in sale object
     sale[0].books = livros;
 
+    // verify if the sale has a transaction
+    const transaction = await aTransaction.getTransactionBySaleId(req.params.id);
+    if (transaction.length > 0) {
+        sale[0].transactionId = transaction[0].transactionId;
+    }
+
     res.render('sale', {
         title: 'Venda',
         sale: sale[0]
@@ -433,7 +439,6 @@ async function updateTransaction (req, res) {
             }
         }
     }
-    
 }
 
 module.exports = {

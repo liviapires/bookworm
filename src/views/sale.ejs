@@ -31,6 +31,8 @@
                     <button type="submit" class="btn btn-primary ml-05">Salvar</button>
                 </div>
             </form>
+        <% } else if (sale.status == "Em Troca") {%>
+            <a href="/evaluateExchange/<%= sale.transactionId %>" class="btn btn-primary ml-05">Avaliar Troca</a>
         <% } %>
     </div>
 
