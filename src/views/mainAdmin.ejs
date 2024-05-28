@@ -1,11 +1,9 @@
 <%- include('header.ejs'); %>
-
-    <div id="body" class="main-center">
         <div class="title-home">Painel Administrativo</div>
 
         <div class="center">
-            <div class="d-flex justify-content-between">
-                <div class="card-admin">
+            <div class="parent">
+                <div class="card-admin div1">
                     <div class="d-flex justify-content-center">
                         <img src="https://www.svgrepo.com/show/496872/box-search.svg" alt="Troca" class="icon-max">
                     </div>
@@ -13,7 +11,7 @@
                         <a href="/sales" class="btn btn-primary w-100 mt-1">Todos os Pedidos</a>
                     </div>
                 </div>
-                <div class="card-admin">
+                <div class="card-admin div2">
                     <div class="d-flex justify-content-center">
                         <img src="https://www.svgrepo.com/show/496871/box-time.svg" alt="Troca" class="icon-max">
                     </div>
@@ -21,7 +19,7 @@
                         <a href="/evaluateExchanges" class="btn btn-primary w-100 mt-1">Avaliar Trocas</a>
                     </div>
                 </div>
-                <div class="card-admin">
+                <div class="card-admin div3">
                     <div class="d-flex justify-content-center">
                         <img src="https://www.svgrepo.com/show/496870/box-remove.svg" alt="Devolução" class="icon-max">
                     </div>
@@ -29,7 +27,7 @@
                         <a href="/evaluateDevolutions" class="btn btn-primary w-100 mt-1">Avaliar Devoluções</a>
                     </div>
                 </div>
-                <div class="card-admin">
+                <div class="card-admin div4">
                     <div class="d-flex justify-content-center">
                         <img src="https://www.svgrepo.com/show/497390/people.svg" alt="Clientes" class="icon-max">
                     </div>
@@ -37,8 +35,10 @@
                         <a href="/clients" class="btn btn-primary w-100 mt-1">Clientes</a>
                     </div>
                 </div>
+                <div class="card-admin div5">
+                    aqui vai o gráfico
+                </div>
             </div>
         </div>
-    </div>
 
 <%- include('footer.ejs'); %>

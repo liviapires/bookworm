@@ -433,7 +433,6 @@ async function updateTransaction (req, res) {
             }
         }
     }
-    
 }
 
 module.exports = {
