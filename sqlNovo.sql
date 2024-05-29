@@ -97,6 +97,7 @@ CREATE TABLE `books` (
     `depth` float NOT NULL,
     `barcode` varchar(255) NOT NULL,
     `active` tinyint NOT NULL,
+    `bookImage` varchar(255) NOT NULL,
     `createdAt` datetime NOT NULL,
     `updatedAt` datetime NOT NULL,
     `pricingGroupId` integer NOT NULL,
@@ -119,6 +120,8 @@ CREATE TABLE `bookCategories` (
     `bookCategoriesId` integer NOT NULL AUTO_INCREMENT,
     `categoryId` integer NOT NULL,
     `bookId` integer NOT NULL,
+    `createdAt` datetime NOT NULL,
+    `updatedAt` datetime NOT NULL,
     PRIMARY KEY (`bookCategoriesId`),
     KEY `FK_1` (`bookId`),
     CONSTRAINT `FK_1` FOREIGN KEY `FK_1` (`bookId`) REFERENCES `books` (`bookId`),
@@ -274,48 +277,176 @@ VALUES
     ('Grupo 09', 20.5, NOW(), NOW()),
     ('Grupo 10', 80.55, NOW(), NOW());
 
--- Inserção de 10 registros na tabela `categories`
-INSERT INTO `categories` (`categoryName`, `createdAt`, `updatedAt`)
+-- Inserção de registros na tabela `categories`
+INSERT INTO `categories` (`categoryName`, `createdAt`, `updatedAt`) 
 VALUES
-    ('Ficção Científica', NOW(), NOW()),
+    ('Fiction', NOW(), NOW()),
+    ('Non-Fiction', NOW(), NOW()),
+    ('Science', NOW(), NOW()),
+    ('History', NOW(), NOW()),
+    ('Biography', NOW(), NOW()),
+    ('Fantasy', NOW(), NOW()),
+    ('Mystery', NOW(), NOW()),
+    ('Thriller', NOW(), NOW()),
+    ('Horror', NOW(), NOW()),
+    ('Self-Help', NOW(), NOW()),
+    ('Memoir', NOW(), NOW()),
+    ('Science Fiction', NOW(), NOW()),
+    ('Dystopian', NOW(), NOW()),
     ('Romance', NOW(), NOW()),
-    ('Fantasia', NOW(), NOW()),
-    ('Aventura', NOW(), NOW()),
-    ('Suspense', NOW(), NOW()),
-    ('Terror', NOW(), NOW()),
-    ('Autoajuda', NOW(), NOW()),
-    ('Biografia', NOW(), NOW()),
-    ('História', NOW(), NOW()),
-    ('Policial', NOW(), NOW());
+    ('Adventure', NOW(), NOW()),
+    ('Childrens', NOW(), NOW()),
+    ('Young Adult', NOW(), NOW()),
+    ('Classic', NOW(), NOW()),
+    ('Philosophy', NOW(), NOW()),
+    ('Religion', NOW(), NOW()),
+    ('Politics', NOW(), NOW()),
+    ('Economics', NOW(), NOW()),
+    ('Business', NOW(), NOW()),
+    ('Art', NOW(), NOW()),
+    ('Music', NOW(), NOW()),
+    ('Sports', NOW(), NOW()),
+    ('Cooking', NOW(), NOW()),
+    ('Travel', NOW(), NOW()),
+    ('Science Fiction', NOW(), NOW()),
+    ('Dystopian', NOW(), NOW()),
+    ('Romance', NOW(), NOW()),
+    ('Adventure', NOW(), NOW()),
+    ('Childrens', NOW(), NOW()),
+    ('Young Adult', NOW(), NOW()),
+    ('Classic', NOW(), NOW()),
+    ('Philosophy', NOW(), NOW()),
+    ('Religion', NOW(), NOW()),
+    ('Politics', NOW(), NOW()),
+    ('Economics', NOW(), NOW()),
+    ('Business', NOW(), NOW()),
+    ('Art', NOW(), NOW()),
+    ('Music', NOW(), NOW()),
+    ('Sports', NOW(), NOW()),
+    ('Cooking', NOW(), NOW()),
+    ('Travel', NOW(), NOW());
 
--- Inserção de 10 registros na tabela `books`
-INSERT INTO `books` (`title`, `author`, `year`, `publisher`, `edition`, `isbn`, `numPages`, `synopsis`, `height`, `widith`, `weight`, `depth`, `barcode`, `active`, `createdAt`, `updatedAt`, `pricingGroupId`)
+
+-- Inserção de registros na tabela `books`
+INSERT INTO `books` (`title`, `author`, `year`, `publisher`, `edition`, `isbn`, `numPages`, `synopsis`, `height`, `widith`, `weight`, `depth`, `barcode`, `active`, `bookImage`, `createdAt`, `updatedAt`, `pricingGroupId`) 
 VALUES
-    ('Livro 1', 'Autor 1', 2020, 'Editora A', '1ª edição', '1234567890123', 300, 'Sinopse do Livro 1', 20.5, 15.2, 0.8, 3.5, '123456', 1, NOW(), NOW(), 1),
-    ('Livro 2', 'Autor 2', 2019, 'Editora B', '2ª edição', '1234567890124', 250, 'Sinopse do Livro 2', 19.8, 14.5, 0.7, 3.2, '123457', 1, NOW(), NOW(), 2),
-    ('Livro 3', 'Autor 3', 2018, 'Editora C', '3ª edição', '1234567890125', 400, 'Sinopse do Livro 3', 22.0, 16.0, 0.9, 3.8, '123458', 1, NOW(), NOW(), 3),
-    ('Livro 4', 'Autor 4', 2017, 'Editora D', '4ª edição', '1234567890126', 350, 'Sinopse do Livro 4', 21.5, 15.5, 0.85, 3.6, '123459', 1, NOW(), NOW(), 4),
-    ('Livro 5', 'Autor 5', 2016, 'Editora E', '5ª edição', '1234567890127', 320, 'Sinopse do Livro 5', 21.0, 15.8, 0.75, 3.4, '123460', 1, NOW(), NOW(), 5),
-    ('Livro 6', 'Autor 6', 2015, 'Editora F', '6ª edição', '1234567890128', 280, 'Sinopse do Livro 6', 20.8, 15.4, 0.85, 3.7, '123461', 1, NOW(), NOW(), 6),
-    ('Livro 7', 'Autor 7', 2014, 'Editora G', '7ª edição', '1234567890129', 330, 'Sinopse do Livro 7', 20.2, 15.0, 0.8, 3.3, '123462', 1, NOW(), NOW(), 7),
-    ('Livro 8', 'Autor 8', 2013, 'Editora H', '8ª edição', '1234567890130', 290, 'Sinopse do Livro 8', 19.5, 14.7, 0.75, 3.1, '123463', 1, NOW(), NOW(), 8),
-    ('Livro 9', 'Autor 9', 2012, 'Editora I', '9ª edição', '1234567890131', 380, 'Sinopse do Livro 9', 22.5, 16.5, 0.95, 3.9, '123464', 1, NOW(), NOW(), 9),
-    ('Livro 10', 'Autor 10', 2011, 'Editora J', '10ª edição', '1234567890132', 270, 'Sinopse do Livro 10', 20.0, 15.6, 0.8, 3.6, '123465', 1, NOW(), NOW(), 10);
+    ('The Great Gatsby', 'F. Scott Fitzgerald', 1925, 'Scribner', '1st', '9780743273565', 180, 'A story of the fabulously wealthy Jay Gatsby and his love for the beautiful Daisy Buchanan, of lavish parties on Long Island.', 20.3, 13.3, 0.4, 1.9, '9780743273565', 1, 'https://images-na.ssl-images-amazon.com/images/I/81AFocW6Y-L.jpg', NOW(), NOW(), 1),
+    ('To Kill a Mockingbird', 'Harper Lee', 1960, 'J.B. Lippincott & Co.', '1st', '9780061120084', 281, 'The unforgettable novel of a childhood in a sleepy Southern town and the crisis of conscience that rocked it.', 20.3, 13.3, 0.6, 1.9, '9780061120084', 1, 'https://images-na.ssl-images-amazon.com/images/I/81OxocN1-jL.jpg', NOW(), NOW(), 1),
+    ('1984', 'George Orwell', 1949, 'Secker & Warburg', '1st', '9780451524935', 328, 'A dystopian social science fiction novel and cautionary tale about the dangers of totalitarianism.', 19.8, 12.9, 0.4, 2.0, '9780451524935', 1, 'https://images-na.ssl-images-amazon.com/images/I/71kxa1-0mfL.jpg', NOW(), NOW(), 2),
+    ('A Brief History of Time', 'Stephen Hawking', 1988, 'Bantam Books', '1st', '9780553380163', 212, 'A landmark volume in science writing by one of the great minds of our time.', 23.5, 15.6, 0.7, 2.3, '9780553380163', 1, 'https://images-na.ssl-images-amazon.com/images/I/71SYq6Pl4LL.jpg', NOW(), NOW(), 3),
+    ('The Art of War', 'Sun Tzu', -500, 'Shambhala', '1st', '9781590302255', 273, 'An ancient Chinese military treatise dating from the Late Spring and Autumn Period.', 19.1, 12.6, 0.3, 1.7, '9781590302255', 1, 'https://images-na.ssl-images-amazon.com/images/I/81Ry8F6MXYL.jpg', NOW(), NOW(), 4),
+    ('Brave New World', 'Aldous Huxley', 1932, 'Chatto & Windus', '1st', '9780060850524', 268, 'A dystopian social science fiction novel set in a futuristic World State.', 20.0, 13.0, 0.5, 1.8, '9780060850524', 1, 'https://images-na.ssl-images-amazon.com/images/I/81aY%2Bddz5IL.jpg', NOW(), NOW(), 2),
+    ('The Catcher in the Rye', 'J.D. Salinger', 1951, 'Little, Brown and Company', '1st', '9780316769488', 214, 'A novel about the experiences of a young man in Manhattan after being expelled from prep school.', 21.0, 14.0, 0.4, 1.9, '9780316769488', 1, 'https://images-na.ssl-images-amazon.com/images/I/81OthjkJBuL.jpg', NOW(), NOW(), 1),
+    ('Sapiens: A Brief History of Humankind', 'Yuval Noah Harari', 2011, 'Harvill Secker', '1st', '9780062316097', 443, 'An exploration of the history and impact of the human species.', 24.0, 16.0, 0.8, 2.5, '9780062316097', 1, 'https://images-na.ssl-images-amazon.com/images/I/713jIoMO3UL.jpg', NOW(), NOW(), 3),
+    ('The Diary of a Young Girl', 'Anne Frank', 1947, 'Contact Publishing', '1st', '9780553296983', 283, 'The writings from the Dutch language diary kept by Anne Frank.', 20.5, 13.5, 0.6, 2.1, '9780553296983', 1, 'https://images-na.ssl-images-amazon.com/images/I/81eA7OO5ecL.jpg', NOW(), NOW(), 4),
+    ('Steve Jobs', 'Walter Isaacson', 2011, 'Simon & Schuster', '1st', '9781451648539', 656, 'A biography of Steve Jobs.', 24.1, 16.1, 0.9, 3.1, '9781451648539', 1, 'https://images-na.ssl-images-amazon.com/images/I/81VStYnDGrL.jpg', NOW(), NOW(), 5),
+    ('The Origin of Species', 'Charles Darwin', 1859, 'John Murray', '1st', '9781509827695', 502, 'A work of scientific literature which is considered to be the foundation of evolutionary biology.', 22.0, 15.0, 0.8, 2.6, '9781509827695', 1, 'https://images-na.ssl-images-amazon.com/images/I/71g2ednj0JL.jpg', NOW(), NOW(), 3),
+    ('The Road', 'Cormac McCarthy', 2006, 'Alfred A. Knopf', '1st', '9780307387899', 287, 'A novel detailing the journey of a father and his young son over a period of several months, across a landscape blasted by an unspecified cataclysm.', 21.2, 13.8, 0.4, 1.9, '9780307387899', 1, 'https://images-na.ssl-images-amazon.com/images/I/81t6t5%2BUbNL.jpg', NOW(), NOW(), 1),
+    ('Thinking, Fast and Slow', 'Daniel Kahneman', 2011, 'Farrar, Straus and Giroux', '1st', '9780374533557', 499, 'A book that dives into the two systems of thought that drive the way we think.', 23.0, 15.5, 0.7, 2.4, '9780374533557', 1, 'https://images-na.ssl-images-amazon.com/images/I/71rXSVqET9L.jpg', NOW(), NOW(), 3),
+    ('Educated', 'Tara Westover', 2018, 'Random House', '1st', '9780399590504', 334, 'A memoir recounting the authors experiences growing up in a strict and abusive household in rural Idaho but eventually escaping to learn about the wider world through education.', 22.5, 15.2, 0.6, 2.3, '9780399590504', 1, 'https://images-na.ssl-images-amazon.com/images/I/81WojUxbbFL.jpg', NOW(), NOW(), 5),
+    ('Becoming', 'Michelle Obama', 2018, 'Crown Publishing Group', '1st', '9781524763138', 426, 'A memoir by the former First Lady of the United States.', 24.0, 16.0, 0.9, 2.7, '9781524763138', 1, 'https://images-na.ssl-images-amazon.com/images/I/81h2gWPTYJL.jpg', NOW(), NOW(), 5),
+    ('The Hobbit', 'J.R.R. Tolkien', 1937, 'George Allen & Unwin', '1st', '9780345339683', 310, 'A fantasy novel and childrens book by J.R.R. Tolkien.', 21.0, 14.0, 0.6, 1.8, '9780345339683', 1, 'https://images-na.ssl-images-amazon.com/images/I/91b0C2YNSrL.jpg', NOW(), NOW(), 1),
+    ('The Da Vinci Code', 'Dan Brown', 2003, 'Doubleday', '1st', '9780307474278', 454, 'A mystery thriller novel by Dan Brown.', 23.0, 15.0, 0.7, 2.3, '9780307474278', 1, 'https://images-na.ssl-images-amazon.com/images/I/81Q%2BD7GCVBL.jpg', NOW(), NOW(), 1),
+    ('A Game of Thrones', 'George R.R. Martin', 1996, 'Bantam Books', '1st', '9780553103540', 694, 'A fantasy novel by George R.R. Martin, the first in A Song of Ice and Fire series.', 24.0, 16.0, 0.9, 2.8, '9780553103540', 1, 'https://images-na.ssl-images-amazon.com/images/I/91b0C2YNSrL.jpg', NOW(), NOW(), 1),
+    ('The Immortal Life of Henrietta Lacks', 'Rebecca Skloot', 2010, 'Crown Publishing Group', '1st', '9781400052172', 370, 'A non-fiction book by Rebecca Skloot.', 22.8, 15.3, 0.8, 2.4, '9781400052172', 1, 'https://images-na.ssl-images-amazon.com/images/I/71rnbF6MsoL.jpg', NOW(), NOW(), 2),
+    ('The Silent Patient', 'Alex Michaelides', 2019, 'Celadon Books', '1st', '9781250301697', 336, 'A psychological thriller novel by Alex Michaelides.', 23.5, 16.0, 0.7, 2.5, '9781250301697', 1, 'https://images-na.ssl-images-amazon.com/images/I/71YV7sYv8YL.jpg', NOW(), NOW(), 1),
+    ('Bad Blood', 'John Carreyrou', 2018, 'Knopf', '1st', '9781524731656', 352, 'The story of the rise and fall of Theranos, the one-time multibillion-dollar biotech startup.', 23.0, 15.0, 0.6, 2.3, '9781524731656', 1, 'https://images-na.ssl-images-amazon.com/images/I/81oqkQAMwLL.jpg', NOW(), NOW(), 2),
+    ('Catch-22', 'Joseph Heller', 1961, 'Simon & Schuster', '1st', '9781451626650', 453, 'A satirical novel set during World War II by Joseph Heller.', 22.0, 14.5, 0.7, 2.4, '9781451626650', 1, 'https://images-na.ssl-images-amazon.com/images/I/81cpDaCJJCL.jpg', NOW(), NOW(), 1),
+    ('The Subtle Art of Not Giving a F*ck', 'Mark Manson', 2016, 'HarperOne', '1st', '9780062457714', 224, 'A self-help book by Mark Manson.', 21.0, 13.5, 0.6, 1.8, '9780062457714', 1, 'https://images-na.ssl-images-amazon.com/images/I/71QKQ9mwV7L.jpg', NOW(), NOW(), 2),
+    ('Educated: A Memoir', 'Tara Westover', 2018, 'Random House', '1st', '9780399590504', 334, 'A memoir by Tara Westover.', 22.5, 15.2, 0.6, 2.3, '9780399590504', 1, 'https://images-na.ssl-images-amazon.com/images/I/81WojUxbbFL.jpg', NOW(), NOW(), 5),
+    ('The Power of Habit', 'Charles Duhigg', 2012, 'Random House', '1st', '9780812981605', 371, 'A book that explores the science behind habit creation and reformation.', 21.0, 13.5, 0.6, 2.0, '9780812981605', 1, 'https://images-na.ssl-images-amazon.com/images/I/71aG%2BXq%2B2PL.jpg', NOW(), NOW(), 2),
+    ('Moby Dick', 'Herman Melville', 1851, 'Harper & Brothers', '1st', '9781503280786', 635, 'The narrative of the sailor Ishmaels adventures aboard the whaling ship Pequod.', 23.0, 15.0, 0.8, 2.5, '9781503280786', 1, 'https://images-na.ssl-images-amazon.com/images/I/81OthjkJBuL.jpg', NOW(), NOW(), 1),
+    ('War and Peace', 'Leo Tolstoy', 1869, 'The Russian Messenger', '1st', '9780199232765', 1225, 'A novel that chronicles the French invasion of Russia and the impact of the Napoleonic era.', 24.0, 16.0, 1.2, 3.5, '9780199232765', 1, 'https://images-na.ssl-images-amazon.com/images/I/81t6t5%2BUbNL.jpg', NOW(), NOW(), 1),
+    ('The Shining', 'Stephen King', 1977, 'Doubleday', '1st', '9780385121675', 447, 'A horror novel about Jack Torrance who becomes winter caretaker of the isolated Overlook Hotel in Colorado.', 23.5, 16.0, 0.9, 2.7, '9780385121675', 1, 'https://images-na.ssl-images-amazon.com/images/I/81OxocN1-jL.jpg', NOW(), NOW(), 1),
+    ('The Catcher in the Rye', 'J.D. Salinger', 1951, 'Little, Brown and Company', '1st', '9780316769488', 277, 'A story about teenage rebellion and angst narrated by Holden Caulfield.', 21.0, 14.0, 0.5, 2.0, '9780316769488', 1, 'https://images-na.ssl-images-amazon.com/images/I/81OthjkJBuL.jpg', NOW(), NOW(), 1),
+    ('Guns, Germs, and Steel', 'Jared Diamond', 1997, 'W.W. Norton & Company', '1st', '9780393317558', 494, 'A transdisciplinary non-fiction book that presents a history of human societies.', 24.1, 16.1, 0.9, 2.8, '9780393317558', 1, 'https://images-na.ssl-images-amazon.com/images/I/71g2ednj0JL.jpg', NOW(), NOW(), 2),
+    ('Thinking, Fast and Slow', 'Daniel Kahneman', 2011, 'Farrar, Straus and Giroux', '1st', '9780374533557', 499, 'An exploration of the two systems of thought that drive the way we think.', 23.0, 15.5, 0.7, 2.4, '9780374533557', 1, 'https://images-na.ssl-images-amazon.com/images/I/71rXSVqET9L.jpg', NOW(), NOW(), 2),
+    ('The Road', 'Cormac McCarthy', 2006, 'Alfred A. Knopf', '1st', '9780307387899', 287, 'A post-apocalyptic novel detailing the journey of a father and his son.', 21.2, 13.8, 0.4, 1.9, '9780307387899', 1, 'https://images-na.ssl-images-amazon.com/images/I/81t6t5%2BUbNL.jpg', NOW(), NOW(), 1),
+    ('The Girl with the Dragon Tattoo', 'Stieg Larsson', 2005, 'Norstedts Förlag', '1st', '9780307269751', 465, 'A mystery novel about the disappearance of a wealthy patriarchs niece.', 22.9, 15.4, 0.8, 2.5, '9780307269751', 1, 'https://images-na.ssl-images-amazon.com/images/I/71U1HQnbWxL.jpg', NOW(), NOW(), 1),
+    ('Pride and Prejudice', 'Jane Austen', 1813, 'T. Egerton', '1st', '9780192833556', 279, 'A romantic novel that charts the emotional development of the protagonist Elizabeth Bennet.', 20.5, 13.5, 0.5, 2.0, '9780192833556', 1, 'https://images-na.ssl-images-amazon.com/images/I/81OxocN1-jL.jpg', NOW(), NOW(), 1),
+    ('The Fellowship of the Ring', 'J.R.R. Tolkien', 1954, 'George Allen & Unwin', '1st', '9780261102354', 423, 'The first volume of The Lord of the Rings.', 23.0, 15.0, 0.8, 2.4, '9780261102354', 1, 'https://images-na.ssl-images-amazon.com/images/I/71rnbF6MsoL.jpg', NOW(), NOW(), 3),
+    ('Sapiens: A Brief History of Humankind', 'Yuval Noah Harari', 2011, 'Harper', '1st', '9780062316097', 443, 'An exploration of the history and impact of Homo sapiens.', 24.5, 16.5, 0.8, 2.8, '9780062316097', 1, 'https://images-na.ssl-images-amazon.com/images/I/81OxocN1-jL.jpg', NOW(), NOW(), 2),
+    ('The Handmaids Tale', 'Margaret Atwood', 1985, 'McClelland and Stewart', '1st', '9780395404255', 311, 'A dystopian novel set in a totalitarian society.', 22.7, 15.2, 0.7, 2.3, '9780395404255', 1, 'https://images-na.ssl-images-amazon.com/images/I/71N4oeWwYlL.jpg', NOW(), NOW(), 1),
+    ('The Great Gatsby', 'F. Scott Fitzgerald', 1925, 'Charles Scribners Sons', '1st', '9780743273565', 180, 'A novel set in the Jazz Age that tells the story of Jay Gatsby and his unrequited love for Daisy Buchanan.', 20.2, 13.2, 0.4, 1.6, '9780743273565', 1, 'https://images-na.ssl-images-amazon.com/images/I/71FTb9X6wsL.jpg', NOW(), NOW(), 1);
 
--- Inserção de 10 registros na tabela `bookCategories`
+
+
+-- Inserção de registros na tabela `bookCategories`
 -- Relacionamento entre os livros e as categorias
-INSERT INTO `bookCategories` (`categoryId`, `bookId`)
+-- Inserção de registros na tabela `bookCategories`
+INSERT INTO `bookCategories` (`categoryId`, `bookId`, `createdAt`, `updatedAt`) 
 VALUES
-    (1, 1),
-    (2, 2),
-    (3, 3),
-    (4, 4),
-    (5, 5),
-    (6, 6),
-    (7, 7),
-    (8, 8),
-    (9, 9),
-    (10, 10);
+    (1, 1, NOW(), NOW()),  -- The Great Gatsby - Fiction
+    (1, 2, NOW(), NOW()),  -- To Kill a Mockingbird - Fiction
+    (1, 3, NOW(), NOW()),  -- 1984 - Fiction
+    (13, 3, NOW(), NOW()), -- 1984 - Dystopian
+    (3, 4, NOW(), NOW()),  -- A Brief History of Time - Science
+    (19, 4, NOW(), NOW()), -- A Brief History of Time - Philosophy
+    (1, 5, NOW(), NOW()),  -- The Art of War - Fiction
+    (15, 5, NOW(), NOW()), -- The Art of War - Adventure
+    (12, 6, NOW(), NOW()), -- Brave New World - Science Fiction
+    (13, 6, NOW(), NOW()), -- Brave New World - Dystopian
+    (1, 7, NOW(), NOW()),  -- The Catcher in the Rye - Fiction
+    (1, 8, NOW(), NOW()),  -- Sapiens: A Brief History of Humankind - Fiction
+    (2, 8, NOW(), NOW()),  -- Sapiens: A Brief History of Humankind - Non-Fiction
+    (5, 9, NOW(), NOW()),  -- The Diary of a Young Girl - Biography
+    (2, 9, NOW(), NOW()),  -- The Diary of a Young Girl - Non-Fiction
+    (5, 10, NOW(), NOW()), -- Steve Jobs - Biography
+    (2, 10, NOW(), NOW()), -- Steve Jobs - Non-Fiction
+    (3, 11, NOW(), NOW()), -- The Origin of Species - Science
+    (4, 11, NOW(), NOW()), -- The Origin of Species - History
+    (1, 12, NOW(), NOW()), -- The Road - Fiction
+    (9, 12, NOW(), NOW()), -- The Road - Horror
+    (2, 13, NOW(), NOW()), -- Thinking, Fast and Slow - Non-Fiction
+    (19, 13, NOW(), NOW()), -- Thinking, Fast and Slow - Philosophy
+    (11, 14, NOW(), NOW()), -- Educated - Memoir
+    (2, 14, NOW(), NOW()), -- Educated - Non-Fiction
+    (11, 15, NOW(), NOW()), -- Becoming - Memoir
+    (5, 15, NOW(), NOW()), -- Becoming - Biography
+    (6, 16, NOW(), NOW()), -- The Hobbit - Fantasy
+    (1, 16, NOW(), NOW()), -- The Hobbit - Fiction
+    (8, 17, NOW(), NOW()), -- The Da Vinci Code - Thriller
+    (1, 17, NOW(), NOW()), -- The Da Vinci Code - Fiction
+    (6, 18, NOW(), NOW()), -- A Game of Thrones - Fantasy
+    (1, 18, NOW(), NOW()), -- A Game of Thrones - Fiction
+    (2, 19, NOW(), NOW()), -- The Immortal Life of Henrietta Lacks - Non-Fiction
+    (3, 19, NOW(), NOW()), -- The Immortal Life of Henrietta Lacks - Science
+    (8, 20, NOW(), NOW()), -- The Silent Patient - Thriller
+    (1, 20, NOW(), NOW()), -- The Silent Patient - Fiction
+    (2, 21, NOW(), NOW()), -- Bad Blood - Non-Fiction
+    (5, 21, NOW(), NOW()), -- Bad Blood - Biography
+    (1, 22, NOW(), NOW()), -- Catch-22 - Fiction
+    (13, 22, NOW(), NOW()), -- Catch-22 - Dystopian
+    (10, 23, NOW(), NOW()), -- The Subtle Art of Not Giving a F*ck - Self-Help
+    (11, 24, NOW(), NOW()), -- Educated: A Memoir - Memoir
+    (10, 24, NOW(), NOW()), -- Educated: A Memoir - Self-Help
+    (21, 25, NOW(), NOW()), -- The Power of Habit - Economics
+    (10, 25, NOW(), NOW()), -- The Power of Habit - Self-Help
+    (1, 26, NOW(), NOW()), -- Moby Dick - Fiction
+    (17, 26, NOW(), NOW()), -- Moby Dick - Classic
+    (1, 27, NOW(), NOW()), -- War and Peace - Fiction
+    (17, 27, NOW(), NOW()), -- War and Peace - Classic
+    (9, 28, NOW(), NOW()), -- The Shining - Horror
+    (1, 28, NOW(), NOW()), -- The Shining - Fiction
+    (1, 29, NOW(), NOW()), -- The Catcher in the Rye - Fiction
+    (2, 30, NOW(), NOW()), -- Guns, Germs, and Steel - Non-Fiction
+    (3, 30, NOW(), NOW()), -- Guns, Germs, and Steel - Science
+    (2, 31, NOW(), NOW()), -- Thinking, Fast and Slow - Non-Fiction
+    (19, 31, NOW(), NOW()), -- Thinking, Fast and Slow - Philosophy
+    (1, 32, NOW(), NOW()), -- The Road - Fiction
+    (9, 32, NOW(), NOW()), -- The Road - Horror
+    (7, 33, NOW(), NOW()), -- The Girl with the Dragon Tattoo - Mystery
+    (1, 33, NOW(), NOW()), -- The Girl with the Dragon Tattoo - Fiction
+    (1, 34, NOW(), NOW()), -- Pride and Prejudice - Fiction
+    (13, 34, NOW(), NOW()), -- Pride and Prejudice - Romance
+    (6, 35, NOW(), NOW()), -- The Fellowship of the Ring - Fantasy
+    (1, 35, NOW(), NOW()), -- The Fellowship of the Ring - Fiction
+    (2, 36, NOW(), NOW()), -- Sapiens: A Brief History of Humankind - Non-Fiction
+    (4, 36, NOW(), NOW()), -- Sapiens: A Brief History of Humankind - History
+    (2, 37, NOW(), NOW()), -- The Handmaid's Tale - Non-Fiction
+    (12, 37, NOW(), NOW()), -- The Handmaid's Tale - Science Fiction
+    (1, 38, NOW(), NOW()), -- The Great Gatsby - Fiction
+    (17, 38, NOW(), NOW()); -- The Great Gatsby - Classic
 
 
 -- Inserção de 10 registros na tabela `users`
@@ -475,15 +606,15 @@ WHERE
     userId BETWEEN 1 AND 10;
     
 -- Gere 10 cupons diferentes com códigos aleatórios
--- INSERT INTO `coupons` (`couponCode`, `couponValue`, `couponType`, `generationDate`, `expirationDate`, `active`, `createdAt`, `updatedAt`)
--- VALUES
---     (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 10.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
---     (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 15.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
---     (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 20.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
---     (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 25.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
---     (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 30.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
---     (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 35.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
---     (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 40.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
---     (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 45.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
---     (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 50.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
---     (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 55.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW());
+INSERT INTO `coupons` (`couponCode`, `couponValue`, `couponType`, `generationDate`, `expirationDate`, `active`, `createdAt`, `updatedAt`)
+VALUES
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 10.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 15.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 20.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 25.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 30.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 35.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 40.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 45.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 50.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW()),
+    (CONCAT(SUBSTRING(MD5(RAND()) FROM 1 FOR 6)), 55.00, 'Discount', NOW(), NOW() + INTERVAL 30 DAY, 1, NOW(), NOW());
