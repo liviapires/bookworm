@@ -7,16 +7,6 @@
             <div class="page-title">Todos os Livros</div>
             <div class="page-subtitle">Home > Todos os Livros</div>
         </div>
-        <div class="d-flex align-items-center">
-            <div>Página</div>
-            <div class="btn-group ml-1">
-                <select name="page" id="page" class="form-control">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
-            </div>
-        </div>
     </div>
 
     <div class="bottom ml-10">
@@ -38,6 +28,8 @@
         <div class="items">
             <% livros.forEach((livro) => { %>
                 <div class="card-item">
+                    <% console.log(livro); %>
+                    <img src="<%= livro.bookImage %>" alt="livro" class="bookImage">
                     <div class="ml-3 info-item">
                         <div class="title-item"><%= livro.title %></div>
                         <div class="price-item">R$ <%= livro.price %></div>

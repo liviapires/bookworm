@@ -25,8 +25,11 @@ async function evaluateExchangesView (req, res) {
 
     let exchanges = await aTransaction.getTransactionByType('exchange');
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('evaluateExchanges', {
         title: 'Avaliar Troca',
+        categories: categories,
         exchanges: exchanges
     });
 }
@@ -90,8 +93,11 @@ async function evaluateExchangeView (req, res) {
     // put books in exchange object
     exchange[0].books = books;
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('evaluateExchange', {
         title: 'Avaliar Troca',
+        categories: categories,
         exchange: exchange[0]
     });
 }
@@ -100,8 +106,11 @@ async function evaluateDevolutions (req, res) {
 
     let devolutions = await aTransaction.getTransactionByType('return');
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('evaluateDevolutions', {
         title: 'Avaliar Devoluções',
+        categories: categories,
         devolutions: devolutions
     });
 }
@@ -165,16 +174,23 @@ async function evaluateDevoutionView (req, res) {
     // put books in devolution object
     devolution[0].books = books;
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('evaluateDevolution', {
         title: 'Avaliar Devolução',
+        categories: categories,
         devolution: devolution[0]
     });
 }
 
 
 async function mainAdminView (req, res) {
+
+    let categories = await aCategory.getAllCategories();
+
     res.render('mainAdmin', {
-        title: 'Administração'
+        title: 'Administração',
+        categories: categories
     });
 }
 
@@ -222,8 +238,11 @@ async function saleView (req, res) {
         sale[0].transactionId = transaction[0].transactionId;
     }
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('sale', {
         title: 'Venda',
+        categories: categories,
         sale: sale[0]
     });
 }
@@ -240,8 +259,11 @@ async function salesView (req, res) {
         sale.purchaseDate = `${day}/${month}/${year}`;
     });
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('sales', {
         title: 'Vendas',
+        categories: categories,
         sales: sales
     });
 }

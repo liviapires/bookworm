@@ -7,10 +7,11 @@ const aCategory = new Category();
 // Renderiza a view allBooks
 async function allBooksView (req, res) {
     let livros = await aBook.getAllBooks();
-    let categorias = await aCategory.getAllCategories();
+    let categories = await aCategory.getAllCategories();
 
     res.render('allBooks', {
         title: 'Todos os Livros',
+        categories: categories,
         livros: livros,
         categorias: categorias
     });
@@ -20,8 +21,11 @@ async function allBooksView (req, res) {
 async function bookView (req, res) {
     // let livros = await aBook.getAllBooks();
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('book', {
         title: 'Livro',
+        categories: categories,
         livros: livros
     });
 }
@@ -29,8 +33,11 @@ async function bookView (req, res) {
 async function oneBookView (req, res) {
     // let livro = await aBook.getBookById(req.params.id);
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('book', {
         title: 'Livro',
+        categories: categories,
         livro: livro
     });
 }

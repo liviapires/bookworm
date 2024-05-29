@@ -5,6 +5,7 @@ const SaleAddresses = require('../models/SaleAddressesModel');
 const SalePayment = require('../models/SalePaymentModel');
 const Cards = require('../models/CardModel');
 const Coupon = require('../models/CouponModel');
+const Category = require('../models/CategoryModel');
 
 const moment = require('moment');
 
@@ -15,11 +16,16 @@ const aSaleAddresses = new SaleAddresses();
 const aSalePayment = new SalePayment();
 const aCard = new Cards();
 const aCoupon = new Coupon();
+const aCategory = new Category();
 
 // Renderiza a view cart
 async function cartView(req, res) {
+
+    let categories = await aCategory.getAllCategories();
+
     res.render('cart', {
         title: 'Carrinho',
+        categories: categories,
         cart: req.session.cart || [],
         total: req.session.total || 0,
         frete: req.session.frete || 0
@@ -27,8 +33,12 @@ async function cartView(req, res) {
 }
 
 async function cartContinueView (req, res) {
+
+    let categories = await aCategory.getAllCategories();
+
     res.render('cartContinue', {
         title: 'Carrinho',
+        categories: categories,
         cliente: req.session.clientInfo || {},
         enderecos: req.session.addresses || [],
         telefones: req.session.phones || [],
@@ -51,8 +61,12 @@ async function cartContinueView (req, res) {
 // cartCheckoutView
 
 async function cartCheckoutView(req, res) {
+
+    let categories = await aCategory.getAllCategories();
+
     res.render('cartCheckout', {
         title: 'Carrinho',
+        categories: categories,
         cliente: req.session.clientInfo || {},
         enderecos: req.session.addresses || [],
         telefones: req.session.phones || [],
@@ -229,8 +243,11 @@ async function finishPurchase(req, res) {
     req.session.useCardsInfo = '';
     req.session.cards = await aCard.getCardByUserId(req.session.clientId);
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('finishPurchase', {
         title: 'Compra Realizada',
+        categories: categories,
         code: code
     });
 }

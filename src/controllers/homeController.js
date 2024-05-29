@@ -81,12 +81,14 @@ const Address = require('../models/AddressModel');
 const Phone = require('../models/PhoneModel');
 const Card = require('../models/CardModel');
 const Coupon = require('../models/CouponModel');
+const Category = require('../models/CategoryModel');
 
 const aClient = new Client();
 const anAddress = new Address();
 const aPhone = new Phone();
 const aCard = new Card();
 const aCoupon = new Coupon();
+const aCategory = new Category();
 
 // Renderiza a view home
 async function homeView (req, res) {
@@ -98,10 +100,12 @@ async function homeView (req, res) {
         req.session.phones = await aPhone.getPhoneByUserId(req.session.clientId);
         req.session.cards = await aCard.getCardByUserId(req.session.clientId);
     };
-    
+
+    let categories = await aCategory.getAllCategories();    
 
     res.render('home', {
         title: 'Home',
+        categories: categories,
         livros: livros,
         boxes: boxes,
         categorias: categorias

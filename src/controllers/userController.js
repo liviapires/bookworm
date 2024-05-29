@@ -4,6 +4,7 @@ const Phone = require('../models/PhoneModel');
 const Card = require('../models/CardModel');
 const Sale = require('../models/SaleModel');
 const saleBooks = require('../models/SaleBooksModel');
+const Category = require('../models/CategoryModel');
 
 const { updateCardValue } = require('./cartController');
 
@@ -16,6 +17,7 @@ const aPhone = new Phone();
 const aCard = new Card();
 const aSale = new Sale();
 const aSaleBooks = new saleBooks();
+const aCategory = new Category();
 
 // CLIENT CONTROLLERS
 
@@ -380,8 +382,11 @@ async function deleteCard (req, res) {
 // Renderiza a view signin
 const signinView = (req, res) => {
 
+    let categories = aCategory.getAllCategories();
+
     res.render('signin', {
-        title: 'Sign In'
+        title: 'Sign In',
+        categories: categories
     });
 }
 
@@ -390,8 +395,11 @@ async function clientsView (req, res) {
 
     const clients = await aClient.getAllClients();
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('clients', {
         title: 'Clientes',
+        categories: categories,
         clients: clients
     });
 }
@@ -425,8 +433,11 @@ async function clientView (req, res) {
         card.cardNumber = censoredCardNumber;
     });
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('client', {
         title: cliente[0].name,
+        categories: categories,
         cliente: cliente,
         phones: clientPhones,
         addresses: clientAddresses,
@@ -439,8 +450,11 @@ async function clientView (req, res) {
 async function editClientView (req, res) {
     const cliente = await aClient.getUserById(req.params.id);
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('editClient', {
         title: 'Editar Cliente',
+        categories: categories,
         cliente: cliente
     });
 }
@@ -448,8 +462,11 @@ async function editClientView (req, res) {
 async function editAddressView (req, res) {
     const address = await anAddress.getAddressByUserId(req.params.id);
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('editAddress', {
         title: 'Editar Endereço',
+        categories: categories,
         address: address
     });
 }
@@ -457,8 +474,11 @@ async function editAddressView (req, res) {
 async function editPhoneView (req, res) {
     const phone = await aPhone.getPhoneById(req.params.id);
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('editPhone', {
         title: 'Editar Telefone',
+        categories: categories,
         phone: phone
     });
 }
@@ -467,8 +487,11 @@ async function addPhoneView (req, res) {
 
     const cliente = await aClient.getUserById(req.params.id);
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('addPhone', {
         title: 'Adicionar Telefone',
+        categories: categories,
         cliente: cliente
     });
 }
@@ -477,8 +500,11 @@ async function addAddressView (req, res) {
 
     const cliente = await aClient.getUserById(req.params.id);
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('addAddress', {
         title: 'Adicionar Endereço',
+        categories: categories,
         cliente: cliente
     });
 }
@@ -486,9 +512,12 @@ async function addAddressView (req, res) {
 async function addCardView (req, res) {
 
     const cliente = await aClient.getUserById(req.params.id);
+    
+    let categories = await aCategory.getAllCategories();
 
     res.render('addCard', {
         title: 'Adicionar Cartão',
+        categories: categories,
         cliente: cliente
     });
 }

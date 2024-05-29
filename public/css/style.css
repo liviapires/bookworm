@@ -979,6 +979,10 @@ a:hover {
 
 .div5 { grid-area: 5 / 1 / 10 / 5; }
 
+.bookImage {
+    width: 10%;
+}
+
 @media (min-width: 768px) {
     .card img {
         height: 11em;

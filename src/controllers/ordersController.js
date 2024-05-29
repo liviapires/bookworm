@@ -87,8 +87,11 @@ async function orderView (req, res) {
         sale[0].transaction = transaction[0];
     }
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('order', {
         title: 'Meus Pedidos',
+        categories: categories,
         pedido: sale[0]
     });
 }
@@ -136,8 +139,11 @@ async function doOrderView (req, res) {
 
     sale[0].action = 'troca';
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('doOrder', {
         title: 'Solicitação de Troca/Devolução',
+        categories: categories,
         pedido: sale[0]
     });
 }
@@ -218,8 +224,11 @@ async function exchangeView (req, res) {
 
     }
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('exchange', {
         title: 'Troca',
+        categories: categories,
         pedido: sale[0],
         troca: troca
     });
@@ -300,8 +309,11 @@ async function returnView (req, res) {
         }
     }
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('return', {
         title: 'Devolução',
+        categories: categories,
         pedido: sale[0],
         devolucao: devolucao
     });
@@ -391,8 +403,11 @@ async function exchange (req, res) {
     // clear transaction session
     req.session.transaction = [];
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('finishTransaction', {
         title: 'Troca',
+        categories: categories,
         type: 'exchange',
     });
 }
@@ -469,8 +484,11 @@ async function devolution (req, res) {
     // clear transaction session
     req.session.transaction = [];
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('finishTransaction', {
         title: 'Devolução',
+        categories: categories,
         type: 'devolution'
     });
 }

@@ -83,8 +83,11 @@ async function myAccountView (req, res) {
         card.cardNumber = censoredCardNumber;
     });
 
+    let categories = await aCategory.getAllCategories();
+
     res.render('myAccount', {
         title: 'Minha Conta',
+        categories: categories,
         cliente: cliente,
         phones: clientPhones,
         addresses: clientAddresses,
