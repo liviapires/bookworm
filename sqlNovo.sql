@@ -110,6 +110,7 @@ CREATE TABLE `books` (
 CREATE TABLE `categories` (
     `categoryId` integer NOT NULL AUTO_INCREMENT,
     `categoryName` varchar(255) NOT NULL,
+    `categoryIcon` varchar(255) NOT NULL,
     `createdAt` datetime NOT NULL,
     `updatedAt` datetime NOT NULL,
     PRIMARY KEY (`categoryId`)
@@ -278,36 +279,36 @@ VALUES
     ('Grupo 10', 80.55, NOW(), NOW());
 
 -- Inserção de registros na tabela `categories`
-INSERT INTO `categories` (`categoryName`, `createdAt`, `updatedAt`) 
+INSERT INTO `categories` (`categoryName`, `categoryIcon`, `createdAt`, `updatedAt`) 
 VALUES
-    ('Ficção', NOW(), NOW()),
-    ('Não-Ficção', NOW(), NOW()),
-    ('Ciências', NOW(), NOW()),
-    ('História', NOW(), NOW()),
-    ('Biografia', NOW(), NOW()),
-    ('Fantasia', NOW(), NOW()),
-    ('Mistério', NOW(), NOW()),
-    ('Thriller', NOW(), NOW()),
-    ('Terror', NOW(), NOW()),
-    ('Autoajuda', NOW(), NOW()),
-    ('Memorial', NOW(), NOW()),
-    ('Ficção Científica', NOW(), NOW()),
-    ('Distopia', NOW(), NOW()),
-    ('Romance', NOW(), NOW()),
-    ('Aventura', NOW(), NOW()),
-    ('Infantis', NOW(), NOW()),
-    ('Jovem Adultos', NOW(), NOW()),
-    ('Clássicos', NOW(), NOW()),
-    ('Filosofia', NOW(), NOW()),
-    ('Religião', NOW(), NOW()),
-    ('Política', NOW(), NOW()),
-    ('Economia', NOW(), NOW()),
-    ('Negócios', NOW(), NOW()),
-    ('Arte', NOW(), NOW()),
-    ('Musica', NOW(), NOW()),
-    ('Esportes', NOW(), NOW()),
-    ('Culinária', NOW(), NOW()),
-    ('Viagem', NOW(), NOW());
+    ('Ficção', "https://www.svgrepo.com/show/481994/werewolf-5.svg", NOW(), NOW()),
+    ('Não-Ficção', "https://www.svgrepo.com/show/307357/human-boy-person-man.svg", NOW(), NOW()),
+    ('Ciências', "https://www.svgrepo.com/show/455775/science.svg", NOW(), NOW()),
+    ('História', "https://www.svgrepo.com/show/177878/history-greek.svg", NOW(), NOW()),
+    ('Biografia', "https://www.svgrepo.com/show/83834/artist-profile.svg", NOW(), NOW()),
+    ('Fantasia', "https://www.svgrepo.com/show/322289/fairy.svg", NOW(), NOW()),
+    ('Mistério', "https://www.svgrepo.com/show/122549/detective.svg", NOW(), NOW()),
+    ('Thriller', "https://www.svgrepo.com/show/192082/zombie.svg", NOW(), NOW()),
+    ('Terror', "https://www.svgrepo.com/show/481675/jack-o-lantern.svg", NOW(), NOW()),
+    ('Autoajuda', "https://www.svgrepo.com/show/308067/self-reflect-meditation-self-reflection.svg", NOW(), NOW()),
+    ('Memorial', "https://www.svgrepo.com/show/86657/the-mount-rushmore-national-memorial.svg", NOW(), NOW()),
+    ('Ficção Científica', "https://www.svgrepo.com/show/192073/frankenstein.svg", NOW(), NOW()),
+    ('Distopia', "https://www.svgrepo.com/show/351775/biohazard.svg", NOW(), NOW()),
+    ('Romance', "https://www.svgrepo.com/show/481541/rose-6.svg", NOW(), NOW()),
+    ('Aventura', "https://www.svgrepo.com/show/225965/road-way.svg", NOW(), NOW()),
+    ('Infantis', "https://www.svgrepo.com/show/384862/teddy-bear-toy.svg", NOW(), NOW()),
+    ('Jovem Adultos', "https://www.svgrepo.com/show/140467/young-male-black-short-hair-shape.svg", NOW(), NOW()),
+    ('Clássicos', "https://www.svgrepo.com/show/482658/mask.svg", NOW(), NOW()),
+    ('Filosofia', "https://www.svgrepo.com/show/438893/thinking-round.svg", NOW(), NOW()),
+    ('Religião', "https://www.svgrepo.com/show/131047/religious-book.svg", NOW(), NOW()),
+    ('Política', "https://www.svgrepo.com/show/354782/government-14.svg", NOW(), NOW()),
+    ('Economia', "https://www.svgrepo.com/show/308998/money-bag-change-money-capital.svg", NOW(), NOW()),
+    ('Negócios', "https://www.svgrepo.com/show/427624/business-future-leadership.svg", NOW(), NOW()),
+    ('Arte', "https://www.svgrepo.com/show/366686/art-gallery.svg", NOW(), NOW()),
+    ('Musica', "https://www.svgrepo.com/show/503061/music.svg", NOW(), NOW()),
+    ('Esportes', "https://www.svgrepo.com/show/446025/sports-soccer.svg", NOW(), NOW()),
+    ('Culinária', "https://www.svgrepo.com/show/482041/cooking-lid-image.svg", NOW(), NOW()),
+    ('Viagem', "https://www.svgrepo.com/show/189553/suitcase-trip.svg", NOW(), NOW());
 
 
 -- Inserção de registros na tabela `books`

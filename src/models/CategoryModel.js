@@ -1,8 +1,9 @@
 const db = require("../../config/db");
 
 class Category {
-    constructor(categoryName, createdAt, updatedAt) {
+    constructor(categoryName, categoryIcon, createdAt, updatedAt) {
         this.categoryName = categoryName;
+        this.categoryIcon = categoryIcon;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -19,9 +20,10 @@ class Category {
     // create category
     async createCategory(category) {
         const [results, metadata] = await db.query(
-            `INSERT INTO categories (categoryName, createdAt, updatedAt) \
+            `INSERT INTO categories (categoryName, categoryIcon, createdAt, updatedAt) \
             VALUES (
                 '${category.categoryName}',
+                '${category.categoryIcon}',
                 '${category.createdAt}',
                 '${category.updatedAt}'
             );`
@@ -34,7 +36,8 @@ class Category {
     async updateCategory(category) {
         const [results, metadata] = await db.query(
             `UPDATE categories SET 
-                name = '${category.categoryName}', 
+                categoryName = '${category.categoryName}', 
+                categoryIcon = '${category.categoryIcon}',
                 updatedAt = '${category.updatedAt}'
             WHERE categoryId = ${category.categoryId};`
         );

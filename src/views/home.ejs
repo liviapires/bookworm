@@ -7,14 +7,16 @@
         <div class="cards-wrapper">
             <% livros.forEach((livro) => {%>
                 <div class="card">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/681px-Placeholder_view_vector.svg.png"
-                        class="card-img-top" alt="...">
+                    <img src="<%= livro.bookImage %>" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h5 class="card-title">
+                        <h5 class="card-title limit-text">
                             <%= livro.title %>
                         </h5>
                         <p class="card-text">R$ <%= livro.price %></p>
-                        <a href="#" class="btn btn-primary">Comprar Agora</a>
+                        <form action="/addToCart" method="POST">
+                            <input type="hidden" id="id" name="id" value="<%= livro.bookId %>">
+                            <button type="submit" class="btn btn-secondary">Comprar Agora</button>
+                        </form>
                     </div>
                 </div>
             <% }); %>
@@ -23,34 +25,16 @@
         <div class="medium">
             <div class="title-home">Top Categorias</div>
             <div id="circles" class="d-flex justify-content-around align-items-center">
+                <% console.log(categorias); %>
                 <% categorias.forEach((categoria) => { %>
                     <div class="category">
-                        <div class="circle">
-                            <img class="icon-category" src="<%= categoria.icon %>"
-                                alt="icon-category">
-                        </div>
+                        <a href="/books/<%= categoria.categoryName %>" class="circle">
+                            <img class="icon-category" src="<%= categoria.categoryIcon %>" alt="icon-category">
+                        </a>
                         <h4 class="mt-075"><%= categoria.titulo %></h4>
                     </div>
                 <% }); %>
             </div>
-        </div>
-
-        <div class="title-home">Boxes</div>
-
-        <div class="cards-wrapper">
-            <% boxes.forEach((box) => {%>
-                <div class="card">
-                    <img src="<%= box.imagem %>"
-                        class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <%= box.titulo %>
-                        </h5>
-                        <p class="card-text">R$ <%= box.preco %></p>
-                        <a href="#" class="btn btn-primary">Comprar Agora</a>
-                    </div>
-                </div>
-            <% }); %>
         </div>
 
     </div>
