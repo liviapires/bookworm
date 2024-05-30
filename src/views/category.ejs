@@ -24,14 +24,18 @@
             </div>
             <hr>
 
-            <% categories.forEach((categoria) => { %>
-                <div class="form-check">
-                    <input class="form-check-input check" type="checkbox" value="" id="defaultCheck1">
-                    <label class="form-check-label" for="defaultCheck1">
-                        <%= categoria.categoryName %>
-                    </label>
-                </div>
-            <% }); %>
+            <div class="d-block">
+                <a href="/books/allBooks" class="black">
+                    Todos os Livros
+                </a>
+                <% categories.forEach((categoria) => { %>
+                    <div class="d-block">
+                        <a href="/books/<%= categoria.categoryName %>" class="black">
+                            <%= categoria.categoryName %>
+                        </a>
+                    </div>
+                <% }); %>
+            </div>
         </div>
         <div class="items">
             <% if (livros.length > 0) {%>

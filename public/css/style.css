@@ -987,6 +987,21 @@ a:hover {
     width: 10%;
 }
 
+.cartBookImage {
+    width: 20%;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+}
+
+.limit-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 @media (min-width: 768px) {
     .card img {
         height: 11em;

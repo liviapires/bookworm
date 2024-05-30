@@ -16,7 +16,7 @@ async function categoryView(req, res) {
         category = "Todos os Livros";
     } else {
         books = await aCategory.getBooksByCategory(req.params.category);
-        title = req.params.category + ' Books';
+        title = "Livros de " + req.params.category;
         category = req.params.category;
     }
     

@@ -228,10 +228,11 @@
                 <% cart.forEach((liv) => { %>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="d-flex ">
+                            <img src="<%= liv.bookImage %>" alt="livro" class="cartBookImage">
                             <div class="ml-1 t-left">
-                                <div class="slight-bold"><%= liv.title %></div>
-                                <div><%= liv.author %></div>
-                                <div><%= liv.publisher %></div>
+                                <div class="slight-bold limit-text"><%= liv.title %></div>
+                                <div class="limit-text"><%= liv.author %></div>
+                                <div class="limit-text"><%= liv.publisher %></div>
                             </div>
                         </div>
                         <div class="d-block justify-content-right">
