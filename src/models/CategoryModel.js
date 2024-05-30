@@ -70,6 +70,28 @@ class Category {
 
         return results;
     }
+
+    // get category by name
+    async getCategoryByName(categoryName) {
+        const [results, metadata] = await db.query(
+            `SELECT * FROM categories WHERE categoryName = '${categoryName}';`
+        );
+
+        return results;
+    }
+
+    // get book by category joining pricingGroups
+    async getBooksByCategory(categoryName) {
+        const [results, metadata] = await db.query(
+            `SELECT books.*, pricingGroups.value as price FROM books
+                JOIN bookCategories ON books.bookId = bookCategories.bookId
+                JOIN categories ON bookCategories.categoryId = categories.categoryId
+                LEFT JOIN pricingGroups ON books.pricingGroupId = pricingGroups.pricingGroupId
+                WHERE categories.categoryName = '${categoryName}';`
+        );
+
+        return results;
+    }
 }
 
 module.exports = Category;

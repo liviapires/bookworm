@@ -25,6 +25,10 @@
     color: var(--red);
 }
 
+.black {
+    color: var(--eerie-black);
+}
+
 .body {
     width: 100%;
     color: var(--eerie-black);

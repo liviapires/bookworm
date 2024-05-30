@@ -8,7 +8,12 @@
             <!-- mock categories -->
             <div class="category">
                 <li class="removeDot">
-                    <a href="/allBooks" class="btn btn-primary w-100">Todos os Livros</a>
+                    <a href="/books/allBooks" class="btn btn-primary w-100">Todos os Livros</a>
+                    <% categories.forEach(function(category) { %>
+                        <a href="/books/<%= category.categoryName %>" class="btn btn-primary w-100">
+                            <%= category.categoryName %>
+                        </a>
+                    <% }); %>
                 </li>
             </div>
         </div>

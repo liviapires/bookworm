@@ -4,8 +4,16 @@
     <!-- MAIN -->
     <div class="top ml-10">
         <div class="d-block">
-            <div class="page-title">Todos os Livros</div>
-            <div class="page-subtitle">Home > Todos os Livros</div>
+            <div class="page-title"><%= title %></div>
+            <div class="page-subtitle">
+                <a href="/home" class="black">
+                    Home
+                </a> 
+                > 
+                <a href="/books/<%if(category != "Todos os Livros"){%><%=category %><%}else{%>allBooks<%}%>" class="black">
+                    <%= category %>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -16,7 +24,7 @@
             </div>
             <hr>
 
-            <% categorias.forEach((categoria) => { %>
+            <% categories.forEach((categoria) => { %>
                 <div class="form-check">
                     <input class="form-check-input check" type="checkbox" value="" id="defaultCheck1">
                     <label class="form-check-label" for="defaultCheck1">
@@ -26,9 +34,9 @@
             <% }); %>
         </div>
         <div class="items">
-            <% livros.forEach((livro) => { %>
+            <% if (livros.length > 0) {%>
+                <% livros.forEach((livro) => { %>
                 <div class="card-item">
-                    <% console.log(livro); %>
                     <img src="<%= livro.bookImage %>" alt="livro" class="bookImage">
                     <div class="ml-3 info-item">
                         <div class="title-item"><%= livro.title %></div>
@@ -43,7 +51,12 @@
                         <button type="submit" class="btn btn-secondary ml-10">Comprar Agora</button>
                     </form>
                 </div>
-            <% }); %>
+                <% })
+            } else { %>
+                <div class="card-item">
+                    <div class="title-item">Nenhum livro encontrado</div>
+                </div>
+            <% } %>
         </div>
     </div>
 </div>

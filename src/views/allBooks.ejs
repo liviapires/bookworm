@@ -16,7 +16,7 @@
             </div>
             <hr>
 
-            <% categorias.forEach((categoria) => { %>
+            <% categories.forEach((categoria) => { %>
                 <div class="form-check">
                     <input class="form-check-input check" type="checkbox" value="" id="defaultCheck1">
                     <label class="form-check-label" for="defaultCheck1">
@@ -28,7 +28,6 @@
         <div class="items">
             <% livros.forEach((livro) => { %>
                 <div class="card-item">
-                    <% console.log(livro); %>
                     <img src="<%= livro.bookImage %>" alt="livro" class="bookImage">
                     <div class="ml-3 info-item">
                         <div class="title-item"><%= livro.title %></div>

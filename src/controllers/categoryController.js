@@ -1,15 +1,43 @@
 const Category = require('../models/CategoryModel');
+const Book = require('../models/BookModel');
 
 const aCategory = new Category();
+const aBook = new Book();
 
 // Renderiza a view category
-const categoryView = (req, res) => {
+async function categoryView(req, res) {
+    let books = [];
+    let title = "";
+    let category = "";
 
-    let categories = aCategory.getAllCategories();
+    if (req.params.category == "allBooks") {
+        books = await aBook.getAllBooks();
+        title = "Todos os Livros";
+        category = "Todos os Livros";
+    } else {
+        books = await aCategory.getBooksByCategory(req.params.category);
+        title = req.params.category + ' Books';
+        category = req.params.category;
+    }
+    
+    const categories = await aCategory.getAllCategories();
+    
+    if (books.length == 0) {
+        res.render('category', {
+            title: title,
+            category: category,
+            categories: categories,
+            livros: books,
+            message: "Nenhum livro encontrado."
+        });
+        return;
+    }
 
     res.render('category', {
-        title: 'category',
-        categories: categories
+        title: title,
+        category: category,
+        categories: categories,
+        livros: books
     });
 }
 

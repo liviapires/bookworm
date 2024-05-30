@@ -12,8 +12,7 @@ async function allBooksView (req, res) {
     res.render('allBooks', {
         title: 'Todos os Livros',
         categories: categories,
-        livros: livros,
-        categorias: categorias
+        livros: livros
     });
 }
 
