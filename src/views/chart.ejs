@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Gráfico de Vendas</title>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            google.charts.load('current', {packages: ['corechart', 'line']});
+            google.charts.setOnLoadCallback(drawChart);
+
+            async function drawChart(startDate = '<%= defaultStartDate %>', endDate = '<%= defaultEndDate %>') {
+                console.log(`Fetching data for period: ${startDate} to ${endDate}`);
+                const response = await fetch(`/filterData?startDate=${startDate}&endDate=${endDate}`);
+                const data = await response.json();
+                console.log(data);
+
+                const salesData = data.salesData;
+                const titles = data.titles;
+
+                const dataTable = new google.visualization.DataTable();
+                dataTable.addColumn('date', 'Date');
+                titles.forEach(title => {
+                    dataTable.addColumn('number', title);
+                });
+
+                const rows = [];
+                salesData.forEach(item => {
+                    const date = new Date(item.purchaseDate);
+                    const existingRow = rows.find(row => row[0].getTime() === date.getTime());
+                    if (existingRow) {
+                    const index = titles.indexOf(item.title) + 1;
+                    existingRow[index] = (existingRow[index] || 0) + item.quantity;
+                    } else {
+                    const newRow = [date];
+                    titles.forEach(title => {
+                        newRow.push(item.title === title ? item.quantity : null);
+                    });
+                    rows.push(newRow);
+                    }
+                });
+
+                dataTable.addRows(rows);
+
+                const options = {
+                    title: 'Volume de Vendas por Livro',
+                    hAxis: { title: 'Data' },
+                    vAxis: { title: 'Volume de Vendas' }
+                };
+
+                const chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+                chart.draw(dataTable, options);
+            }
+
+            function filterData() {
+                const startDate = document.getElementById('startDate').value;
+                const endDate = document.getElementById('endDate').value;
+                drawChart(startDate, endDate);
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Gráfico de Vendas</h1>
+        <form onsubmit="event.preventDefault(); filterData();">
+            <label for="startDate">Data de Início:</label>
+            <input type="date" id="startDate" name="startDate" value="<%= defaultStartDate %>" required>
+            <label for="endDate">Data de Fim:</label>
+            <input type="date" id="endDate" name="endDate" value="<%= defaultEndDate %>" required>
+            <button type="submit">Filtrar</button>
+        </form>
+        <div id="chart_div" style="width: 100%; height: 500px;"></div>
+    </body>
+</html>

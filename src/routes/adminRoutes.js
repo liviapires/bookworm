@@ -17,4 +17,7 @@ router.get("/sale/:id", adminController.saleView);
 
 router.post("/updateSaleStatus", adminController.updateSaleStatus);
 
+router.get("/chart", adminController.chart);
+router.get("/filterData", adminController.filterData);
+
 module.exports = router;

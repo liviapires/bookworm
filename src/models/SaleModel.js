@@ -100,6 +100,18 @@ class sale {
 
         return results;
     }
+
+    // get all sales purchaseDate with its books titles and quantity
+    async getSalesBooks() {
+        const [results, metadata] = await db.query(
+            `SELECT sales.purchaseDate, books.title, saleBooks.quantity FROM sales
+                LEFT JOIN saleBooks ON sales.saleId = saleBooks.saleId
+                LEFT JOIN books ON saleBooks.bookId = books.bookId
+                ORDER BY sales.purchaseDate ASC;`
+        );
+
+        return results;
+    }
 }
 
 module.exports = sale;

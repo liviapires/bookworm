@@ -463,6 +463,45 @@ async function updateTransaction (req, res) {
     }
 }
 
+async function chart(req, res){
+    const today = new Date();
+    const lastMonth = new Date(today);
+    lastMonth.setMonth(today.getMonth() - 1);
+
+    const formatDate = (date) => date.toISOString().split('T')[0];
+
+    const defaultEndDate = formatDate(today);
+    const defaultStartDate = formatDate(lastMonth);
+
+    res.render('chart', { 
+        defaultStartDate, 
+        defaultEndDate 
+    });
+}
+
+async function filterData(req, res){
+    let { startDate, endDate } = req.query;
+
+    // Simulando dados de vendas
+    const allSalesData = await aSale.getSalesBooks();
+
+    startDate = new Date(startDate);
+    endDate = new Date(endDate);
+    endDate.setHours(23, 59, 59, 999);
+
+    const filteredData = allSalesData.filter(item => {
+        const itemDate = new Date(item.purchaseDate);
+        return itemDate >= startDate && itemDate <= endDate;
+    });
+
+    const titles = [...new Set(allSalesData.map(item => item.title))];
+
+    res.json({ 
+        salesData: filteredData, 
+        titles 
+    });
+}
+
 module.exports = {
     evaluateExchangesView,
     evaluateExchangeView,
@@ -472,5 +511,7 @@ module.exports = {
     salesView,
     saleView,
     updateSaleStatus,
-    updateTransaction
+    updateTransaction,
+    chart,
+    filterData
 }
