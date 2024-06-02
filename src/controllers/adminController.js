@@ -188,9 +188,20 @@ async function mainAdminView (req, res) {
 
     let categories = await aCategory.getAllCategories();
 
+    const today = new Date();
+    const lastMonth = new Date(today);
+    lastMonth.setMonth(today.getMonth() - 1);
+
+    const formatDate = (date) => date.toISOString().split('T')[0];
+
+    const defaultEndDate = formatDate(today);
+    const defaultStartDate = formatDate(lastMonth);
+
     res.render('mainAdmin', {
         title: 'Administração',
-        categories: categories
+        categories: categories,
+        defaultStartDate,
+        defaultEndDate
     });
 }
 
