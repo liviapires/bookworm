@@ -26,4 +26,6 @@ router.post("/addToCart", cartController.addToCart);
 router.post("/frete", cartController.frete);
 router.post("/confirmCardValue", cartController.confirmCardValue);
 
+router.get("/random", cartController.createRandomSales);
+
 module.exports = router;

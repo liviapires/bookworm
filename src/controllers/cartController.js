@@ -6,8 +6,11 @@ const SalePayment = require('../models/SalePaymentModel');
 const Cards = require('../models/CardModel');
 const Coupon = require('../models/CouponModel');
 const Category = require('../models/CategoryModel');
+const addresses = require('../models/AddressModel');
+const Clients = require('../models/UserModel');
 
 const moment = require('moment');
+const { json } = require('sequelize');
 
 const aBook = new Book();
 const aSale = new Sale();
@@ -17,6 +20,8 @@ const aSalePayment = new SalePayment();
 const aCard = new Cards();
 const aCoupon = new Coupon();
 const aCategory = new Category();
+const anAddresses = new addresses();
+const aClient = new Clients();
 
 // Renderiza a view cart
 async function cartView(req, res) {
@@ -254,7 +259,7 @@ async function finishPurchase(req, res) {
 
 // set frete
 async function frete(req, res) {
-    let { frete } = req.body;
+    let { frete } = req.body;admin
 
     req.session.frete = parseFloat(frete);
 
@@ -701,6 +706,123 @@ async function removeCoupon(req, res) {
     res.redirect(req.get('referer'));
 }
 
+async function createRandomSales(req, res){
+    let sales = await aSale.getAllSales();
+    let code = '0'.repeat(10 - (sales.length + 1).toString().length) + (sales.length + 1).toString();
+
+    let livros = await aBook.getAllBooks();
+    let cart = [];
+    let totalQuantity = 0;
+    let withoutShipping = 0;
+
+    for (let i = 0; i < 5; i++) {
+        let livro = livros[Math.floor(Math.random() * (livros.length))];
+        totalQuantity += 1;
+        withoutShipping += livro.price;
+        cart.push(livro);
+    }
+
+    let addresses = await anAddresses.getAllAddresses();
+    let saleAddressInfo = addresses[Math.floor(Math.random() * (addresses.length))];
+
+    if (saleAddressInfo.preferred == 0 || saleAddressInfo.preferred == false || saleAddressInfo.preferred == true) {
+        saleAddressInfo.preferred = 1;
+    }
+
+    let saleAddress = {
+        residenceType: saleAddressInfo.residenceType,
+        street: saleAddressInfo.street,
+        number: saleAddressInfo.number,
+        neighborhood: saleAddressInfo.neighborhood,
+        zipCode: saleAddressInfo.zipCode,
+        city: saleAddressInfo.city,
+        state: saleAddressInfo.state,
+        country: saleAddressInfo.country,
+        complement: saleAddressInfo.complement,
+        notes: saleAddressInfo.notes,
+        preferred: saleAddressInfo.preferred,
+        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+    }
+
+    console.log(saleAddress);
+    await aSaleAddresses.createSaleAddress(saleAddress);
+
+    let theSaleAddress = await aSaleAddresses.getSaleAddressIdByZipCode(saleAddress.zipCode); theSaleAddress[0].saleAddressId
+
+    let frete = Math.random() * (50 - 10) + 10;
+
+    let totalValue = withoutShipping + frete;
+
+    let purchaseDate = moment().subtract(Math.floor(Math.random() * 365), 'days').format('YYYY-MM-DD HH:mm:ss');
+
+    let clients = await aClient.getAllClients();
+    let client = clients[Math.floor(Math.random() * (clients.length))];
+
+    let sale = {
+        code: code,
+        status: 'Em Processamento',
+        purchaseDate: purchaseDate,
+        totalQuantity: totalQuantity,
+        totalValue: totalValue,
+        shipping: frete,
+        withoutShipping: withoutShipping,
+        createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        userId: client.userId,
+        saleAddressId: 1
+    }
+    
+    console.log(sale);
+    await aSale.createSale(sale);
+
+    let cards = await aCard.getCardByUserId(client.userId);
+    let card = cards[Math.floor(Math.random() * (cards.length))];
+    let paymentMethod = [];
+
+    card.paymentMethod = 'Cartão de Crédito';
+    card.cardTotal = totalValue;
+    paymentMethod.push(card);
+
+    let theSale = await aSale.getSaleByCode(code); 
+
+    paymentMethod.forEach(async payment => {
+        paymentValue = payment.cardTotal;
+
+        let salePayment = {
+            paymentMethod: payment.paymentMethod,
+            paymentValue: paymentValue,
+            createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+            updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+            saleId: theSale[0].saleId
+        }
+
+        console.log(salePayment);
+        await aSalePayment.createSalePayment(salePayment);
+    });
+
+    cart.forEach(async livro => {
+        livro.quantity = Math.floor(Math.random() * 20) + 1;
+
+        let saleBooks = {
+            quantity: livro.quantity,
+            unitValue: livro.price,
+            createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+            updatedAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+            saleId: theSale[0].saleId,
+            bookId: livro.bookId
+        }
+
+        console.log(saleBooks);
+        await aSaleBooks.createSaleBooks(saleBooks);
+    });
+
+    res.render('random', {
+        title: 'AAAAAAAAA',
+        code: code,
+    });
+}
+
 module.exports = {
     cartView,
     cartContinueView,
@@ -719,5 +841,6 @@ module.exports = {
     confirmCardValue,
     updateCardValue,
     searchCouponByCode,
-    removeCoupon
+    removeCoupon,
+    createRandomSales
 }
