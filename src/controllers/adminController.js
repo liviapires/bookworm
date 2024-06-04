@@ -490,10 +490,9 @@ async function chart(req, res){
     });
 }
 
-async function filterData(req, res){
+async function filterData(req, res) {
     let { startDate, endDate } = req.query;
 
-    // Simulando dados de vendas
     const allSalesData = await aSale.getSalesBooks();
 
     startDate = new Date(startDate);
@@ -505,37 +504,39 @@ async function filterData(req, res){
         return itemDate >= startDate && itemDate <= endDate;
     });
 
-    // NOVO
     const aggregatedData = {};
     filteredData.forEach(item => {
-        const itemDate = new Date(item.purchaseDate);
-        const monthYear = `${itemDate.getFullYear()}-${String(itemDate.getMonth() + 1).padStart(2, '0')}`;
+        const date = new Date(item.purchaseDate);
+        const month = new Date(date.getFullYear(), date.getMonth());
+        const key = `${month.getFullYear()}-${month.getMonth()}`;
 
-        if (!aggregatedData[monthYear]) {
-        aggregatedData[monthYear] = {};
+        if (!aggregatedData[key]) {
+            aggregatedData[key] = {};
         }
 
-        if (!aggregatedData[monthYear][item.title]) {
-        aggregatedData[monthYear][item.title] = 0;
+        if (!aggregatedData[key][item.title]) {
+            aggregatedData[key][item.title] = 0;
         }
 
-        aggregatedData[monthYear][item.title] += item.quantity;
+        aggregatedData[key][item.title] += item.quantity;
     });
 
     const titles = [...new Set(allSalesData.map(item => item.title))];
 
-    // NOVO
-    const dataPoints = Object.keys(aggregatedData).sort().map(monthYear => {
-        const [year, month] = monthYear.split('-').map(Number);
-        const date = new Date(year, month - 1);
-        const quantities = titles.map(title => aggregatedData[monthYear][title] || 0);
-        return [date, ...quantities];
+    const dataPoints = [];
+    Object.keys(aggregatedData).forEach(month => {
+        const date = new Date(parseInt(month.split('-')[0]), parseInt(month.split('-')[1]));
+        const row = [date];
+        titles.forEach(title => {
+            row.push(aggregatedData[month][title] || 0);
+        });
+        dataPoints.push(row);
     });
 
-    res.json({ 
-        // salesData: filteredData,
+
+    res.json({
         dataPoints,
-        titles 
+        titles
     });
 }
 

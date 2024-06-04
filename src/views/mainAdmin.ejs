@@ -1,65 +1,69 @@
 <%- include('header.ejs'); %>
-        <div class="title-home">Painel Administrativo</div>
+    <div class="title-home">Painel Administrativo</div>
 
-        <div class="center">
-            <div class="parent">
-                <div class="card-admin div1">
-                    <div class="d-flex justify-content-center">
-                        <img src="https://www.svgrepo.com/show/496872/box-search.svg" alt="Troca" class="icon-max">
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <a href="/sales" class="btn btn-primary w-100 mt-1">Todos os Pedidos</a>
-                    </div>
+    <div class="center">
+        <div class="parent">
+            <div class="card-admin div1">
+                <div class="d-flex justify-content-center">
+                    <img src="https://www.svgrepo.com/show/496872/box-search.svg" alt="Troca" class="icon-max">
                 </div>
-                <div class="card-admin div2">
-                    <div class="d-flex justify-content-center">
-                        <img src="https://www.svgrepo.com/show/496871/box-time.svg" alt="Troca" class="icon-max">
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <a href="/evaluateExchanges" class="btn btn-primary w-100 mt-1">Avaliar Trocas</a>
-                    </div>
+                <div class="d-flex justify-content-center">
+                    <a href="/sales" class="btn btn-primary w-100 mt-1">Todos os Pedidos</a>
                 </div>
-                <div class="card-admin div3">
-                    <div class="d-flex justify-content-center">
-                        <img src="https://www.svgrepo.com/show/496870/box-remove.svg" alt="Devolução" class="icon-max">
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <a href="/evaluateDevolutions" class="btn btn-primary w-100 mt-1">Avaliar Devoluções</a>
-                    </div>
+            </div>
+            <div class="card-admin div2">
+                <div class="d-flex justify-content-center">
+                    <img src="https://www.svgrepo.com/show/496871/box-time.svg" alt="Troca" class="icon-max">
                 </div>
-                <div class="card-admin div4">
-                    <div class="d-flex justify-content-center">
-                        <img src="https://www.svgrepo.com/show/497390/people.svg" alt="Clientes" class="icon-max">
-                    </div>
-                    <div class="d-flex justify-content-center">
-                        <a href="/clients" class="btn btn-primary w-100 mt-1">Clientes</a>
-                    </div>
+                <div class="d-flex justify-content-center">
+                    <a href="/evaluateExchanges" class="btn btn-primary w-100 mt-1">Avaliar Trocas</a>
                 </div>
-                <div class="card-admin div5">
-                    <div class="title center">Gráfico de Vendas</div>
-                    <div class="d-flex align-items-end justify-content-between">
-                        <form onsubmit="event.preventDefault(); filterData();" class="d-flex align-items-end">
-                            <div>
-                                <label for="startDate">Data de Início:</label>
-                                <input type="date" id="startDate" name="startDate" value="<%= defaultStartDate %>" class="form-control" required>
-                            </div>
-                            <div class="ml-05">
-                                <label for="endDate">Data de Fim:</label>
-                                <input type="date" id="endDate" name="endDate" value="<%= defaultEndDate %>" class="form-control" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary ml-05">Filtrar</button>
-                        </form>
-                        <button onclick="showAllData()" class="btn btn-secondary">Mostrar Todos</button>
-                    </div>
-                    <div id="chart_div" style="width: 100%; height: 500px;"></div>
+            </div>
+            <div class="card-admin div3">
+                <div class="d-flex justify-content-center">
+                    <img src="https://www.svgrepo.com/show/497390/people.svg" alt="Clientes" class="icon-max">
+                </div>
+                <div class="d-flex justify-content-center">
+                    <a href="/clients" class="btn btn-primary w-100 mt-1">Clientes</a>
+                </div>
+            </div>
+            <div class="card-admin div4">
+                <div class="d-flex justify-content-center">
+                    <img src="https://www.svgrepo.com/show/496870/box-remove.svg" alt="Devolução" class="icon-max">
+                </div>
+                <div class="d-flex justify-content-center">
+                    <a href="/evaluateDevolutions" class="btn btn-primary w-100 mt-1">Avaliar Devoluções</a>
                 </div>
             </div>
         </div>
-
+        <div class="card-admin div5 mt-1 w-80">
+            <div class="title center">Gráfico de Vendas</div>
+            <div class="d-flex align-items-end justify-content-between">
+                <form onsubmit="event.preventDefault(); filterData();" class="d-flex align-items-end">
+                    <div>
+                        <label for="startDate">Data de Início:</label>
+                        <input type="date" id="startDate" name="startDate" value="<%= defaultStartDate %>"
+                            class="form-control" required>
+                    </div>
+                    <div class="ml-05">
+                        <label for="endDate">Data de Fim:</label>
+                        <input type="date" id="endDate" name="endDate" value="<%= defaultEndDate %>"
+                            class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary ml-05">Filtrar</button>
+                </form>
+                <button onclick="showAllData()" class="btn btn-secondary">Mostrar Todos</button>
+            </div>
+            <div id="chart_div" style="width: 100%; height: 500px;"></div>
+        </div>
+    </div>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-    google.charts.load('current', { packages: ['corechart', 'line'] });
+    google.charts.load('current', {
+        packages: ['corechart', 'line'],
+        language: 'pt'
+    });
     google.charts.setOnLoadCallback(() => drawChart());
 
     let chart;
@@ -71,61 +75,75 @@
         const response = await fetch(`/filterData?startDate=${startDate}&endDate=${endDate}`);
         const data = await response.json();
         console.log(data);
-    
+
         const dataPoints = data.dataPoints;
         const titles = data.titles;
-    
+
         dataTable = new google.visualization.DataTable();
         dataTable.addColumn('date', 'Date');
         titles.forEach(title => {
             dataTable.addColumn('number', title);
         });
-    
-        // Convert dates to JavaScript Date objects
+
         dataPoints.forEach(row => {
             row[0] = new Date(row[0]);
         });
-    
+
         dataTable.addRows(dataPoints);
         originalDataTable = dataTable.clone();
-    
+
         const options = {
             title: 'Volume de Vendas por Livro',
-            hAxis: { title: 'Mês', format: 'MMM yyyy' },
+            hAxis: {
+                title: 'Mês',
+                format: 'MMM yyyy',
+                gridlines: { count: -1 },
+                viewWindow: { min: new Date(startDate), max: new Date(endDate) },
+                showTextEvery: 1,
+                ticks: generateTicks(startDate, endDate)
+            },
             vAxis: { title: 'Volume de Vendas' },
-            interpolateNulls: true
+            interpolateNulls: true,
+            tooltip: { isHtml: true }
         };
-    
+
         chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-    
-        google.visualization.events.addListener(chart, 'select', function() {
+
+        google.visualization.events.addListener(chart, 'select', function () {
             const selection = chart.getSelection();
             if (selection.length) {
-            const item = selection[0];
-            if (item.row === null) { // clicked on legend
-                const column = item.column;
-                filterByTitle(column);
-            }
+                const item = selection[0];
+                if (item.row === null) {
+                    const column = item.column;
+                    filterByTitle(column);
+                }
             }
         });
-    
+
         chart.draw(dataTable, options);
     }
 
     function filterByTitle(column) {
         if (!originalDataTable) return;
-        
+
         const view = new google.visualization.DataView(originalDataTable);
         const columns = [0, column];
         view.setColumns(columns);
-        
+
         const options = {
             title: 'Volume de Vendas por Livro',
-            hAxis: { title: 'Mês', format: 'MMM yyyy' },
+            hAxis: {
+                title: 'Mês',
+                format: 'MMM yyyy',
+                gridlines: { count: -1 },
+                showTextEvery: 1,
+                ticks: generateTicks(document.getElementById('startDate').value, document.getElementById('endDate').value)
+            },
             vAxis: { title: 'Volume de Vendas' },
-            interpolateNulls: true
+            interpolateNulls: true,
+            tooltip: { isHtml: true }
         };
-        
+
         chart.draw(view, options);
     }
 
@@ -134,9 +152,16 @@
 
         const options = {
             title: 'Volume de Vendas por Livro',
-            hAxis: { title: 'Mês', format: 'MMM yyyy' },
+            hAxis: {
+                title: 'Mês',
+                format: 'MMM yyyy',
+                gridlines: { count: -1 },
+                showTextEvery: 1,
+                ticks: generateTicks(document.getElementById('startDate').value, document.getElementById('endDate').value)
+            },
             vAxis: { title: 'Volume de Vendas' },
-            interpolateNulls: true
+            interpolateNulls: true,
+            legend: { position: 'bottom' }
         };
 
         chart.draw(originalDataTable, options);
@@ -146,5 +171,19 @@
         const startDate = document.getElementById('startDate').value;
         const endDate = document.getElementById('endDate').value;
         drawChart(startDate, endDate);
+    }
+
+    function generateTicks(startDate, endDate) {
+        const ticks = [];
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const current = new Date(start);
+
+        while (current <= end) {
+            ticks.push(new Date(current));
+            current.setMonth(current.getMonth() + 1);
+        }
+
+        return ticks;
     }
 </script>
