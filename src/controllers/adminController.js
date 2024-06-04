@@ -505,10 +505,36 @@ async function filterData(req, res){
         return itemDate >= startDate && itemDate <= endDate;
     });
 
+    // NOVO
+    const aggregatedData = {};
+    filteredData.forEach(item => {
+        const itemDate = new Date(item.purchaseDate);
+        const monthYear = `${itemDate.getFullYear()}-${String(itemDate.getMonth() + 1).padStart(2, '0')}`;
+
+        if (!aggregatedData[monthYear]) {
+        aggregatedData[monthYear] = {};
+        }
+
+        if (!aggregatedData[monthYear][item.title]) {
+        aggregatedData[monthYear][item.title] = 0;
+        }
+
+        aggregatedData[monthYear][item.title] += item.quantity;
+    });
+
     const titles = [...new Set(allSalesData.map(item => item.title))];
 
+    // NOVO
+    const dataPoints = Object.keys(aggregatedData).sort().map(monthYear => {
+        const [year, month] = monthYear.split('-').map(Number);
+        const date = new Date(year, month - 1);
+        const quantities = titles.map(title => aggregatedData[monthYear][title] || 0);
+        return [date, ...quantities];
+    });
+
     res.json({ 
-        salesData: filteredData, 
+        // salesData: filteredData,
+        dataPoints,
         titles 
     });
 }

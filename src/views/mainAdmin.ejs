@@ -37,17 +37,20 @@
                 </div>
                 <div class="card-admin div5">
                     <div class="title center">Gráfico de Vendas</div>
-                    <form onsubmit="event.preventDefault(); filterData();" class="d-flex align-items-end">
-                        <div>
-                            <label for="startDate">Data de Início:</label>
-                            <input type="date" id="startDate" name="startDate" value="<%= defaultStartDate %>" class="form-control" required>
-                        </div>
-                        <div class="ml-05">
-                            <label for="endDate">Data de Fim:</label>
-                            <input type="date" id="endDate" name="endDate" value="<%= defaultEndDate %>" class="form-control" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary ml-05">Filtrar</button>
-                    </form>
+                    <div class="d-flex align-items-end justify-content-between">
+                        <form onsubmit="event.preventDefault(); filterData();" class="d-flex align-items-end">
+                            <div>
+                                <label for="startDate">Data de Início:</label>
+                                <input type="date" id="startDate" name="startDate" value="<%= defaultStartDate %>" class="form-control" required>
+                            </div>
+                            <div class="ml-05">
+                                <label for="endDate">Data de Fim:</label>
+                                <input type="date" id="endDate" name="endDate" value="<%= defaultEndDate %>" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary ml-05">Filtrar</button>
+                        </form>
+                        <button onclick="showAllData()" class="btn btn-secondary">Mostrar Todos</button>
+                    </div>
                     <div id="chart_div" style="width: 100%; height: 500px;"></div>
                 </div>
             </div>
@@ -56,50 +59,87 @@
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
-    google.charts.load('current', {packages: ['corechart', 'line']});
-    google.charts.setOnLoadCallback(drawChart);
+    google.charts.load('current', { packages: ['corechart', 'line'] });
+    google.charts.setOnLoadCallback(() => drawChart());
+
+    let chart;
+    let dataTable;
+    let originalDataTable;
 
     async function drawChart(startDate = '<%= defaultStartDate %>', endDate = '<%= defaultEndDate %>') {
         console.log(`Fetching data for period: ${startDate} to ${endDate}`);
         const response = await fetch(`/filterData?startDate=${startDate}&endDate=${endDate}`);
         const data = await response.json();
         console.log(data);
-
-        const salesData = data.salesData;
+    
+        const dataPoints = data.dataPoints;
         const titles = data.titles;
-
-        const dataTable = new google.visualization.DataTable();
+    
+        dataTable = new google.visualization.DataTable();
         dataTable.addColumn('date', 'Date');
         titles.forEach(title => {
             dataTable.addColumn('number', title);
         });
-
-        const rows = [];
-        salesData.forEach(item => {
-            const date = new Date(item.purchaseDate);
-            const existingRow = rows.find(row => row[0].getTime() === date.getTime());
-            if (existingRow) {
-            const index = titles.indexOf(item.title) + 1;
-            existingRow[index] = (existingRow[index] || 0) + item.quantity;
-            } else {
-            const newRow = [date];
-            titles.forEach(title => {
-                newRow.push(item.title === title ? item.quantity : null);
-            });
-            rows.push(newRow);
+    
+        // Convert dates to JavaScript Date objects
+        dataPoints.forEach(row => {
+            row[0] = new Date(row[0]);
+        });
+    
+        dataTable.addRows(dataPoints);
+        originalDataTable = dataTable.clone();
+    
+        const options = {
+            title: 'Volume de Vendas por Livro',
+            hAxis: { title: 'Mês', format: 'MMM yyyy' },
+            vAxis: { title: 'Volume de Vendas' },
+            interpolateNulls: true
+        };
+    
+        chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+    
+        google.visualization.events.addListener(chart, 'select', function() {
+            const selection = chart.getSelection();
+            if (selection.length) {
+            const item = selection[0];
+            if (item.row === null) { // clicked on legend
+                const column = item.column;
+                filterByTitle(column);
+            }
             }
         });
+    
+        chart.draw(dataTable, options);
+    }
 
-        dataTable.addRows(rows);
+    function filterByTitle(column) {
+        if (!originalDataTable) return;
+        
+        const view = new google.visualization.DataView(originalDataTable);
+        const columns = [0, column];
+        view.setColumns(columns);
+        
+        const options = {
+            title: 'Volume de Vendas por Livro',
+            hAxis: { title: 'Mês', format: 'MMM yyyy' },
+            vAxis: { title: 'Volume de Vendas' },
+            interpolateNulls: true
+        };
+        
+        chart.draw(view, options);
+    }
+
+    function showAllData() {
+        if (!originalDataTable) return;
 
         const options = {
             title: 'Volume de Vendas por Livro',
-            hAxis: { title: 'Data' },
-            vAxis: { title: 'Volume de Vendas' }
+            hAxis: { title: 'Mês', format: 'MMM yyyy' },
+            vAxis: { title: 'Volume de Vendas' },
+            interpolateNulls: true
         };
 
-        const chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-        chart.draw(dataTable, options);
+        chart.draw(originalDataTable, options);
     }
 
     function filterData() {
