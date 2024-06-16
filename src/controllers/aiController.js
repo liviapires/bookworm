@@ -1,7 +1,7 @@
 // const { GoogleGenerativeAI } = require("@google/generative-ai");
 const axios = require('axios');
 
-const apiKey = 'sk-proj-iL18X4dQZGhvY9uHzqGnT3BlbkFJXjf7AFZBdMKKjSuiCqD7';
+const apiKey = '';
 
 if (!apiKey || apiKey === 'sua_chave_de_api') {
     console.error('Erro: Chave de API não definida ou incorreta.');
