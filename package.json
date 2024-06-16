@@ -24,6 +24,7 @@
   "homepage": "https://github.com/liviapires/bookworm#readme",
   "dependencies": {
     "@google/generative-ai": "^0.12.0",
+    "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "ejs": "^3.1.9",
     "express": "^4.18.2",

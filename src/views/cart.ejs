@@ -22,6 +22,7 @@
                         </div>
                     </div>
                     <div class="row">
+                        <% console.log(cart); %>
                         <% cart.forEach((livro) => { %>
                             <div class="col-md-5 mb-1">
                                 <div class="row">
@@ -67,7 +68,13 @@
                             <% }); %>
                     </div>
                 </div>
-                <a href="/emptyCart" class="btn btn-secondary mt-3">Limpar o Carrinho</a>
+                <div class="d-flex justify-content-between align-items-baseline mt-3">
+                    <a href="/emptyCart" class="btn btn-secondary">Limpar o Carrinho</a>
+                    <div data-toggle="tooltip" data-placement="left" title="Utilizando IA!">
+                        <!-- hidden form with all categories from books -->
+                        <a href="/recomendation" class="btn btn-secondary"><img src="https://www.svgrepo.com/show/452634/ai.svg" class="icon"> Recomende-me um livro</a>
+                    </div>
+                </div>
             </div>
             <div class="d-block right">
                 <div class="slight-bold">Total Carrinho</div>
@@ -99,6 +106,9 @@
 
 
 <script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
     
     document.getElementById('calcularFrete').addEventListener('click', () => {
         if (document.getElementById('cep').value.length === 8) {

@@ -36,6 +36,15 @@ async function cartContinueView (req, res) {
 
     let categories = await aCategory.getAllCategories();
 
+    // se o frete ainda não foi definido, randomiza o valor do frete
+    if (!req.session.frete) {
+        let frete = Math.random() * (50 - 10) + 10;
+        req.session.frete = parseFloat((frete).toFixed(2));
+        let precoFinalComFrete = parseFloat(req.session.total) + req.session.frete;
+        req.session.precoFinalComFrete = parseFloat((precoFinalComFrete).toFixed(2));
+    }
+
+
     res.render('cartContinue', {
         title: 'Carrinho',
         categories: categories,
@@ -45,7 +54,7 @@ async function cartContinueView (req, res) {
         cartoes: req.session.cards || [],
         cart: req.session.cart || [],
         total: req.session.total || 0,
-        frete: req.session.frete || 0,
+        frete: req.session.frete,
         precoFinalComFrete: req.session.precoFinalComFrete || 0,
         useCards: req.session.useCards || 0,
         useCardsInfo: req.session.useCardsInfo || '',

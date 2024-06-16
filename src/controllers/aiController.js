@@ -1,26 +1,18 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+// const { GoogleGenerativeAI } = require("@google/generative-ai");
+const axios = require('axios');
 
-const api_key = 'AIzaSyBpJHsVunBgt37UkEYKpWXbvw2VJCPQ8J8';
+const apiKey = 'sk-proj-iL18X4dQZGhvY9uHzqGnT3BlbkFJXjf7AFZBdMKKjSuiCqD7';
 
-// Access your API key as an environment variable (see "Set up your API key" above)
-const genAI = new GoogleGenerativeAI({ apiKey: api_key });
+if (!apiKey || apiKey === 'sua_chave_de_api') {
+    console.error('Erro: Chave de API não definida ou incorreta.');
+    process.exit(1);
+}
 
-// ...
+// Função para gerar uma resposta
+async function recomendation() {
+    
+}
 
-// The Gemini 1.5 models are versatile and work with most use cases
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});
-
-
-// test the ai
-const test = async (req, res) => {
-    try {
-        const prompt = "Once upon a time";
-        const response = await model.generateText({ prompt });
-        console.log(response);
-        res.send(response);
-    } catch (error) {
-        console.error(error);
-    }
+module.exports = {
+    recomendation
 };
-
-test();
