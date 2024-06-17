@@ -8,6 +8,7 @@ const Coupon = require('../models/CouponModel');
 const Category = require('../models/CategoryModel');
 
 const moment = require('moment');
+const { recomendation } = require('./aiController');
 
 const aBook = new Book();
 const aSale = new Sale();
@@ -28,7 +29,8 @@ async function cartView(req, res) {
         categories: categories,
         cart: req.session.cart || [],
         total: req.session.total || 0,
-        frete: req.session.frete || 0
+        frete: req.session.frete || 0,
+        recomendations: req.session.recomendations || ''
     });
 }
 

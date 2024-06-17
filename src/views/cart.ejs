@@ -22,7 +22,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        <% console.log(cart); %>
                         <% cart.forEach((livro) => { %>
                             <div class="col-md-5 mb-1">
                                 <div class="row">
@@ -71,8 +70,16 @@
                 <div class="d-flex justify-content-between align-items-baseline mt-3">
                     <a href="/emptyCart" class="btn btn-secondary">Limpar o Carrinho</a>
                     <div data-toggle="tooltip" data-placement="left" title="Utilizando IA!">
-                        <!-- hidden form with all categories from books -->
-                        <a href="/recomendation" class="btn btn-secondary"><img src="https://www.svgrepo.com/show/452634/ai.svg" class="icon"> Recomende-me um livro</a>
+                        <form action="/recomendation" method="POST" id="categories">
+                            <% cart.forEach((livro) => { %>
+                                <input type="hidden" name="books" value="<%= livro.title %>">
+                            <% }); %>
+                            <button type="submit" class="btn btn-secondary"><img src="https://www.svgrepo.com/show/452634/ai.svg" class="icon"> Recomende-me um livro</button>
+                        </form>
+                        
+                        <% if(recomendations) {
+                            console.log(recomendations); 
+                        }%>
                     </div>
                 </div>
             </div>
