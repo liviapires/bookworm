@@ -5,7 +5,7 @@ const Books = require('../models/BookModel');
 
 const aBook = new Books();
 
-const apiKey = 'sk-proj-NpekipqybaC1r2aovEKdT3BlbkFJYxHVmkoGa6lg1QNr4T2Z';
+const apiKey = '';
 
 if (!apiKey || apiKey === 'sua_chave_de_api') {
     console.error('Erro: Chave de API não definida ou incorreta.');
