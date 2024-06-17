@@ -60,10 +60,8 @@
     google.charts.setOnLoadCallback(drawChart);
 
     async function drawChart(startDate = '<%= defaultStartDate %>', endDate = '<%= defaultEndDate %>') {
-        console.log(`Fetching data for period: ${startDate} to ${endDate}`);
         const response = await fetch(`/filterData?startDate=${startDate}&endDate=${endDate}`);
         const data = await response.json();
-        console.log(data);
 
         const salesData = data.salesData;
         const titles = data.titles;
