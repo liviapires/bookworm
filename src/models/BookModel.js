@@ -102,6 +102,15 @@ class Book {
 
         return results;
     }
+
+    // get book by title
+    async getBookByTitle(title) {
+        const [results, metadata] = await db.query(
+            `SELECT * FROM books WHERE title = '${title}';`
+        );
+
+        return results;
+    }
 }
 
 module.exports = Book;

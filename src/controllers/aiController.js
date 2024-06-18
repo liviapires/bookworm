@@ -5,7 +5,7 @@ const Books = require('../models/BookModel');
 
 const aBook = new Books();
 
-const apiKey = '';
+const apiKey = 'sk-proj-eExV6CZaPHWrokFkT66NT3BlbkFJy60kPlEvKLK3czbcKgfV';
 
 if (!apiKey || apiKey === 'sua_chave_de_api') {
     console.error('Erro: Chave de API não definida ou incorreta.');
@@ -13,16 +13,9 @@ if (!apiKey || apiKey === 'sua_chave_de_api') {
 }
 
 // Função para gerar uma resposta
-async function recomendation(req, res) {
+async function recommendation(req, res) {
 
     let bookTitles = req.body.books;
-
-    generateRecomendation(bookTitles);
-
-    res.redirect(req.get('referer'));
-}
-
-async function generateRecomendation(bookTitles) {
 
     let booksDump = await aBook.getAllBooks();
 
@@ -39,9 +32,9 @@ async function generateRecomendation(bookTitles) {
                 model: 'gpt-3.5-turbo',
                 messages: [
                     { role: 'system', content: 'Você é um assistente útil.' },
-                    { role: 'user', content:`Com base na lista de livros: ${bookTitles}, recomende outros livros entre esses ${allBooks} que um leitor possa gostar.`}
+                    { role: 'user', content:`Com base na lista de livros que eu estou comprando: ${bookTitles}, recomende outros livros entre esses ${allBooks} que eu possa gostar entre aspas e numa lista ordenada.`}
                 ],
-                max_tokens: 100,
+                max_tokens: 200,
             },
             {
                 headers: {
@@ -50,17 +43,49 @@ async function generateRecomendation(bookTitles) {
                 },
             }
         );
-    
-        // console.log(response.data.choices[0].message.content.trim());
         
-        const recommendations = response.data.choices[0].text.trim();
-        res.json({ recommendations });
+        let recommendations = response.data.choices[0].message.content.trim();
+
+        // get the book titles from the response considering it is in an ordered list
+        let bookTitlesRecommended = recommendations.match(/".*?"/g).map(title => title.replace(/"/g, ""));
+
+        console.log(bookTitlesRecommended);
+
+        let promises = bookTitlesRecommended.map(async bookName => {
+            const book = await aBook.getBookByTitle(bookName);
+            if (book.length > 0) {
+                let link = `<a href="/book/${book[0].bookId}">${book[0].title}</a>`; // Assuming the book's detail page is at /books/:id
+                recommendations = recommendations.replace(bookName, link);
+            }
+        });
+
+        Promise.all(promises)
+        .then(() => {
+            // Now you can format the recommendations as before
+            let paragraphs = recommendations.split('\n\n');
+            let formattedRecommendations = paragraphs.map(paragraph => {
+                let listItems = paragraph.split('\n');
+                if (listItems.length > 1) {
+                    return `<ul>${listItems.map(item => `<li>${item.replace(/^\d+\.\s/, '')}</li>`).join('')}</ul>`;
+                } else {
+                    return `<p>${paragraph}</p>`;
+                }
+            }).join('');
+
+            req.session.recommendation = formattedRecommendations;
+            res.redirect(req.get('referer'));
+        })
+        .catch(error => {
+            console.error('Erro ao gerar resposta: ', error);
+            res.redirect(req.get('referer'));
+        });
+
     } catch (error) {
-        console.error('Erro ao gerar resposta:', error.response.status, error.response.statusText);
-        console.error('Detalhes:', JSON.stringify(error.response.data, null, 2));
+        console.error('Erro ao gerar resposta: ', error);
+        res.redirect(req.get('referer'));
     }
 }
 
 module.exports = {
-    recomendation
+    recommendation
 };

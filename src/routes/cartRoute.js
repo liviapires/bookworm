@@ -27,6 +27,6 @@ router.post("/addToCart", cartController.addToCart);
 router.post("/frete", cartController.frete);
 router.post("/confirmCardValue", cartController.confirmCardValue);
 
-router.post("/recomendation", aiController.recomendation);
+router.post("/recommendation", aiController.recommendation);
 
 module.exports = router;

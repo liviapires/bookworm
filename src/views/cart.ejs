@@ -70,18 +70,19 @@
                 <div class="d-flex justify-content-between align-items-baseline mt-3">
                     <a href="/emptyCart" class="btn btn-secondary">Limpar o Carrinho</a>
                     <div data-toggle="tooltip" data-placement="left" title="Utilizando IA!">
-                        <form action="/recomendation" method="POST" id="categories">
+                        <form action="/recommendation" method="POST" id="categories">
                             <% cart.forEach((livro) => { %>
                                 <input type="hidden" name="books" value="<%= livro.title %>">
                             <% }); %>
                             <button type="submit" class="btn btn-secondary"><img src="https://www.svgrepo.com/show/452634/ai.svg" class="icon"> Recomende-me um livro</button>
                         </form>
-                        
-                        <% if(recomendations) {
-                            console.log(recomendations); 
-                        }%>
                     </div>
                 </div>
+                <% if(recommendation.length > 0) { %>
+                    <div class="cards">
+                        <%- recommendation %>                        
+                    </div>
+                <% } %>
             </div>
             <div class="d-block right">
                 <div class="slight-bold">Total Carrinho</div>
