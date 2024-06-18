@@ -47,7 +47,7 @@ async function recommendation(req, res) {
         let recommendations = response.data.choices[0].message.content.trim();
 
         // get the book titles from the response considering it is in an ordered list
-        let bookTitlesRecommended = recommendations.match(/".*?"/g).map(title => title.replace(/"/g, ""));
+        let bookTitlesRecommended = recommendations.match(/".*?"/g).map(title => title.replace(/['"]/g, ''));
 
         console.log(bookTitlesRecommended);
 
