@@ -43,16 +43,16 @@
                 <div class="card-item">
                     <img src="<%= livro.bookImage %>" alt="livro" class="bookImage">
                     <div class="ml-3 info-item">
-                        <div class="title-item"><%= livro.title %></div>
+                        <a href="/book/<%= livro.bookId %>" class="title-item"><%= livro.title %></a>
                         <div class="price-item">R$ <%= livro.price %></div>
                         <div class="description-item"><%= livro.author %></div>
-                        <div class="icons-item">
+                        <a href="/book/<%= livro.bookId %>" class="icons-item">
                             <img class="icon" src="https://www.svgrepo.com/show/511031/info.svg" alt="info">
-                        </div>
+                        </a>
                     </div>
                     <form action="/addToCart" method="POST">
                         <input type="hidden" id="id" name="id" value="<%= livro.bookId %>">
-                        <button type="submit" class="btn btn-secondary ml-10">Comprar Agora</button>
+                        <button type="submit" class="btn btn-secondary ml-10">Adicionar ao Carrinho</button>
                     </form>
                 </div>
                 <% })

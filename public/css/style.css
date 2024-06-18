@@ -214,6 +214,10 @@
     margin-bottom: 1rem !important;
 }
 
+.mb-5{
+    margin-bottom: 5rem !important;
+}
+
 .mt-075 {
     margin-top: 0.75rem !important;
 }
@@ -994,11 +998,15 @@ a:hover {
 }
 
 .bookImage {
-    width: 10%;
+    width: 12%;
 }
 
 .cartBookImage {
     width: 20%;
+}
+
+.aBookImage {
+    width: 35%;
 }
 
 .row {

@@ -1,86 +1,42 @@
 <%- include('header.ejs') %>
-
-    <div id="body" class="body">
-
-        <% livro.forEach((liv)=> { %>
-            <div class="top ml-10">
-                <div class="d-block">
-                    <div class="page-title">Livro</div>
-                    <div class="page-subtitle">Home > <%= liv.categorias[0] %> > <%= liv.titulo %>
+    <div class="bottom-details ml-10">
+        <div class="big-card mb-5">
+            <img src="<%= livro.bookImage %>" class="aBookImage">
+            <div class="d-block ml-5">
+                <div class="info">
+                    <div class="page-title">
+                        <%= livro.title %> - <%= livro.isbn %>
                     </div>
-                </div>
-            </div>
-
-            <div class="bottom-details ml-10">
-                <div class="big-card">
-                    <img src="<%= liv.imagem %>" width="250rem">
-                    <div class="info ml-10">
-                        <div class="page-title">
-                            <%= liv.titulo %>
-                        </div>
-                        <div class="slight-bold">
-                            Disponibilidade: <%= liv.disponibilidade %>
-                        </div>
-                        <div class="price-item">
-                            R$ <%= liv.preco %>
-                        </div>
-                        <div class="description-item">
-                            <%= liv.descricao %>
-                        </div>
-                        <div class="d-flex m-3">
-                            <a href="#" class="btn btn-secondary">Comprar agora</a>
-                            <a class="navbar-brand ml-4" href="#">
-                                <img src="https://www.svgrepo.com/show/533043/cart-shopping.svg" alt="Carrinho"
-                                    class="icon">
-                            </a>
-                        </div>
-                        <div class="slight-bold">
-                            Categorias
-                        </div>
-                        <% liv.categorias.forEach((cat)=> { %>
-                            <div class="badge">
-                                <%= cat %>
-                            </div>
-                            <% }); %>
+                    <div class="price-item">
+                        R$ <%= livro.price %>
                     </div>
+                    <div class="mt-1">
+                        <%= livro.synopsis %>
+                    </div>
+                    <form action="/addToCart" method="POST">
+                        <input type="hidden" id="id" name="id" value="<%= livro.bookId %>">
+                        <button type="submit" class="btn btn-secondary mt-1">Adicionar ao Carrinho</button>
+                    </form>
                 </div>
-                <div class="mt-5">
-                    <div class="page-title mt-5">
+                <div class="mt-2">
+                    <div class="page-title">
                         Especificações
                     </div>
                     <hr>
                     <div>
                         <div class="slight-bold mt-1">Autor</div>
-                        <%= liv.autor %>
-                            <div class="slight-bold mt-1">Ano da Edição</div>
-                            <%= liv.anoEdicao %>
-                                <div class="slight-bold mt-1">Editora</div>
-                                <%= liv.editora %>
-                                    <div class="slight-bold mt-1">Idioma</div>
-                                    <%= liv.idioma %>
-                                        <div class="slight-bold mt-1">Número de Páginas</div>
-                                        <%= liv.paginas %>
+                        <%= livro.author %>
+        
+                        <div class="slight-bold mt-1">Ano da Edição</div>
+                        <%= livro.year %>
+        
+                        <div class="slight-bold mt-1">Editora</div>
+                        <%= livro.publisher %>
+        
+                        <div class="slight-bold mt-1">Número de Páginas</div>
+                        <%= livro.numPages %>
                     </div>
                 </div>
-                <% }); %>
             </div>
-
-    </div>
-
-    <div class="title-home">Quem viu, viu também...</div>
-
-    <div class="cards-wrapper">
-        <% livros.forEach((livro)=> { %>
-            <div class="card">
-                <img src="<%= livro.imagem %>" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <%= livro.titulo %>
-                    </h5>
-                    <p class="card-text">R$ <%= livro.preco %>
-                    </p>
-                    <a href="#" class="btn btn-primary">Comprar Agora</a>
-                </div>
-            </div>
-        <% }); %>
+        </div>
     </div>
