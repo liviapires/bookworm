@@ -251,6 +251,7 @@ async function finishPurchase(req, res) {
     req.session.valorExcedente = 0;
     req.session.useCards = 0;
     req.session.useCardsInfo = '';
+    req.session.recommendation = '';
     req.session.cards = await aCard.getCardByUserId(req.session.clientId);
 
     let categories = await aCategory.getAllCategories();
