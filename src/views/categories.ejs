@@ -1,21 +1,21 @@
-<div class="modalCategorias">
+<div class="foraModalCategorias">
     <div class="conteudoModalCategorias">
-        <div class="closeModal" id="close"><img src="https://www.svgrepo.com/show/521590/cross.svg" alt="Fechar" class="icon"></div>
-
-        <div class="categorias">
-            <h6 class="title-item">Categorias</h6>
-            
-            <!-- mock categories -->
-            <div class="category">
-                <li class="removeDot">
-                    <a href="/books/allBooks" class="btn btn-primary w-100">Todos os Livros</a>
-                    <% categories.forEach(function(category) { %>
-                        <a href="/books/<%= category.categoryName %>" class="btn btn-primary w-100">
+        <div class="categorias mt-1">
+            <li class="removeDot">
+                <ul>
+                    <h6 class="title-item veronica">Categorias</h6>
+                </ul>
+                <ul>
+                    <a href="/books/allBooks" class="linkCategoria">Todos os Livros</a>
+                </ul>
+                <% categories.forEach(function(category) { %>
+                    <ul>
+                        <a href="/books/<%= category.categoryName %>" class="linkCategoria">
                             <%= category.categoryName %>
                         </a>
-                    <% }); %>
-                </li>
-            </div>
+                    </ul>
+                <% }); %>
+            </li>
         </div>
     </div>
 </div>
@@ -23,20 +23,29 @@
 <!-- JS -->
 <script>
     // toogle modal categorias
+    const modal = document.querySelector('.conteudoModalCategorias');
+    const modalBackground = document.querySelector('.foraModalCategorias');
+
     const switchModal = () => {
-        const modal = document.querySelector('.modalCategorias');
         const actualState = modal.style.display;
         if (actualState === 'block') {
             modal.style.display = 'none';
+            modalBackground.style.display = 'none';
         } else {
             modal.style.display = 'block';
+            modalBackground.style.display = 'block';
         }
     }
 
     const btn = document.querySelector('#categorias');
     btn.addEventListener('click', switchModal);
 
-    // close modal when clicking on close button
-    const closeModal = document.querySelector('.closeModal');
-    closeModal.addEventListener('click', switchModal);
+    // close modal when clicking outside of it
+    modalBackground.addEventListener('click', switchModal);
+
+    // prevent closing when clicking inside the modal
+    const modalContent = document.querySelector('.conteudoModalCategorias');
+    modalContent.addEventListener('click', function(event) {
+        event.stopPropagation();
+    });
 </script>

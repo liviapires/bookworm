@@ -581,6 +581,7 @@ a {
 
 a:hover {
     color: var(--dark-gray);
+    text-decoration: none;
 }
 
 .br-100 {
@@ -766,18 +767,49 @@ a:hover {
     cursor: pointer;
 }
 
-.modalCategorias {
+.foraModalCategorias {
     display: none;
     position: fixed;
     left: 0;
     top: 0;
-    width: 18.75rem;
+    width: 100%;
+    height: 100%;
+    background-color: var(--dim-black);
+    z-index: 9999;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* hide the scroll bar */
+    scrollbar-width: none;
+}
+
+.conteudoModalCategorias {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 18rem;
     height: 100%;
     background-color: var(--white);
     box-shadow: 2px 6px 8px 0 var(--shadow);
     z-index: 9999;
     overflow-x: hidden;
     overflow-y: auto;
+    /* hide the scroll bar */
+    scrollbar-width: none;
+}
+
+.linkCategoria {
+    display: inline-block;
+    color: var(--veronica);
+    transition: 0.35s;
+}
+
+.linkCategoria:hover {
+    text-decoration: none;
+    transform: scale(1.1);
+    transition: 0.35s;
+    margin-left: 0.5rem;
+    color: var(--veronica);
 }
 
 .closeModal {
