@@ -2,7 +2,6 @@ const express = require('express')
 const router = express.Router();
 
 const cartController = require("../controllers/cartController");
-const aiController = require("../controllers/aiController");
 
 router.get("/cart", cartController.cartView);
 router.get("/cartContinue", cartController.cartContinueView);
@@ -26,7 +25,5 @@ router.get("/removeFromCart/:id", cartController.removeFromCart);
 router.post("/addToCart", cartController.addToCart);
 router.post("/frete", cartController.frete);
 router.post("/confirmCardValue", cartController.confirmCardValue);
-
-router.post("/recommendation", aiController.recommendation);
 
 module.exports = router;
