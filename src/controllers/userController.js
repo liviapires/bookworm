@@ -380,9 +380,9 @@ async function deleteCard (req, res) {
 // VIEWS CONTROLLERS
 
 // Renderiza a view signin
-const signinView = (req, res) => {
+async function signinView (req, res) {
 
-    let categories = aCategory.getAllCategories();
+    let categories = await aCategory.getAllCategories();
 
     res.render('signin', {
         title: 'Sign In',
