@@ -3603,6 +3603,78 @@
       "targets": [],
       "value": ""
     }]
+  }, {
+    "id": "878fdad1-5a2b-4481-b213-7ab0fc29e3eb",
+    "name": "14. Chat IA",
+    "commands": [{
+      "id": "2c663768-98c8-443c-9493-64e90860d3c2",
+      "comment": "",
+      "command": "open",
+      "target": "/home",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "771fcd65-9713-487b-ab0e-eb2560f0e40b",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1552x832",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8fe9841a-15ce-4eb3-a1f7-80915b915c9b",
+      "comment": "",
+      "command": "click",
+      "target": "css=typebot-bubble",
+      "targets": [
+        ["css=typebot-bubble", "css:finder"],
+        ["xpath=//typebot-bubble", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "a2f6893a-db5b-44f6-b624-5d216efe2fab",
+      "comment": "",
+      "command": "click",
+      "target": "css=typebot-bubble",
+      "targets": [
+        ["css=typebot-bubble", "css:finder"],
+        ["xpath=//typebot-bubble", "xpath:position"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win4593",
+      "windowTimeout": 2000
+    }, {
+      "id": "83561671-9baf-4b5b-9255-dd0aba950118",
+      "comment": "",
+      "command": "storeWindowHandle",
+      "target": "root",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "91908473-076f-4a02-88d6-b4f49172691a",
+      "comment": "",
+      "command": "selectWindow",
+      "target": "handle=${win4593}",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6ce897b3-ed0b-4c9f-8139-92837b09607a",
+      "comment": "",
+      "command": "selectWindow",
+      "target": "handle=${root}",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "375f9ab6-83c2-4d40-94d7-cfd13fd3b516",
+      "comment": "",
+      "command": "click",
+      "target": "css=typebot-bubble",
+      "targets": [
+        ["css=typebot-bubble", "css:finder"],
+        ["xpath=//typebot-bubble", "xpath:position"]
+      ],
+      "value": ""
+    }]
   }],
   "suites": [{
     "id": "223ac8d0-20da-4e51-905f-337cab875821",
